@@ -336,6 +336,10 @@ insuficiente mesmo com checklist verde.
 
 ## Capítulo 22.8 — Automatizar e sair do checklist
 
+A saída do checklist não é abandono da garantia: é **mudança de detentor**. Enquanto o humano marca,
+a garantia depende de atenção. Quando o gate bloqueia o merge, a garantia depende do pipeline. O
+pipeline falha em público; a caixa mentirosa falha em silêncio.
+
 ### CHK-036 — O que o CI bloqueia com sinal claro sai do checklist humano **[OBRIGATÓRIA]**
 
 Lint que falha o build, typecheck, teste de contrato no pipeline, axe no CI que bloqueia merge: o
@@ -343,10 +347,16 @@ humano não precisa "lembrar" de marcar. O checklist humano fica com o que a má
 autorização por objeto no caminho certo, contagem de dado legado, percurso de teclado, intenção do
 diff.
 
+Critério de "sinal claro": quem recebe a falha entende o que quebrou sem abrir um runbook de
+interpretação. Job vermelho genérico "quality failed" não autoriza remoção do item.
+
 ### CHK-037 — Automação que só reporta sem bloquear não remove o item humano **[OBRIGATÓRIA]**
 
 Aviso amarelo no CI é decoração (`CON-050` aplicado a gate). Enquanto não bloqueia, o item permanece
 no checklist de confirmação.
+
+Times que "vão tornar bloqueante no próximo trimestre" mantêm o item até a data — e a data entra no
+backlog com gatilho, não na cabeça de alguém.
 
 ### CHK-038 — Ao automatizar, registre a remoção e o gate substituto **[RECOMENDADA]**
 
@@ -358,10 +368,16 @@ checklist em AAAA-MM-DD". Sem registro, alguém recoloca o item e a lista incha 
 "O PR faz só o que a descrição diz" e "a asserção foi afrouxada por motivo legítimo" são julgamento.
 Script que marca isso automaticamente produz falsa segurança.
 
+Heurísticas de tamanho de diff ou de cobertura de linhas **apontam** onde olhar (`CON-051`); não
+assinam o item de escopo.
+
 ### CHK-040 — Preferir um teste que falha a um item eterno no checklist **[RECOMENDADA]**
 
 Regressão que já quebrou produção merece teste nomeado (`QAT`), não eterna caixa "não esquecer o
 caso X". Checklist é memória; teste é trava.
+
+Migração típica: item "cancelamento após pagamento parcial" no pré-merge por duas rodadas → vira
+teste `does_not_leave_inconsistent_balance_after_partial_refund` → item removido do checklist.
 
 ---
 

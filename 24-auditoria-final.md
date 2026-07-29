@@ -39,9 +39,45 @@ O auditor não redesenha a solução (`AUD-034`). Ele verifica contra normas, Do
 genuíno fora do escopo da rodada vai para a próxima, não expande esta em silêncio — salvo bloqueante
 de segurança ou regressão introduzida agora.
 
+### O que este portão é e o que ele não é
+
+Este portão **não** refaz a análise completa de cada especialista. Refazer seria duplicar custo e
+ainda assim herdar o mesmo viés se o auditor "já sabe" a conclusão desejada. O portão **reexecuta
+provas**, **cruza mudanças**, **amostra afirmações** e **aplica travas**. Onde a prova não existe, a
+afirmação cai — independentemente de quão persuasivo foi o capítulo de narrativa do relatório.
+
+Tampouco é revisão de PR (`REV`). Um módulo pode ter vinte PRs aprovados e falhar no portão final:
+interação entre mudanças, DoD incompleta no conjunto, backlog que nunca recebeu as `OPPORTUNITY`,
+nota de segurança baixa no agregado. Aprovar PRs em série não compõe excelência; pode compor
+apenas ritmo.
+
+### Anti-teatro como propriedade do sistema
+
+Teatro é qualquer artefato que **parece** garantia e **não** confronta o mundo. Checklist carimbado,
+CI amarelo tratado como verde, "LGTM" sob prazo, score 9 sem testes, cobertura de volume só no nome
+do arquivo aberto. O custo do teatro é maior que o da omissão explícita: a omissão ainda deixa o
+buraco visível; o teatro pinta o buraco.
+
+Por isso `FIN-006` exige amostragem. Amostragem não prova que todo o resto está certo — prova que
+o processo de evidência da rodada **sobrevive a inspeção hostil**. Se não sobrevive, o veredito
+honesto é rejeição ou reabertura, não "corrigimos os três e seguimos".
+
+### Relação com Volumes 12, 13 e 22
+
+| Volume | Pergunta | Este volume |
+| --- | --- | --- |
+| [12](12-auditoria.md) `AUD` | Como investigar, comentar, pontuar, caçar regressão? | Cita e aplica no fechamento |
+| [13](13-revisao-de-codigo.md) `REV` | Este PR pode mergear? | Não decide nota 10 do módulo |
+| [22](22-checklists.md) `CHK` | Como a lista de G5 deve ser executada? | Exige execução; interpreta veredito |
+| **24 `FIN`** | O conjunto merece sair — de verdade? | Portão e registro |
+
 ---
 
 ## Capítulo 24.1 — Portão anti-teatro
+
+Teatro sobrevive onde a inspeção é cara e a aparência é barata. O antídoto é tornar a inspeção
+**barata o bastante para ser feita sempre** (amostra) e a aparência **cara o bastante para não
+compensar** (afirmação sem artefato = falha, não pendência).
 
 ### FIN-001 — O veredito final trata afirmação sem evidência como falha **[IMUTÁVEL]**
 
@@ -53,15 +89,24 @@ comando ou artefato equivalente → item falho. É `AUD-002` aplicado sem exceç
 Escopo não aprovado, backlog não atualizado, DoD carimbada, checklist marcado em bloco: rejeição por
 processo é legítima (`AUD-033`). Não é burocracia; é o que mantém as outras garantias reais.
 
+Sem esta regra, o time aprende que normas técnicas são negociáveis via narrativa e que só "bug
+óbvio" bloqueia. O próximo incidente nasce educado.
+
 ### FIN-003 — O auditor não participa da implementação da rodada que julga **[IMUTÁVEL]**
 
 `AUD-003`. Se o mesmo agente implementou e "auditou", o portão não ocorreu. Declare conflito e
 reassine com outro papel ou humano.
 
+Em cadeias só de agentes: rode o papel 10 em contexto limpo, sem o transcript de implementação como
+memória ativa de "já sei que está certo".
+
 ### FIN-004 — Pressão de prazo não rebaixa bloqueante **[IMUTÁVEL]**
 
 Alinhado a `REV-048` e `CON-044`: só `S0` de produção autoriza DoD reduzida, com dívida imediata.
 "O cliente espera" não autoriza `APPROVED` com `S1` aberto.
+
+O registro honesto sob pressão é: `REJECTED` ou `APPROVED WITH CONDITIONS` com condições fecháveis
+e dono humano — nunca `APPROVED` com dedos cruzados.
 
 ### FIN-005 — Primeira linha do entregável é o veredito **[OBRIGATÓRIA]**
 
@@ -74,9 +119,17 @@ Escolha no mínimo três afirmações `OK` (validação, item de checklist, ou a
 reconstrua a evidência. Se a amostra falha, trate o relatório inteiro como não confiável até nova
 passagem — não "corrija só os três".
 
+Rodada trivial (typo, texto, teste já vermelho corrigido) pode declarar amostra N/A com motivo —
+comprimir G5 inteiro, porém, continua proibido onde G4 não foi comprimível (`CON-063`): evidência
+de validação ainda é exigida.
+
 ---
 
 ## Capítulo 24.2 — Report OK versus realmente verificou
+
+A fluência do relatório é o adversário. Agentes e humanos sob prazo produzem prosa que **soa** como
+engenharia concluída. O auditor treina o olho no artefato bruto: exit code, contagem SQL, trecho de
+log com timestamp desta revisão, path:line do `authorize`.
 
 ### FIN-007 — Tabela de verificação de afirmações é seção obrigatória **[OBRIGATÓRIA]**
 
@@ -97,6 +150,10 @@ número; não aprove a narrativa.
 Exija o caminho de exploração demonstrado como fechado (`CON-061`). Teste verde sem o exploit path
 é teatro de segurança.
 
+Exemplo: IDOR em `GET /invoices/:id` "corrigido". Evidência mínima: requisição com token do tenant A
+ao id do tenant B retorna 404/403 **depois**, e o teste automatizado que falharia se a checagem fosse
+removida. "Suite passou" sem esse caso é `failed`.
+
 ### FIN-010 — O auditor reexecuta a suíte relevante, types e lint no escopo **[OBRIGATÓRIA]**
 
 Delegar ao relatório do implementador viola `FIN-001`. Reexecução pode ser o job de CI cujo log o
@@ -111,6 +168,9 @@ Resumo gerado por agente é narrativa (`AUD-042`).
 
 `CON-061`. Sem o comando, é omissão. Com o comando, o item fica `PENDENTE`/`PARTIAL` até execução —
 não vira `OK` por honestidade.
+
+Honestidade sem comando produz filas de "alguém rode depois" que ninguém roda. O comando transforma
+pendência em trabalho acionável.
 
 ---
 
@@ -224,10 +284,23 @@ Mesmo sem `S0`/`S1` abertos. Condições devem fechar o caminho até a nota mín
 
 ## Capítulo 24.6 — Nota 8 versus nota 10
 
+A escala existe para separar **piso cumprido** de **excelência deliberada**. Inflacionar notas destrói
+a capacidade de ver tendência (`CON-050`): depois de três rodadas com "tudo 9", o primeiro 6 parece
+crise — quando na verdade o 9 nunca foi 9.
+
 ### FIN-028 — Nota 10 exige DoE na dimensão; ausência de problemas não basta **[IMUTÁVEL]**
 
 `CON-046`, `AUD-029`. Módulo sem achados, sem testes, sem observabilidade e sem ADR fica em torno de
 5: **não se sabe se funciona**.
+
+Calibragem rápida:
+
+| Evidência disponível | Teto típico |
+| --- | --- |
+| Sem testes, sem OBS, sem ADR | ~5 |
+| DoD cumprida, lacunas DoE não registradas | 4–5 se S2 oculto; senão ≤7 |
+| DoD folgada, lacunas DoE no backlog | 8–9 |
+| DoE demonstrada na dimensão | 10 na dimensão |
 
 ### FIN-029 — Faixa 8–9: DoD folgada; lacunas de DoE conhecidas e registradas **[OBRIGATÓRIA]**
 
@@ -251,6 +324,9 @@ Remanejar peso para salvar a nota total é fraude de métrica.
 ### FIN-033 — Meta razoável entre rodadas é +1 na dimensão mais fraca, não 10 universal **[RECOMENDADA]**
 
 `CON-048`. Exigir DoE em módulo periférico é erro de priorização, não rigor.
+
+O portão final pode **recomendar** qual dimensão subir na próxima rodada; não pode exigir excelência
+universal como condição de `APPROVED` em módulo padrão.
 
 ---
 
@@ -283,10 +359,15 @@ Resposta negativa obriga nomear a lacuna no backlog antes de `APPROVED` limpo �
 
 ## Capítulo 24.8 — Discordar do orquestrador
 
+O orquestrador maximiza progresso da rodada. O auditor maximiza verdade do portão. O conflito é
+estrutural e saudável — desde que resolvido por evidência, não por hierarquia informal de "quem
+falou por último".
+
 ### FIN-038 — Veredito do auditor final prevalece na rodada sobre o desejo de fechar do orquestrador **[IMUTÁVEL]**
 
 O orquestrador integra e despacha (`ORC`); não anula evidência. Aceitação de risco residual pertence
-a humano nomeado (`CON-042`), não ao orquestrador "para seguir".
+a humano nomeado (aceitação registrada por escrito; ver também riscos fora do diff em `CON-042` e
+dívida em `AUD-037`), não ao orquestrador "para seguir".
 
 ### FIN-039 — Discordância cita evidência e regra, não preferência **[OBRIGATÓRIA]**
 
@@ -302,6 +383,9 @@ ilegítimo: negociar o significado de `S1`.
 
 Média entre "seguro" e "inseguro" é absurdo. O auditor escolhe o lado com prova; o outro vira
 `HYPOTHESIS` ou item de backlog.
+
+Exemplo: Performance alega N+1; Backend alega que o batch resolve. O auditor conta queries sob 1 e
+50 itens. O número decide — não o tom do relatório.
 
 ### FIN-042 — Registro da discordância fica no `AUDIT REPORT` **[OBRIGATÓRIA]**
 
