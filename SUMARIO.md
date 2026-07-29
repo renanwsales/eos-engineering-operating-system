@@ -38,7 +38,7 @@ Contrato de autoria: [`AUTHORING.md`](AUTHORING.md) · Índice de regras: [`RULE
 | 21 | [Playbooks](21-playbooks.md) | `PLB` | escrito | qualquer |
 | 22 | [Checklists](22-checklists.md) | `CHK` | escrito | [Auditor Final](agents/10-final-auditor.md) |
 | 23 | [Métricas](23-metricas.md) | `MET` | escrito | [Orquestrador](agents/00-orchestrator.md) |
-| 24 | [Auditoria Final](24-auditoria-final.md) | `FIN` | pendente | [Auditor Final](agents/10-final-auditor.md) |
+| 24 | [Auditoria Final](24-auditoria-final.md) | `FIN` | escrito | [Auditor Final](agents/10-final-auditor.md) |
 
 Diretórios de apoio: [`prompts/`](prompts/) · [`checklists/`](checklists/) · [`playbooks/`](playbooks/) ·
 [`templates/`](templates/) · [`examples/`](examples/) · [`diagrams/`](diagrams/) · [`agents/`](agents/) ·
