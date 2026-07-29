@@ -1,6 +1,6 @@
 # RULES-INDEX — índice de regras do EOS
 
-**943 regras** em 17 volumes. Este arquivo é **gerado** por
+**1001 regras** em 18 volumes. Este arquivo é **gerado** por
 `scripts/build-rules-index.py`; não edite à mão. Se um volume e este índice divergirem,
 **o volume** é a fonte de verdade.
 
@@ -21,7 +21,7 @@ deixa o número aposentado, nunca reaproveitado, para que relatórios antigos co
 | `[RECOMENDADA]` | Padrão esperado; exceção é normal | Justificativa no momento, sem ADR |
 | `[REVOGADA]` | Não vale mais; o número fica aposentado | — |
 
-Distribuição: **77 imutáveis** · **704 obrigatórias** · **162 recomendadas**.
+Distribuição: **84 imutáveis** · **746 obrigatórias** · **171 recomendadas**.
 
 ## Volumes
 
@@ -40,11 +40,12 @@ Distribuição: **77 imutáveis** · **704 obrigatórias** · **162 recomendadas
 | 10 | [DevOps e SRE](10-devops.md) | `OPS` | 48 |
 | 11 | [QA e Testes](11-qa.md) | `QAT` | 40 |
 | 12 | [Auditoria Técnica](12-auditoria.md) | `AUD` | 42 |
+| 13 | [Revisão de Código](13-revisao-de-codigo.md) | `REV` | 58 |
 | 14 | [Escala e Multi-Inquilino](14-escalabilidade.md) | `ESC` | 42 |
 | 17 | [Observabilidade](17-observabilidade.md) | `OBS` | 70 |
 | 19 | [IA no Produto](19-ia-no-produto.md) | `IAX` | 69 |
 | 21 | [Playbooks](21-playbooks.md) | `PLB` | 58 |
-| | **Total** | | **943** |
+| | **Total** | | **1001** |
 
 ---
 
@@ -842,6 +843,71 @@ Arquivo: [`12-auditoria.md`](12-auditoria.md) · 42 regras
 | `AUD-040` | Higiene periódica | OBRIG | — | Backlog |
 | `AUD-041` | Riscos específicos verificados explicitamente | OBRIG | — | Código gerado por IA |
 | `AUD-042` | Exija a evidência, não a narrativa | IMUT | — | Código gerado por IA |
+
+## 📕 Volume 13 — Revisão de Código
+
+Arquivo: [`13-revisao-de-codigo.md`](13-revisao-de-codigo.md) · 58 regras
+
+| ID | Regra | Nível | Sev. | Capítulo |
+| --- | --- | --- | --- | --- |
+| `REV-001` | A revisão de PR não substitui teste, medição nem auditoria de módulo | IMUT | — | O que a revisão encontra e o que ela não encontra |
+| `REV-002` | O que a revisão encontra bem | OBRIG | — | O que a revisão encontra e o que ela não encontra |
+| `REV-003` | O que a revisão comprovadamente não encontra | OBRIG | — | O que a revisão encontra e o que ela não encontra |
+| `REV-004` | Todo PR declara o que **não** foi verificado | RECOM | — | O que a revisão encontra e o que ela não encontra |
+| `REV-005` | Não leia o diff de cima para baixo como padrão | OBRIG | — | Ordem de leitura |
+| `REV-006` | Comece pela descrição; se ela for vaga, pare | OBRIG | — | Ordem de leitura |
+| `REV-007` | Leia os testes antes do código de produção | OBRIG | — | Ordem de leitura |
+| `REV-008` | Migração antes do código que a assume | OBRIG | — | Ordem de leitura |
+| `REV-009` | O que só se vê no diff | OBRIG | — | Ordem de leitura |
+| `REV-010` | O que só se vê no arquivo inteiro | OBRIG | — | Ordem de leitura |
+| `REV-011` | Abra os arquivos irmãos quando o PR toca regra de negócio | RECOM | — | Ordem de leitura |
+| `REV-012` | Respeite o orçamento de `AUD-004`; acima dele, peça decomposição | OBRIG | — | Tamanho, ritmo e composição do PR |
+| `REV-013` | Formatação e comportamento nunca no mesmo commit | IMUT | — | Tamanho, ritmo e composição do PR |
+| `REV-014` | Refatoração mecânica e mudança de comportamento são PRs separados | OBRIG | — | Tamanho, ritmo e composição do PR |
+| `REV-015` | Dependência nova exige justificativa no PR | OBRIG | — | Tamanho, ritmo e composição do PR |
+| `REV-016` | Arquivos gerados e lockfiles não contam no orçamento **se** estão sozinhos no commit | RECOM | — | Tamanho, ritmo e composição do PR |
+| `REV-017` | PR que "só move arquivos" ainda precisa de revisão de fronteira | OBRIG | — | Tamanho, ritmo e composição do PR |
+| `REV-018` | Todo comentário declara a força | OBRIG | — | Comentário útil |
+| `REV-019` | `MUST` cita a regra ou o defeito concreto | OBRIG | — | Comentário útil |
+| `REV-020` | Não discuta decisão já registrada no ADR no thread do PR | OBRIG | — | Comentário útil |
+| `REV-021` | Sugestão de código no comentário é `CONSIDER` ou patch anexado, nunca reescrita silenciosa | OBRIG | — | Comentário útil |
+| `REV-022` | Máximo de 3 `NIT` por PR | OBRIG | — | Comentário útil |
+| `REV-023` | Discordar com alternativa e custo | OBRIG | — | Comentário útil |
+| `REV-024` | Ceder também se registra | RECOM | — | Comentário útil |
+| `REV-025` | Elogio específico ou nenhum | RECOM | — | Comentário útil |
+| `REV-026` | O teste falharia se a regra fosse removida? | OBRIG | — | Revisão de teste |
+| `REV-027` | Teste que só cobre o caminho feliz em mudança de regra é incompleto | OBRIG | — | Revisão de teste |
+| `REV-028` | Não aprove teste que congela comportamento sem o revisor saber se está certo | IMUT | — | Revisão de teste |
+| `REV-029` | Snapshot e golden file exigem justificativa | RECOM | — | Revisão de teste |
+| `REV-030` | Teste flaky no PR é `MUST`, não "vamos ver no CI" | OBRIG | — | Revisão de teste |
+| `REV-031` | Migração sem reversa executada é incompleta | OBRIG | — | Revisão de migração e de dados |
+| `REV-032` | Conte registros que violam a nova regra | OBRIG | — | Revisão de migração e de dados |
+| `REV-033` | Aditivo primeiro; destrutivo em fase própria | OBRIG | — | Revisão de migração e de dados |
+| `REV-034` | Migração de dados é `R4` até prova em contrário | OBRIG | — | Revisão de migração e de dados |
+| `REV-035` | Verifique bloqueio de tabela na versão do banco em uso | OBRIG | — | Revisão de migração e de dados |
+| `REV-036` | Qualquer superfície nova nasce inacessível até autorização declarada | OBRIG | `S0` | Segurança, contrato e operação no PR |
+| `REV-037` | Diff que toca dado de usuário, dinheiro ou permissão exige revisor de segurança ou checklist OWASP | OBRIG | — | Segurança, contrato e operação no PR |
+| `REV-038` | Mudança de contrato público sem versão ou compatibilidade é `MUST` | OBRIG | — | Segurança, contrato e operação no PR |
+| `REV-039` | O PR declara como se detecta falha em produção e como se reverte | OBRIG | — | Segurança, contrato e operação no PR |
+| `REV-040` | Feature flag sem plano de remoção é dívida disfarçada | RECOM | — | Segurança, contrato e operação no PR |
+| `REV-041` | Trate saída de IA como entrada não confiável de alta plausibilidade | IMUT | — | Código gerado por IA |
+| `REV-042` | Volume alto de PR gerado não reduz o padrão de revisão | OBRIG | — | Código gerado por IA |
+| `REV-043` | Exija que o autor explique a intenção em linguagem de negócio | OBRIG | — | Código gerado por IA |
+| `REV-044` | Procure o padrão colado sem a proteção do original | OBRIG | — | Código gerado por IA |
+| `REV-045` | Testes gerados por IA passam no mesmo crivo `REV-026` | OBRIG | — | Código gerado por IA |
+| `REV-046` | Bloqueie por defeito, contrato, segurança, dado ou teste que não prova | OBRIG | — | Quando bloquear, quando aprovar, pressão |
+| `REV-047` | Aprovar com comentários abertos só se nenhum for `MUST` | OBRIG | — | Quando bloquear, quando aprovar, pressão |
+| `REV-048` | Pressão de prazo não rebaixa `S0`/`S1` nem `R4` | IMUT | — | Quando bloquear, quando aprovar, pressão |
+| `REV-049` | Autoaprovação só com regra explícita no perfil do projeto | OBRIG | — | Quando bloquear, quando aprovar, pressão |
+| `REV-050` | Tempo de resposta de revisão é métrica de fluxo, não de virtude | RECOM | — | Quando bloquear, quando aprovar, pressão |
+| `REV-051` | Quando o código está certo e a abordagem está errada, um `MUST` de escopo | OBRIG | — | Quando bloquear, quando aprovar, pressão |
+| `REV-052` | Segunda revisão após mudança substancial | OBRIG | — | Quando bloquear, quando aprovar, pressão |
+| `REV-053` | Quem implementou não aprova o próprio PR em mudança `R3`/`R4` | IMUT | — | O revisor |
+| `REV-054` | Revisor declara o que não olhou | OBRIG | — | O revisor |
+| `REV-055` | Bikeshedding é falha do revisor, não do autor | OBRIG | — | O revisor |
+| `REV-056` | Revisão que só olha estilo é revisão não feita | OBRIG | — | O revisor |
+| `REV-057` | Não use o PR para ensinar carreira | RECOM | — | O revisor |
+| `REV-058` | Checklist marcado sem evidência não conta | IMUT | — | O revisor |
 
 ## 📒 Volume 14 — Escala e Multi-Inquilino
 

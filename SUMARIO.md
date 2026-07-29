@@ -27,7 +27,7 @@ Contrato de autoria: [`AUTHORING.md`](AUTHORING.md) · Índice de regras: [`RULE
 | 10 | [DevOps](10-devops.md) | `OPS` | escrito | [DevOps/SRE](agents/08-devops-sre.md) |
 | 11 | [QA](11-qa.md) | `QAT` | escrito | [QA](agents/07-qa.md) |
 | 12 | [Auditoria](12-auditoria.md) | `AUD` | escrito | [Auditor Final](agents/10-final-auditor.md) |
-| 13 | [Revisão de Código](13-revisao-de-codigo.md) | `REV` | pendente | [Auditor Final](agents/10-final-auditor.md) |
+| 13 | [Revisão de Código](13-revisao-de-codigo.md) | `REV` | escrito | [Auditor Final](agents/10-final-auditor.md) |
 | 14 | [Escalabilidade](14-escalabilidade.md) | `ESC` | escrito | [Performance](agents/06-performance.md) |
 | 15 | [APIs](15-apis.md) | `API` | pendente | [Backend](agents/02-backend.md) |
 | 16 | [Multi-Tenant](16-multi-tenant.md) | `MTN` | pendente | [Arquiteto](agents/01-architect.md) |
