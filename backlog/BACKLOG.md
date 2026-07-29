@@ -17,6 +17,8 @@ Ordenados por score. Recalcular os 10 do topo a cada rodada.
 | ID | Título | Sev. | Conf. | Esforço | Risco | Score | Gatilho de promoção | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | EOS-001 | Perfil do projeto ainda não preenchido para o repositório alvo | S1 | HIGH | S | LOW | 20.0 | Primeira rodada de revisão em qualquer projeto | aberto |
+| EOS-003 | Verificação do EOS não roda automaticamente | S2 | HIGH | XS | LOW | 14.0 | Primeiro hospedagem do repositório em plataforma com CI | aberto |
+| EOS-002 | Limiares de métrica nunca calibrados contra um módulo real | S2 | MEDIUM | M | LOW | 3.4 | Primeira revisão completa de módulo concluída | aberto |
 
 ### EOS-001 — Perfil do projeto ainda não preenchido
 
@@ -28,6 +30,37 @@ Consequência se ignorado: todo julgamento técnico dos agentes fica sem base �
   comandos, nenhuma mudança pode ser validada, e mudança não validada não existe.
 Gatilho de promoção: primeira rodada de revisão em qualquer projeto que adote o EOS
 Origem: criação do framework, 2026-07-29
+Status: aberto
+```
+
+### EOS-003 — Verificação do EOS não roda automaticamente
+
+```
+Severidade: S2 | Confiança: HIGH | Esforço: XS | Risco: LOW | Score: 14.0
+Evidência: scripts/build-rules-index.py e scripts/check-links.py existem e passam, mas nada os
+  executa a cada mudança. Não há arquivo de pipeline no repositório.
+Consequência se ignorado: o índice de regras e o índice de links divergem do conteúdo na primeira
+  vez que alguém adicionar uma regra sem rodar o gerador. Isso é exatamente o que OPS-028 chama de
+  teatro: verificação que existe e não bloqueia.
+Correção: um job que rode os dois scripts e falhe o build.
+Gatilho de promoção: primeira hospedagem do repositório em plataforma com CI
+Origem: migração para volumes, 2026-07-29
+Status: aberto
+```
+
+### EOS-002 — Limiares de métrica nunca calibrados contra um módulo real
+
+```
+Severidade: S2 | Confiança: MEDIUM | Esforço: M | Risco: LOW | Score: 3.4
+Evidência: CON-050 declara limiares padrão marcados [perfil]; nenhum foi confrontado com medição
+  de um módulo real deste ou de outro projeto.
+Consequência se ignorado: os agentes bloqueiam ou liberam entregas com base em números escolhidos
+  por plausibilidade, não por evidência. Limiar mal calibrado gera ruído (bloqueia o que não
+  importa) ou falsa segurança (libera o que importa) — e ambos corroem a confiança no framework.
+Correção: rodar o runbook de revisão completa em um módulo real, medir, e ajustar os limiares do
+  perfil do projeto com os números observados e a data.
+Gatilho de promoção: primeira revisão completa de módulo concluída
+Origem: ADR-0001, mantido na migração para volumes
 Status: aberto
 ```
 
@@ -62,7 +95,7 @@ Estado saudável e necessário. Backlog que só cresce perde utilidade.
 ## Higiene periódica
 
 Executada pelo orquestrador a cada rodada. Ver
-[gestão de backlog](../manual/12-gestao-de-backlog.md).
+[gestão de backlog](../volumes/vol-11-auditoria.md).
 
 - [ ] Verificar obsolescência: evidência (`arquivo:linha`) que não existe mais.
 - [ ] Reavaliar severidade com os modificadores de contexto.
@@ -79,4 +112,4 @@ até virar `MUST-FIX` ela mesma — normalmente na forma de um incidente.
 
 ## Próximo ID disponível
 
-`EOS-002`
+`EOS-004`

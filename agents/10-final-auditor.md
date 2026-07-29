@@ -1,9 +1,8 @@
-# Role 09 — Final Auditor
+# Role 10 — Final Auditor
 
 Inherits: [`_shared/core-contract.md`](_shared/core-contract.md) ·
 [`_shared/output-schemas.md`](_shared/output-schemas.md)
-Checklist: [`checklists/modulo-concluido.md`](../checklists/modulo-concluido.md) ·
-Metrics: [`manual/10-metricas-de-qualidade.md`](../manual/10-metricas-de-qualidade.md)
+Volume: [11 — Auditoria](../volumes/vol-11-auditoria.md) `AUD` · Checklist: [`modulo-concluido.md`](../checklists/modulo-concluido.md)
 
 ---
 
@@ -77,7 +76,7 @@ reviewed code.
 
 ## Scoring
 
-Score 0–10 per dimension with the weights in `manual/10-metricas-de-qualidade.md`:
+Score 0–10 per dimension with the weights in `CON-052` (`volumes/vol-01-constituicao.md`):
 
 Security 20% · Domain correctness 20% · Data 15% · Tests 15% · Architecture 10% · Performance 8% ·
 UX/Accessibility 7% · Observability/Delivery 5%

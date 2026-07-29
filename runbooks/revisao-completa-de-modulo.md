@@ -3,7 +3,7 @@
 O pipeline multiagente completo. Use quando um módulo precisa de revisão profunda em várias áreas.
 
 **Não use** para mudança pontual — nesse caso, use
-[ciclo de mudança única](ciclo-de-mudanca-unica.md). Rodar dez papéis para corrigir um botão é
+[ciclo de mudança única](ciclo-de-mudanca-unica.md). Rodar onze papéis para corrigir um botão é
 desperdício de contexto, e desperdício de contexto degrada o julgamento.
 
 Duração típica: uma sessão longa, ou várias com estado registrado em arquivos.
@@ -67,9 +67,13 @@ upload — independentemente do tamanho da mudança.
 
 | Papel | Pergunta típica |
 | --- | --- |
-| [`06-qa`](../agents/06-qa.md) | Os testes existentes pegariam as falhas que importam? |
-| [`08-product-ux`](../agents/08-product-ux.md) | Os fluxos fazem o que o usuário quer, e são consistentes? |
-| [`07-devops-sre`](../agents/07-devops-sre.md) | Quanto tempo até sabermos, e quanto até voltarmos? |
+| [`06-performance`](../agents/06-performance.md) | Onde está o gargalo **medido**, e ele viola um limiar declarado? |
+| [`07-qa`](../agents/07-qa.md) | Os testes existentes pegariam as falhas que importam? |
+| [`08-devops-sre`](../agents/08-devops-sre.md) | Quanto tempo até sabermos, e quanto até voltarmos? |
+| [`09-product-ux`](../agents/09-product-ux.md) | Os fluxos fazem o que o usuário quer, e são consistentes? |
+
+Performance só é despachado quando há **medição possível**. Sem acesso a medição, o entregável dele é o
+plano de medição, declarado como tal — nunca hipótese apresentada como achado (ORC-013).
 
 ---
 
@@ -79,9 +83,9 @@ upload — independentemente do tamanho da mudança.
       a melhor evidência.
 - [ ] Rejeitar achados sem evidência — voltam como hipótese.
 - [ ] Deflacionar severidade inflada, com motivo escrito.
-- [ ] Resolver conflitos entre papéis pela [regra de desempate](../manual/01-filosofia-de-engenharia.md#regra-de-desempate),
+- [ ] Resolver conflitos entre papéis pela [regra de desempate](../volumes/vol-01-constituicao.md),
       nunca pela média das opiniões.
-- [ ] Aplicar a [matriz de priorização](../manual/06-matriz-de-priorizacao.md).
+- [ ] Aplicar a [matriz de priorização](../volumes/vol-01-constituicao.md).
 - [ ] Compor a rodada em 70% `MUST-FIX` / 20% risco estrutural / 10% ferramental.
 - [ ] Registrar **toda** `OPPORTUNITY` no backlog.
 
@@ -125,7 +129,7 @@ Para cada uma:
 
 ## Etapa 6 — G5 Auditoria
 
-Papel: [`09-final-auditor`](../agents/09-final-auditor.md) ·
+Papel: [`09-final-auditor`](../agents/10-final-auditor.md) ·
 Checklist: [`modulo-concluido`](../checklists/modulo-concluido.md)
 
 O auditor **não** participou da implementação e trata cada afirmação de validação como não verificada

@@ -2,8 +2,7 @@
 
 Inherits: [`_shared/core-contract.md`](_shared/core-contract.md) ·
 [`_shared/output-schemas.md`](_shared/output-schemas.md)
-Standard: [`standards/seguranca.md`](../standards/seguranca.md) ·
-Checklist: [`checklists/seguranca-owasp.md`](../checklists/seguranca-owasp.md)
+Volume: [5 — Segurança](../volumes/vol-05-seguranca.md) `SEC` · Checklist: [`seguranca-owasp.md`](../checklists/seguranca-owasp.md)
 
 ---
 

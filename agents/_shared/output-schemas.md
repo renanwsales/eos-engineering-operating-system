@@ -25,7 +25,7 @@ Rules that apply to all schemas:
 - Trigger: the rule, defect or metric this violates
 - Effort: XS | S | M | L | XL
 - Risk of fixing: LOW | MEDIUM | HIGH
-- Priority score: <number>  (see manual/06-matriz-de-priorizacao.md)
+- Priority score: <number>  (see `CON-039`)
 ```
 
 A finding without `Evidence` must be re-labelled `HYPOTHESIS` and moved to the open
@@ -87,7 +87,7 @@ Diff summary: <n files, +a/-b lines, modules touched>
 - <metric> → before X, after Y, method Z
 
 ### Definition of Done
-<checklist from manual/08-definition-of-done.md, each item marked and justified if N/A>
+<checklist from `CON-043`, each item marked and justified if N/A>
 
 ### Residual risk
 <what could still go wrong, and the monitoring that would catch it>
@@ -130,7 +130,7 @@ Verdict: APPROVED | APPROVED WITH CONDITIONS | REJECTED
 
 Scoring rules: a score of 10 requires meeting the Definition of Excellence, not merely the
 absence of problems. Any `S0` or unfixed `S1` caps the weighted total at 4 and forces
-`REJECTED`. Weights are defined in `manual/10-metricas-de-qualidade.md`.
+`REJECTED`. Weights are defined in `CON-052`.
 
 ---
 

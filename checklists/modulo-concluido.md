@@ -1,7 +1,7 @@
 # Checklist — Módulo concluído (portão G5)
 
 O último portão antes de declarar um módulo entregue. Executado pelo
-[auditor final](../agents/09-final-auditor.md), que **não** participou da implementação.
+[auditor final](../agents/10-final-auditor.md), que **não** participou da implementação.
 
 Regra: toda afirmação de validação é tratada como não verificada até que a evidência apareça.
 
@@ -57,7 +57,7 @@ Escopo não aprovado é código não revisado entrando sob a cobertura de códig
 
 ## 6. Camadas cobertas
 
-- [ ] Está declarado quais camadas de [análise](../manual/03-ordem-de-analise.md) foram cobertas e
+- [ ] Está declarado quais camadas de [análise](../volumes/vol-01-constituicao.md) foram cobertas e
       quais não foram.
 - [ ] Camada não analisada está registrada como risco conhecido, não omitida.
 
@@ -80,7 +80,7 @@ Escopo não aprovado é código não revisado entrando sob a cobertura de códig
 ## 9. Notas
 
 Atribuir 0–10 por dimensão, com os pesos de
-[métricas](../manual/10-metricas-de-qualidade.md#notas-da-auditoria):
+[métricas](../volumes/vol-01-constituicao.md):
 
 | Dimensão | Peso | Nota | Justificativa |
 | --- | --- | --- | --- |
@@ -96,7 +96,7 @@ Atribuir 0–10 por dimensão, com os pesos de
 
 Lembretes de calibragem:
 
-- Nota 10 exige [Definition of Excellence](../manual/09-definition-of-excellence.md) na dimensão.
+- Nota 10 exige [Definition of Excellence](../volumes/vol-01-constituicao.md) na dimensão.
 - **Ausência de problemas não é excelência.** Módulo sem achados, sem testes, sem observabilidade e
   sem decisões registradas fica em torno de 5 — não se sabe se funciona.
 - Travas: qualquer `S0` ou `S1` não corrigido limita o total a 4 e força `REJECTED`. Segurança abaixo

@@ -1,7 +1,7 @@
 # Proposta de mudança `<ID>` — `<o que muda>`
 
 Obrigatória antes de editar qualquer coisa não trivial. Sem proposta aprovada, a implementação não
-começa. Ver [portão G2](../manual/02-processo-de-engenharia.md).
+começa. Ver [portão G2](../volumes/vol-01-constituicao.md).
 
 | Campo | Valor |
 | --- | --- |
@@ -63,7 +63,7 @@ Precisa de ADR? `<não | sim — porquê>`
 
 ## 6. Riscos que não aparecem no diff
 
-Verificar todos antes de aprovar (ver [matriz de risco](../manual/07-matriz-de-risco.md)):
+Verificar todos antes de aprovar (ver [matriz de risco](../volumes/vol-01-constituicao.md)):
 
 - [ ] Dado existente viola a regra nova?
 - [ ] Cliente antigo continua funcionando?

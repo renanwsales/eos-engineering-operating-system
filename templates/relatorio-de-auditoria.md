@@ -41,7 +41,7 @@ Executado pelo auditor:
 | Observabilidade e entrega | 5% | | |
 | **Total ponderado** | 100% | | |
 
-Calibragem: 10 exige [DoE](../manual/09-definition-of-excellence.md) na dimensão. Ausência de
+Calibragem: 10 exige [DoE](../volumes/vol-01-constituicao.md) na dimensão. Ausência de
 problemas dá no máximo 8 — e módulo sem testes, sem observabilidade e sem decisões registradas fica em
 torno de 5, porque não se sabe se funciona.
 

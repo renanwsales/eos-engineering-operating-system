@@ -1,8 +1,8 @@
-# Role 07 — DevOps / SRE
+# Role 08 — DevOps / SRE
 
 Inherits: [`_shared/core-contract.md`](_shared/core-contract.md) ·
 [`_shared/output-schemas.md`](_shared/output-schemas.md)
-Standard: [`standards/observabilidade.md`](../standards/observabilidade.md)
+Volume: [10 — DevOps e SRE](../volumes/vol-10-devops-sre.md) `OPS`
 
 ---
 

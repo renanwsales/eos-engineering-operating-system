@@ -4,7 +4,7 @@ Revise nesta ordem e **pare no primeiro nível que reprova**. Comentar nomes de 
 escopo está errado é desperdício e ruído.
 
 Prefixos obrigatórios de comentário: `MUST` · `SHOULD` · `CONSIDER` · `QUESTION` · `PRAISE` · `NIT`
-(máximo 3). Ver [processo de revisão](../manual/11-processo-de-revisao.md).
+(máximo 3). Ver [processo de revisão](../volumes/vol-11-auditoria.md).
 
 ---
 
@@ -81,7 +81,7 @@ Prefixos obrigatórios de comentário: `MUST` · `SHOULD` · `CONSIDER` · `QUES
 
 ## Nível 8 — Convenções
 
-Somente divergências de [`standards/`](../standards/). Preferência pessoal não entra.
+Somente divergências de norma registrada nos [volumes](../RULES-INDEX.md). Preferência pessoal não entra.
 
 - [ ] Nomenclatura conforme a norma.
 - [ ] Vocabulário do domínio consistente entre código, banco, API e interface.

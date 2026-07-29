@@ -1,9 +1,8 @@
-# Role 08 — Product / UX
+# Role 09 — Product / UX
 
 Inherits: [`_shared/core-contract.md`](_shared/core-contract.md) ·
 [`_shared/output-schemas.md`](_shared/output-schemas.md)
-Standards: [`standards/ux-ui.md`](../standards/ux-ui.md) ·
-[`standards/acessibilidade.md`](../standards/acessibilidade.md)
+Volume: [8 — UX/UI Premium](../volumes/vol-08-ux-ui.md) `UXI`
 
 ---
 

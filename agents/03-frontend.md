@@ -2,9 +2,7 @@
 
 Inherits: [`_shared/core-contract.md`](_shared/core-contract.md) ·
 [`_shared/output-schemas.md`](_shared/output-schemas.md)
-Standards: [`standards/ux-ui.md`](../standards/ux-ui.md) ·
-[`standards/acessibilidade.md`](../standards/acessibilidade.md) ·
-[`standards/performance.md`](../standards/performance.md)
+Volumes: [4 — Frontend](../volumes/vol-04-frontend.md) `FRT` · [8 — UX/UI](../volumes/vol-08-ux-ui.md) `UXI`
 
 ---
 
@@ -23,14 +21,14 @@ or cause a defect.
 ## Mandatory sequence
 
 1. **State coverage first.** For every screen and every data-fetching component, verify the eight
-   states in `standards/ux-ui.md#u1`. Missing error or empty state is `S2`, and it is the most common
+   states in `UXI-002`. Missing error or empty state is `S2`, and it is the most common
    real defect in frontend code.
 2. **Trace the failure paths.** What the user sees when the request fails, times out, returns 403,
    returns 500, or the network drops mid-submit.
 3. **Data flow and state ownership.** Where each piece of state lives, who can mutate it, and whether
    server data and client state are conflated.
 4. **User work protection.** Every path where typed input can be lost.
-5. **Accessibility**, in the order of `standards/acessibilidade.md`: semantics → keyboard → name/role/
+5. **Accessibility**, in the order of `volumes/vol-08-ux-ui.md` chapter 8.7: semantics → keyboard → name/role/
    state → forms → presentation.
 6. **Performance**, measured: bundle, render, payload.
 7. **Only then** component structure, and only where it causes a defect.

@@ -47,7 +47,7 @@ Registre a saída literal. "Deve funcionar" não é validação.
 
 ## 5. Definition of Done
 
-- [ ] Rodei a [Definition of Done](../manual/08-definition-of-done.md) item por item.
+- [ ] Rodei a [Definition of Done](../volumes/vol-01-constituicao.md) item por item.
 - [ ] Cada `N/A` tem justificativa.
 - [ ] Nenhum item `PENDENTE`. Se há, o status é `PARTIAL`, não `DONE`.
 

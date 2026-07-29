@@ -11,7 +11,7 @@ entender, e opinar cedo produz achados superficiais.
       criá-lo é o primeiro entregável.
 - [ ] O objetivo desta rodada está escrito, com critério de sucesso mensurável.
 - [ ] Os **não objetivos** estão escritos. Sem isso, o escopo infla.
-- [ ] As camadas de [análise](../manual/03-ordem-de-analise.md) em escopo estão definidas.
+- [ ] As camadas de [análise](../volumes/vol-01-constituicao.md) em escopo estão definidas.
 - [ ] A tolerância a risco do projeto é conhecida.
 
 ## Terreno

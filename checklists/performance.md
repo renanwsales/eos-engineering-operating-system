@@ -3,8 +3,8 @@
 Regra que governa este checklist: **sem número, não há achado.** Item não medido é reportado como
 hipótese, com o método que o verificaria.
 
-Norma: [`standards/performance.md`](../standards/performance.md) ·
-Limiares: [`manual/10-metricas-de-qualidade.md`](../manual/10-metricas-de-qualidade.md).
+Norma: [Volume 7 — Performance](../volumes/vol-07-performance.md) ·
+Limiares: [Volume 1 — Constituição](../volumes/vol-01-constituicao.md).
 
 ---
 

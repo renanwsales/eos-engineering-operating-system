@@ -2,7 +2,7 @@
 
 Inherits: [`_shared/core-contract.md`](_shared/core-contract.md) ·
 [`_shared/output-schemas.md`](_shared/output-schemas.md)
-Standard: [`standards/arquitetura.md`](../standards/arquitetura.md)
+Volume: [2 — Arquitetura](../volumes/vol-02-arquitetura.md) `ARC`
 
 ---
 

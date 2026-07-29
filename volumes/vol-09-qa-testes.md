@@ -1,0 +1,298 @@
+# 📗 Volume 9 — QA e Testes
+
+Prefixo: `QAT` · Regras: QAT-001 a QAT-040 · Papel: [QA Engineer](../agents/07-qa.md)
+
+Camada coberta: **7 (testes)**.
+
+---
+
+## Princípio central
+
+### QAT-001 — Um teste existe para detectar que algo importante quebrou **[IMUTÁVEL]**
+
+Teste que não pode falhar por um motivo real é custo puro: precisa ser mantido, executado e lido, sem nunca
+proteger nada.
+
+A pergunta que este volume responde não é "qual é a cobertura?", e sim: **os testes existentes pegariam as
+falhas que importam?**
+
+### QAT-002 — Perseguir percentual de cobertura é antipadrão **[IMUTÁVEL]**
+
+Um módulo com 90% de cobertura e regras de precificação sem teste está em pior situação do que um com 50% e
+todos os casos de preço cobertos — porque o primeiro inspira uma confiança que não conquistou.
+
+Cobertura de linhas é **indicador** e **nunca bloqueia**. Casos de negócio cobertos é a meta, e bloqueia.
+
+---
+
+## Capítulo 9.1 — Qualidade do teste
+
+### QAT-003 — Teste comportamento, não implementação **[OBRIGATÓRIA]**
+
+Se uma refatoração que preserva comportamento quebra o teste, o teste testava a implementação.
+
+Sinais: verificar que um método interno foi chamado · simular tudo, inclusive o que se está testando ·
+duplicar o cálculo da implementação dentro do teste.
+
+### QAT-004 — Todo teste novo deve falhar antes **[OBRIGATÓRIA]**
+
+Verifique que ele falha sem a mudança, e **apresente a evidência**. Teste que passa em qualquer circunstância
+é o mais perigoso que existe: dá confiança sem dar proteção.
+
+### QAT-005 — Determinístico **[OBRIGATÓRIA]**
+
+Mesma entrada, mesmo resultado, em qualquer ordem, em qualquer máquina, sempre.
+
+**Proibido:** depender de hora real, aleatoriedade sem semente, rede externa, ordem de execução, estado
+deixado por outro teste, espera fixa por tempo.
+
+### QAT-006 — Teste intermitente é pior do que teste ausente **[OBRIGATÓRIA]**
+
+Ele treina o time a reexecutar o pipeline até passar — e a ignorar falhas reais. Corrija ou remova em uma
+rodada.
+
+### QAT-007 — `retry` não é correção **[OBRIGATÓRIA]**
+
+Adicionar nova tentativa a um teste intermitente esconde um defeito real, com frequência de concorrência.
+Investigue a causa.
+
+### QAT-008 — Nunca afrouxe a asserção para passar **[OBRIGATÓRIA]** · `S1`
+
+Quando um teste falha, a primeira hipótese é que **o código** está errado. Editar a expectativa para casar com
+o novo comportamento sem confirmar que ele é correto é o mecanismo pelo qual um defeito deixa de ser defeito e
+se torna a especificação documentada.
+
+Em revisão, examine **cada** teste alterado com esta pergunta.
+
+### QAT-009 — Nome descreve o cenário **[OBRIGATÓRIA]**
+
+```
+Ruim: test_pedido_1
+Bom:  rejeita finalizar pedido quando o estoque do item é insuficiente
+Bom:  mantém o total original quando o cupom está expirado
+```
+
+O nome é lido no relatório de falha, muitas vezes por quem não escreveu o teste.
+
+### QAT-010 — Um motivo de falha por teste **[RECOMENDADA]**
+
+Teste que verifica quinze coisas esconde qual delas falhou.
+
+### QAT-011 — Sem lógica no teste **[RECOMENDADA]**
+
+Condicional e laço geralmente indicam que deveriam ser vários testes, ou um teste por tabela de casos. Teste
+com lógica precisa ser depurado, e nada testa o teste.
+
+### QAT-012 — Mensagem de falha no vocabulário do domínio **[RECOMENDADA]**
+
+A falha deve dizer o que se esperava e o que ocorreu, sem exigir depuração.
+
+### QAT-013 — Simule fronteiras, não o próprio código **[RECOMENDADA]**
+
+Simule o que sai do processo: rede, tempo, aleatoriedade, sistema de arquivos, fornecedor. Simular o código
+sob teste transforma o teste numa afirmação sobre si mesmo.
+
+### QAT-014 — Dados de teste explícitos **[RECOMENDADA]**
+
+O teste mostra os valores que importam para o cenário. Fixture compartilhada gigante torna impossível saber
+por que um teste falha. Use construtores com padrões e sobreponha só o relevante.
+
+### QAT-015 — Snapshot lido, nunca aprovado em massa **[OBRIGATÓRIA]**
+
+Aprovar snapshot sem ler aceita a regressão automaticamente.
+
+---
+
+## Capítulo 9.2 — Cobertura que importa
+
+### QAT-016 — Mapeie o que não pode quebrar **[OBRIGATÓRIA]**
+
+A lista vem do domínio, não dos arquivos de teste: regras de negócio, caminhos de dinheiro, controle de
+acesso, integridade de dados.
+
+### QAT-017 — Cobertura por casos declarados de cada regra **[OBRIGATÓRIA]**
+
+```
+| Regra | Casos necessários | Casos testados | Lacuna | Sev. |
+| Frete por faixa de peso (5 faixas) | 5 faixas + 4 limites + zero + acima do máximo | 2 faixas | 8 | S1 |
+| Cupom: expirado, usado, valor mínimo | 3 rejeições + 1 aceitação | 1 aceitação | 3 | S1 |
+```
+
+### QAT-018 — Regra de negócio crítica sem teste é `S1` **[OBRIGATÓRIA]**
+
+É o único critério de cobertura que bloqueia entrega.
+
+### QAT-019 — Caminho de erro é testado **[OBRIGATÓRIA]**
+
+É o menos testado e o mais executado em produção. Para cada dependência: falha, timeout, resposta malformada,
+sucesso parcial, permissão negada, conflito de concorrência.
+
+Tipicamente a maior lacuna de qualquer base de código, e a mais barata de fechar.
+
+### QAT-020 — Bordas obrigatórias **[OBRIGATÓRIA]**
+
+| Categoria | Casos |
+| --- | --- |
+| Ausência | nulo, faltando, vazio, apenas espaços |
+| Quantidade | 0, 1, muitos, o limite, o limite + 1 |
+| Sinal | negativo onde não deveria ser aceito |
+| Texto | muito longo, caractere especial, emoji, unicode combinado |
+| Número | precisão decimal, arredondamento, estouro |
+| Tempo | fuso, horário de verão, virada de dia/mês/ano, ano bissexto, ordem invertida |
+| Duplicidade | envio repetido, requisição concorrente |
+| Estado | transição inválida, operação em recurso finalizado |
+| Permissão | dono, não dono, outro tenant, sem autenticação |
+| Dependência | indisponível, lenta, resposta inesperada |
+
+### QAT-021 — Arredondamento de dinheiro testado explicitamente **[OBRIGATÓRIA]**
+
+É onde os defeitos silenciosos vivem.
+
+### QAT-022 — Bordas por tabela ou propriedade, não por exemplos avulsos **[RECOMENDADA]**
+
+Uma tabela de casos cobre o espaço; três exemplos escolhidos à mão cobrem os que você já imaginou.
+
+---
+
+## Capítulo 9.3 — Estrutura da suíte
+
+### QAT-023 — Proporção é orientação, risco é o que decide **[RECOMENDADA]**
+
+| Nível | O que cobre | Característica |
+| --- | --- | --- |
+| Unidade | Regras de negócio puras | Muitos, rápidos, sem infraestrutura |
+| Integração | Módulo com banco, fila, fornecedor simulado | Alguns, cobrem o que unidade não alcança |
+| Ponta a ponta | Fluxos críticos completos | Poucos, caros, só os que geram receita ou risco |
+| Contrato | Compatibilidade entre serviços | Onde há integração real |
+
+### QAT-024 — Regra de negócio testável sem infraestrutura **[OBRIGATÓRIA]**
+
+Se testar exige banco, rede e framework, a arquitetura está errada (ARC-001). **A dificuldade de testar é um
+diagnóstico de acoplamento, não um problema de teste.**
+
+### QAT-025 — Pelo menos um teste do caminho crítico ponta a ponta **[RECOMENDADA]**
+
+### QAT-026 — Teste de contrato onde há consumidor externo **[RECOMENDADA]**
+
+Especialmente com cliente que não se controla (app móvel).
+
+### QAT-027 — Suíte rápida o suficiente para ser usada **[RECOMENDADA]**
+
+Se a verificação relevante não roda em minutos, ela deixa de ser executada durante o desenvolvimento, e o
+pipeline se torna o único lugar onde falhas aparecem — tarde e em lote.
+
+### QAT-028 — Teste de concorrência onde há recurso escasso **[OBRIGATÓRIA]**
+
+Estoque, saldo, cupom de uso único. Sem esse teste, BAK-038 não tem proteção contra regressão.
+
+### QAT-029 — Teste que conta consultas onde N+1 foi corrigido **[RECOMENDADA]**
+
+É a única forma de a correção não regredir silenciosamente.
+
+---
+
+## Capítulo 9.4 — Regressão
+
+### QAT-030 — Bug corrigido ganha teste que reproduz o defeito **[OBRIGATÓRIA]**
+
+E que falha sem a correção. Sem isso, a reincidência é questão de tempo.
+
+### QAT-031 — Reincidência de defeito: o achado é o teste ausente **[OBRIGATÓRIA]**
+
+Não o código. Corrigir de novo sem adicionar o teste garante a terceira ocorrência.
+
+### QAT-032 — Nenhum teste desabilitado sem ID de backlog **[OBRIGATÓRIA]**
+
+`skip` exige item referenciado no próprio teste. Teste desabilitado e esquecido é área sem proteção que
+ninguém sabe que existe.
+
+### QAT-033 — Teste de regressão antes da mudança de risco `R3`/`R4` **[OBRIGATÓRIA]**
+
+Escrito **antes**, provando que o comportamento atual está correto. Ver CON-041.
+
+---
+
+## Capítulo 9.5 — Critérios de aceite
+
+### QAT-034 — Critério de aceite é verificável **[OBRIGATÓRIA]**
+
+"Deve ser rápido" não é critério. "p95 abaixo de 300 ms com 10 mil pedidos" é.
+
+### QAT-035 — Critério de aceite inclui os caminhos infelizes **[OBRIGATÓRIA]**
+
+Uma funcionalidade não está aceita só porque o caminho feliz funciona.
+
+### QAT-036 — Critério de aceite inclui o que **não** deve acontecer **[RECOMENDADA]**
+
+"Usuário de outro tenant não vê este pedido" é critério de aceite, não apenas requisito de segurança.
+
+### QAT-037 — Aceite não passa sem a Definition of Done **[OBRIGATÓRIA]**
+
+Ver CON-043.
+
+---
+
+## Capítulo 9.6 — Limites do papel
+
+### QAT-038 — Nunca escreva asserção para comportamento não confirmado **[IMUTÁVEL]**
+
+Se você não consegue determinar se o comportamento atual é correto, **pare e pergunte**. Escrever o teste
+agora trava o que existe — inclusive o bug. Este é o erro mais custoso que este papel pode cometer.
+
+### QAT-039 — Não exija teste de código trivial **[OBRIGATÓRIA]**
+
+Getters, construtores e repasses. Exigi-los é violação de CON-013 no domínio de testes: manutenção sem
+proteção.
+
+### QAT-040 — Não bloqueie por percentual **[IMUTÁVEL]**
+
+Você pode bloquear por regra crítica sem teste, por asserção afrouxada e por teste recém-desabilitado.
+Nunca por número de cobertura.
+
+---
+
+## Antipadrões
+
+| Antipadrão | Consequência |
+| --- | --- |
+| Teste que reflete a implementação | Impede refatoração legítima |
+| Teste tautológico | Trava o bug junto com o comportamento |
+| Simulação excessiva | Testa a simulação, não o sistema |
+| Espera fixa por tempo | Intermitente e lento |
+| Teste dependente de ordem | Falha inexplicável ao paralelizar |
+| Fixture global gigante | Ninguém sabe o que o teste pressupõe |
+| `retry` em teste intermitente | Esconde defeito de concorrência |
+| Perseguir percentual | Manutenção sem proteção |
+| Teste que só roda no pipeline | Ciclo de correção longo |
+| Snapshot aprovado sem leitura | Aceita a regressão automaticamente |
+| Asserção afrouxada | Transforma o bug em especificação |
+
+---
+
+## Verificação obrigatória de saída
+
+```
+## O que não pode quebrar
+| Regra/fluxo | Criticidade | Testado? | Lacuna |
+
+## Cobertura de casos de negócio
+| Regra | Casos necessários | Testados | Faltando | Severidade |
+
+## Qualidade dos testes
+| Teste | Problema | Severidade | Evidência |
+
+## Bordas
+| Regra | Categoria | Testado? | Evidência |
+
+## Caminhos de erro
+| Dependência | Modo de falha | Testado? |
+
+## Regressão
+| Bug histórico | Teste de regressão | Status |
+
+## Saúde da suíte
+Determinismo: <intermitentes encontrados> | Duração: <tempo> | Desabilitados: <n, com IDs>
+
+## Comportamento não confirmado (bloqueia escrever teste)
+| Local | Pergunta | Quem responde |
+```

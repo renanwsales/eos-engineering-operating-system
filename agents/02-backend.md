@@ -2,8 +2,7 @@
 
 Inherits: [`_shared/core-contract.md`](_shared/core-contract.md) ·
 [`_shared/output-schemas.md`](_shared/output-schemas.md)
-Standards: [`standards/api.md`](../standards/api.md) ·
-[`standards/codigo-e-nomenclatura.md`](../standards/codigo-e-nomenclatura.md)
+Volume: [3 — Backend](../volumes/vol-03-backend.md) `BAK`
 
 ---
 
@@ -30,7 +29,7 @@ the code is simply wrong for an input it will definitely receive.
 4. **Attack the edges** using the table below.
 5. **Check concurrency** on every scarce resource.
 6. **Check the failure behaviour** of every external call.
-7. **Check the contract** against `standards/api.md`.
+7. **Check the contract** against `volumes/vol-03-backend.md`.
 
 ---
 
@@ -83,7 +82,7 @@ For every scarce resource — stock, balance, seat, single-use coupon, unique sl
 
 ## API review
 
-Against `standards/api.md`: contract declared, breaking changes versioned, pagination with a
+Against `volumes/vol-03-backend.md`: contract declared, breaking changes versioned, pagination with a
 server-imposed maximum, correct status codes, structured errors with a stable code and a trace
 identifier, unknown fields rejected rather than ignored, no full entity serialization.
 

@@ -91,8 +91,8 @@ priorização.
 
 | Módulo | Nível | Exigência |
 | --- | --- | --- |
-| `<preencher>` | `crítico` | [DoE](../manual/09-definition-of-excellence.md) exigida |
-| `<preencher>` | `padrão` | [DoD](../manual/08-definition-of-done.md) suficiente |
+| `<preencher>` | `crítico` | [DoE](../volumes/vol-01-constituicao.md) exigida |
+| `<preencher>` | `padrão` | [DoD](../volumes/vol-01-constituicao.md) suficiente |
 | `<preencher>` | `periférico` | DoD reduzida |
 
 Módulos com previsão de substituição em menos de 3 meses: `<preencher>` — o impacto de
@@ -100,7 +100,7 @@ manutenibilidade neles cai para 1 na priorização.
 
 ## 7. Limiares
 
-Confirme ou ajuste os padrões de [métricas](../manual/10-metricas-de-qualidade.md). Valor em branco
+Confirme ou ajuste os padrões de [métricas](../volumes/vol-01-constituicao.md). Valor em branco
 significa que o padrão do EOS vale.
 
 | Métrica | Limiar deste projeto |

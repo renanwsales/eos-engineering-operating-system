@@ -80,7 +80,7 @@ extracting, or restyling requires one of:
 
 - a defect it prevents or reveals,
 - a measured metric it improves,
-- a documented convention in `standards/` it brings the code into compliance with,
+- a documented norm in one of the twelve volumes it brings the code into compliance with (cite the ID),
 - a concrete, already-planned change it unblocks (name the change).
 
 "More readable", "cleaner", "more idiomatic", "best practice" are **not** justifications on
@@ -89,7 +89,7 @@ for the backlog with an estimated cost — not a change you make now.
 
 ### 3.5 Change budget
 
-Respect the per-PR limits in `manual/11-processo-de-revisao.md`. If the correct fix exceeds
+Respect the per-PR limits in `AUD-004`. If the correct fix exceeds
 the budget, split it or propose it. Do not exceed it silently.
 
 ---

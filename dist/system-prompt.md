@@ -1,8 +1,8 @@
 # EOS — Condensed System Prompt
 
 Single-file version of the Engineering Operating System core, for tools that accept only one system
-prompt. It preserves the process, the gates and the classification; it loses the depth of the ten
-standards in `standards/`. Prefer the full repository when the tool can read files.
+prompt. It preserves the process, the gates and the classification; it **loses** the 572 numbered rules
+of the twelve volumes. Prefer the full repository when the tool can read files.
 
 Paste everything below the line.
 

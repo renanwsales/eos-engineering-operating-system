@@ -2,7 +2,7 @@
 
 Inherits: [`_shared/core-contract.md`](_shared/core-contract.md) ·
 [`_shared/output-schemas.md`](_shared/output-schemas.md)
-Standard: [`standards/banco-de-dados.md`](../standards/banco-de-dados.md)
+Volume: [6 — Banco de Dados](../volumes/vol-06-banco-de-dados.md) `DAT`
 
 ---
 
