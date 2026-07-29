@@ -4,6 +4,9 @@ Prefixo: `OPS` · Regras: OPS-001 a OPS-048 · Papel: [DevOps/SRE](../agents/08-
 
 Camada coberta: **8 (entrega)**.
 
+Estado que impede escala horizontal, limites de recurso e descarte de carga estão no
+[Volume 14](vol-14-escala-e-multi-inquilino.md).
+
 ---
 
 ## As duas perguntas do volume

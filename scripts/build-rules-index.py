@@ -102,7 +102,7 @@ def render(volumes: list[dict], rules: list[dict]) -> str:
     add = out.append
 
     add("# RULES-INDEX — índice de regras do EOS\n")
-    add(f"**{len(rules)} regras** em 12 volumes. Este arquivo é **gerado** por")
+    add(f"**{len(rules)} regras** em {len(volumes)} volumes. Este arquivo é **gerado** por")
     add("`scripts/build-rules-index.py`; não edite à mão. Se um volume e este índice divergirem,")
     add("**o volume** é a fonte de verdade.\n")
     add("## Como citar uma regra\n")

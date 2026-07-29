@@ -3,7 +3,8 @@
 Prefixo: `FRT` · Regras: FRT-001 a FRT-042 · Papel: [Frontend](../agents/03-frontend.md)
 
 Camadas cobertas: **6 (UX/A11y)** na parte técnica, com apoio de [Vol 7](vol-07-performance.md) e
-[Vol 8](vol-08-ux-ui.md).
+[Vol 8](vol-08-ux-ui.md). A escolha da estratégia de renderização (SSR, CSR, RSC, estático, streaming) está no
+[Volume 13](vol-13-selecao-de-arquitetura.md), capítulo 13.6.
 
 Aviso de calibragem: revisão de frontend é onde achados cosméticos se multiplicam. Estrutura de
 componentes, abordagem de estilização e organização de arquivos **não são achados** salvo violação de norma

@@ -4,6 +4,9 @@ Prefixo: `PRF` · Regras: PRF-001 a PRF-038 · Papel: [Performance Engineer](../
 
 Camada coberta: **5 (performance)**.
 
+Este volume trata do gargalo **medido de hoje**. As decisões estruturais de crescimento e a contrapressão sob
+saturação estão no [Volume 14](vol-14-escala-e-multi-inquilino.md).
+
 ---
 
 ## O portão de entrada do volume

@@ -23,7 +23,11 @@ SKIP_DIRS = {".git", "node_modules"}
 LINK = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 HEADING = re.compile(r"^#{1,6}\s+(.*)$")
 RULE_DEF = re.compile(r"^### ([A-Z]{3}-\d{3}) — ", re.M)
-RULE_REF = re.compile(r"\b(CON|ARC|BAK|FRT|SEC|DAT|PRF|UXI|QAT|OPS|AUD|ORC)-(\d{3})\b")
+
+
+def rule_reference_pattern(prefixes: set[str]) -> re.Pattern[str]:
+    """Built from the prefixes that actually exist, so adding a volume never leaves this stale."""
+    return re.compile(rf"\b({'|'.join(sorted(prefixes))})-(\d{{3}})\b")
 
 
 def slug(text: str) -> str:
@@ -54,6 +58,10 @@ def main() -> int:
         for path in (ROOT / "volumes").glob("vol-*.md")
         for rule in RULE_DEF.findall(path.read_text())
     }
+    if not known_rules:
+        print("FALHOU: nenhuma regra encontrada em volumes/", file=sys.stderr)
+        return 1
+    rule_ref = rule_reference_pattern({rule[:3] for rule in known_rules})
 
     errors: list[str] = []
     links = anchor_checks = rule_refs = 0
@@ -81,7 +89,7 @@ def main() -> int:
                 if resolved in anchors and anchor not in anchors[resolved]:
                     errors.append(f"{rel}: âncora inexistente -> {target}")
 
-        for prefix, number in RULE_REF.findall(text):
+        for prefix, number in rule_ref.findall(text):
             rule_refs += 1
             if f"{prefix}-{number}" not in known_rules:
                 errors.append(f"{rel}: referência a regra inexistente -> {prefix}-{number}")

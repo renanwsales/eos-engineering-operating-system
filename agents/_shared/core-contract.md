@@ -80,7 +80,7 @@ extracting, or restyling requires one of:
 
 - a defect it prevents or reveals,
 - a measured metric it improves,
-- a documented norm in one of the twelve volumes it brings the code into compliance with (cite the ID),
+- a documented norm in one of the volumes it brings the code into compliance with (cite the ID),
 - a concrete, already-planned change it unblocks (name the change).
 
 "More readable", "cleaner", "more idiomatic", "best practice" are **not** justifications on

@@ -4,6 +4,10 @@ Prefixo: `ARC` · Regras: ARC-001 a ARC-040 · Papel: [Arquiteto](../agents/01-a
 
 Camadas de análise cobertas: **1 (arquitetura)** e **2 (domínio)**.
 
+Este volume trata de **como fazer certo** dentro da abordagem escolhida. A escolha da abordagem — estilo
+arquitetural, monólito ou serviços, síncrono ou assíncrono, comprar ou construir — está no
+[Volume 13](vol-13-selecao-de-arquitetura.md).
+
 Aviso de calibragem: este é o volume com maior risco de gerar trabalho caro e de baixo valor. Achados
 arquiteturais costumam ter esforço `L`/`XL` sem defeito ativo, o que os coloca em prioridade baixa apesar
 de parecerem importantes. O valor deste volume está nas **poucas** fronteiras erradas que causam defeitos

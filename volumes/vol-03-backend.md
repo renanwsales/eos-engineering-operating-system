@@ -1,8 +1,11 @@
 # 📙 Volume 3 — Framework Backend
 
-Prefixo: `BAK` · Regras: BAK-001 a BAK-048 · Papel: [Backend](../agents/02-backend.md)
+Prefixo: `BAK` · Regras: BAK-001 a BAK-073 · Papel: [Backend](../agents/02-backend.md)
 
 Camadas cobertas: **2 (domínio)**, **3 (segurança, em conjunto com o Vol 5)**.
+
+Inclui webhooks, GraphQL e trabalho agendado. Contrato de API e regras de negócio são os capítulos centrais;
+os três últimos capítulos aplicam-se conforme a superfície do projeto.
 
 Missão do volume: garantir que **o servidor faz a coisa certa sob toda entrada, toda falha e toda execução
 concorrente**. Os achados de maior valor aqui não são arquiteturais — são os casos concretos e baratos de
@@ -329,6 +332,148 @@ em silêncio é perda de dado.
 
 Com limite de tempo por bloco e possibilidade de retomar. Um processamento único e gigante bloqueia,
 estoura memória e, ao falhar, não deixa progresso.
+
+---
+
+## Capítulo 3.8 — Webhooks
+
+### BAK-049 — Webhook de entrada verifica a origem **[OBRIGATÓRIA]** · `S0`
+
+Assinatura do payload conferida em tempo constante (`SEC-017`), ou autenticação mútua. Endpoint público que
+confia no corpo da requisição é uma API de escrita sem autenticação — e normalmente numa área sensível, porque
+webhook costuma carregar confirmação de pagamento.
+
+Verifique também o **carimbo de tempo**, para recusar replay de uma requisição legítima capturada.
+
+### BAK-050 — Webhook de entrada é idempotente **[OBRIGATÓRIA]**
+
+Todo provedor reentrega. Processar duas vezes a confirmação de pagamento é `S0`. Guarde o identificador do
+evento e descarte repetição.
+
+### BAK-051 — Responda rápido, processe fora do ciclo da requisição **[OBRIGATÓRIA]**
+
+Aceite, persista, enfileire, responda. Processar de forma síncrona faz o provedor expirar e reentregar — o que
+multiplica o trabalho exatamente quando ele já está lento.
+
+### BAK-052 — Ordem de chegada não é garantida **[OBRIGATÓRIA]**
+
+Eventos chegam fora de ordem. Use o carimbo do provedor ou o número de sequência para descartar o estado mais
+antigo, em vez de aplicar o último que chegou. É a causa do bug em que um pedido cancelado volta a `pago`.
+
+### BAK-053 — Evento desconhecido é ignorado, não é erro **[RECOMENDADA]**
+
+Provedores adicionam tipos de evento. Responder erro para o que você não trata faz o provedor reentregar
+indefinidamente e, em alguns casos, desativar o endpoint.
+
+### BAK-054 — Webhook de saída é assinado, com segredo por assinante **[OBRIGATÓRIA]**
+
+O assinante precisa poder verificar que a mensagem é sua. Segredo compartilhado entre todos os assinantes
+significa que qualquer um pode falsificar mensagem para outro.
+
+### BAK-055 — URL de destino validada contra faixas internas **[OBRIGATÓRIA]** · `S1`
+
+Webhook de saída com URL configurável pelo cliente é o vetor clássico de SSRF: ele pede que **você** faça a
+requisição. Ver `SEC-049`.
+
+### BAK-056 — Reentrega com espera crescente, limite e destino final **[OBRIGATÓRIA]**
+
+E desativação do assinante após falha persistente, com notificação. Sem limite, um assinante morto consome
+capacidade indefinidamente.
+
+### BAK-057 — Carga útil mínima, sem dado sensível **[OBRIGATÓRIA]**
+
+Prefira enviar o identificador e deixar o assinante buscar o recurso com a própria autorização. Webhook é
+enviado para um endpoint que você não controla, e frequentemente sem TLS verificado do outro lado.
+
+### BAK-058 — Falha de assinante não afeta o fluxo principal **[OBRIGATÓRIA]**
+
+Entrega de webhook é assíncrona e isolada. Se o envio é síncrono no fluxo de checkout, o assinante lento
+derruba a sua venda.
+
+### BAK-059 — O assinante tem visibilidade das entregas **[RECOMENDADA]**
+
+Histórico com resultado e possibilidade de reenviar. Sem isso, todo problema de integração vira um pedido de
+suporte que você investiga manualmente.
+
+---
+
+## Capítulo 3.9 — GraphQL
+
+Aplicável somente quando a API usa GraphQL. As regras dos capítulos anteriores continuam valendo; estas
+tratam do que muda.
+
+### BAK-060 — Resolver não faz uma consulta por item **[OBRIGATÓRIA]**
+
+GraphQL torna o N+1 o comportamento **padrão**: cada campo de cada item resolve isoladamente. Sem carregamento
+em lote por requisição, uma consulta de 50 itens com 3 relações faz 151 consultas. `S1` em fluxo principal.
+
+Verifique contando consultas (`PRF-008`), nunca lendo o resolver.
+
+### BAK-061 — Profundidade e complexidade limitadas **[OBRIGATÓRIA]** · `S1`
+
+Sem limite, uma única consulta aninhada é um ataque de indisponibilidade de uma linha. Imponha profundidade
+máxima, custo máximo calculado antes de executar, e limite de tempo.
+
+### BAK-062 — Autorização por campo e por objeto, não na raiz **[OBRIGATÓRIA]** · `S0`
+
+O grafo permite alcançar um recurso por caminhos que ninguém previu — por exemplo, o e-mail do dono através de
+um pedido público. Autorizar apenas a consulta de entrada é insuficiente por construção.
+
+### BAK-063 — Erro parcial é decisão explícita **[OBRIGATÓRIA]**
+
+GraphQL responde 200 com dados parciais e uma lista de erros. Defina o que o cliente faz nesse caso — e
+garanta que o monitoramento conta esses erros, porque por status HTTP eles são invisíveis (`OPS-018`).
+
+### BAK-064 — Introspecção e campos internos controlados em produção **[RECOMENDADA]**
+
+O schema é a documentação completa da sua superfície de ataque.
+
+### BAK-065 — Deprecação de campo é medida antes da remoção **[OBRIGATÓRIA]**
+
+Marque, meça o uso real, remova quando chegar a zero (`BAK-036`).
+
+---
+
+## Capítulo 3.10 — Trabalho agendado e workers
+
+### BAK-066 — Agendamento roda uma vez, não uma vez por instância **[OBRIGATÓRIA]** · `S0` com efeito externo
+
+Ao escalar de uma para três instâncias, todo agendamento em processo passa a executar três vezes. Se o
+trabalho cobra, envia ou provisiona, isso é `S0`. Ver `ESC-024`.
+
+### BAK-067 — Todo job é idempotente e retomável **[OBRIGATÓRIA]**
+
+Ele vai ser interrompido no meio — por deploy, por reciclagem de instância, por falha. Job que ao ser
+reexecutado duplica efeito, ou que perde todo o progresso, é defeito de projeto.
+
+### BAK-068 — Job declara com que autoridade roda **[OBRIGATÓRIA]**
+
+E qual o escopo de dados que alcança. Job com privilégio total processando pedido de usuário comum é escalada
+de privilégio esperando um bug (`BAK-022`).
+
+### BAK-069 — Sobreposição de execução é tratada **[OBRIGATÓRIA]**
+
+Se a execução de hoje ainda roda quando a de amanhã começa, o comportamento precisa estar definido: pular,
+enfileirar ou executar em paralelo com segurança. Sem definição, o padrão é corrida.
+
+### BAK-070 — Timeout por execução **[OBRIGATÓRIA]**
+
+Job sem limite de tempo trava recurso indefinidamente e não aparece como falha.
+
+### BAK-071 — Falha de job é visível e alertada **[OBRIGATÓRIA]**
+
+Job que falha em silêncio é a forma mais comum de perda de dado que ninguém percebe por semanas. Registre
+início, fim, volume processado e resultado. Alerte para falha e para **ausência de execução** — job que parou
+de rodar não emite erro nenhum.
+
+### BAK-072 — Fuso do agendamento é explícito **[OBRIGATÓRIA]**
+
+Agendamento em fuso local muda de hora com horário de verão, e duplica ou pula execução na virada. Agende em
+UTC e converta para exibir.
+
+### BAK-073 — Job de volume processa em lotes, com progresso registrado **[RECOMENDADA]**
+
+Ver `BAK-048`. Processamento único e gigante bloqueia, estoura memória e, ao falhar, não deixa progresso.
 
 ---
 

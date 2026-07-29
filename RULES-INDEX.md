@@ -1,6 +1,6 @@
 # RULES-INDEX — índice de regras do EOS
 
-**572 regras** em 12 volumes. Este arquivo é **gerado** por
+**735 regras** em 15 volumes. Este arquivo é **gerado** por
 `scripts/build-rules-index.py`; não edite à mão. Se um volume e este índice divergirem,
 **o volume** é a fonte de verdade.
 
@@ -17,7 +17,7 @@ deixa o número aposentado, nunca reaproveitado, para que relatórios antigos co
 | `[OBRIGATÓRIA]` | Violação é achado, com severidade | ADR registrando a divergência (ARC-037) |
 | `[RECOMENDADA]` | Padrão esperado; exceção é normal | Justificativa no momento, sem ADR |
 
-Distribuição: **59 imutáveis** · **402 obrigatórias** · **111 recomendadas**.
+Distribuição: **69 imutáveis** · **531 obrigatórias** · **135 recomendadas**.
 
 ## Volumes
 
@@ -25,9 +25,9 @@ Distribuição: **59 imutáveis** · **402 obrigatórias** · **111 recomendadas
 | --- | --- | --- | --- |
 | 01 | [Constituição da Engenharia](volumes/vol-01-constituicao.md) | `CON` | 86 |
 | 02 | [Framework de Arquitetura](volumes/vol-02-arquitetura.md) | `ARC` | 40 |
-| 03 | [Framework Backend](volumes/vol-03-backend.md) | `BAK` | 48 |
+| 03 | [Framework Backend](volumes/vol-03-backend.md) | `BAK` | 73 |
 | 04 | [Framework Frontend](volumes/vol-04-frontend.md) | `FRT` | 42 |
-| 05 | [Segurança e DevSecOps](volumes/vol-05-seguranca.md) | `SEC` | 61 |
+| 05 | [Segurança e DevSecOps](volumes/vol-05-seguranca.md) | `SEC` | 66 |
 | 06 | [Framework de Banco de Dados](volumes/vol-06-banco-de-dados.md) | `DAT` | 40 |
 | 07 | [Framework de Performance](volumes/vol-07-performance.md) | `PRF` | 38 |
 | 08 | [UX/UI Premium](volumes/vol-08-ux-ui.md) | `UXI` | 55 |
@@ -35,7 +35,10 @@ Distribuição: **59 imutáveis** · **402 obrigatórias** · **111 recomendadas
 | 10 | [DevOps e SRE](volumes/vol-10-devops-sre.md) | `OPS` | 48 |
 | 11 | [Auditoria Técnica](volumes/vol-11-auditoria.md) | `AUD` | 42 |
 | 12 | [Orquestrador Mestre](volumes/vol-12-orquestrador.md) | `ORC` | 32 |
-| | **Total** | | **572** |
+| 13 | [Seleção de Arquitetura](volumes/vol-13-selecao-de-arquitetura.md) | `SEL` | 33 |
+| 14 | [Escala e Multi-Inquilino](volumes/vol-14-escala-e-multi-inquilino.md) | `ESC` | 42 |
+| 15 | [Playbooks](volumes/vol-15-playbooks.md) | `PLB` | 58 |
+| | **Total** | | **735** |
 
 ---
 
@@ -181,7 +184,7 @@ Arquivo: [`volumes/vol-02-arquitetura.md`](volumes/vol-02-arquitetura.md) · 40 
 
 ## 📙 Volume 3 — Framework Backend
 
-Arquivo: [`volumes/vol-03-backend.md`](volumes/vol-03-backend.md) · 48 regras
+Arquivo: [`volumes/vol-03-backend.md`](volumes/vol-03-backend.md) · 73 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -233,6 +236,31 @@ Arquivo: [`volumes/vol-03-backend.md`](volumes/vol-03-backend.md) · 48 regras
 | `BAK-046` | Sucesso parcial é tratado | OBRIG | — | Resiliência |
 | `BAK-047` | Fila com destino final definido | OBRIG | — | Resiliência |
 | `BAK-048` | Trabalho em volume é processado em lotes e retomável | RECOM | — | Resiliência |
+| `BAK-049` | Webhook de entrada verifica a origem | OBRIG | `S0` | Webhooks |
+| `BAK-050` | Webhook de entrada é idempotente | OBRIG | — | Webhooks |
+| `BAK-051` | Responda rápido, processe fora do ciclo da requisição | OBRIG | — | Webhooks |
+| `BAK-052` | Ordem de chegada não é garantida | OBRIG | — | Webhooks |
+| `BAK-053` | Evento desconhecido é ignorado, não é erro | RECOM | — | Webhooks |
+| `BAK-054` | Webhook de saída é assinado, com segredo por assinante | OBRIG | — | Webhooks |
+| `BAK-055` | URL de destino validada contra faixas internas | OBRIG | `S1` | Webhooks |
+| `BAK-056` | Reentrega com espera crescente, limite e destino final | OBRIG | — | Webhooks |
+| `BAK-057` | Carga útil mínima, sem dado sensível | OBRIG | — | Webhooks |
+| `BAK-058` | Falha de assinante não afeta o fluxo principal | OBRIG | — | Webhooks |
+| `BAK-059` | O assinante tem visibilidade das entregas | RECOM | — | Webhooks |
+| `BAK-060` | Resolver não faz uma consulta por item | OBRIG | — | GraphQL |
+| `BAK-061` | Profundidade e complexidade limitadas | OBRIG | `S1` | GraphQL |
+| `BAK-062` | Autorização por campo e por objeto, não na raiz | OBRIG | `S0` | GraphQL |
+| `BAK-063` | Erro parcial é decisão explícita | OBRIG | — | GraphQL |
+| `BAK-064` | Introspecção e campos internos controlados em produção | RECOM | — | GraphQL |
+| `BAK-065` | Deprecação de campo é medida antes da remoção | OBRIG | — | GraphQL |
+| `BAK-066` | Agendamento roda uma vez, não uma vez por instância | OBRIG | `S0` com efeito externo | Trabalho agendado e workers |
+| `BAK-067` | Todo job é idempotente e retomável | OBRIG | — | Trabalho agendado e workers |
+| `BAK-068` | Job declara com que autoridade roda | OBRIG | — | Trabalho agendado e workers |
+| `BAK-069` | Sobreposição de execução é tratada | OBRIG | — | Trabalho agendado e workers |
+| `BAK-070` | Timeout por execução | OBRIG | — | Trabalho agendado e workers |
+| `BAK-071` | Falha de job é visível e alertada | OBRIG | — | Trabalho agendado e workers |
+| `BAK-072` | Fuso do agendamento é explícito | OBRIG | — | Trabalho agendado e workers |
+| `BAK-073` | Job de volume processa em lotes, com progresso registrado | RECOM | — | Trabalho agendado e workers |
 
 ## 📕 Volume 4 — Framework Frontend
 
@@ -285,7 +313,7 @@ Arquivo: [`volumes/vol-04-frontend.md`](volumes/vol-04-frontend.md) · 42 regras
 
 ## 📓 Volume 5 — Segurança e DevSecOps
 
-Arquivo: [`volumes/vol-05-seguranca.md`](volumes/vol-05-seguranca.md) · 61 regras
+Arquivo: [`volumes/vol-05-seguranca.md`](volumes/vol-05-seguranca.md) · 66 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -347,9 +375,14 @@ Arquivo: [`volumes/vol-05-seguranca.md`](volumes/vol-05-seguranca.md) · 61 regr
 | `SEC-056` | Direitos do titular tecnicamente possíveis | OBRIG | — | Dados pessoais |
 | `SEC-057` | Nenhum dado pessoal em desenvolvimento ou em fixture | OBRIG | — | Dados pessoais |
 | `SEC-058` | Compartilhamento com terceiro é decisão registrada | OBRIG | — | Dados pessoais |
-| `SEC-059` | Testes passando não é prova | OBRIG | — | Dados pessoais |
-| `SEC-060` | Descreva o caminho de exploração concretamente | OBRIG | — | Dados pessoais |
-| `SEC-061` | `S0` de segurança não é rebaixável por agente | IMUT | — | Dados pessoais |
+| `SEC-059` | Três níveis, escolhidos por criticidade do módulo | OBRIG | — | Níveis de verificação |
+| `SEC-060` | O nível é declarado no relatório, sempre | OBRIG | — | Níveis de verificação |
+| `SEC-061` | Subir de nível é decisão registrada; descer também | OBRIG | — | Níveis de verificação |
+| `SEC-062` | V3 nunca é executado só por agente | IMUT | — | Níveis de verificação |
+| `SEC-063` | Nível não substitui as regras de bloqueio | IMUT | — | Níveis de verificação |
+| `SEC-064` | Testes passando não é prova | OBRIG | — | Níveis de verificação |
+| `SEC-065` | Descreva o caminho de exploração concretamente | OBRIG | — | Níveis de verificação |
+| `SEC-066` | `S0` de segurança não é rebaixável por agente | IMUT | — | Níveis de verificação |
 
 ## 📒 Volume 6 — Framework de Banco de Dados
 
@@ -694,4 +727,158 @@ Arquivo: [`volumes/vol-12-orquestrador.md`](volumes/vol-12-orquestrador.md) · 3
 | `ORC-030` | Conferir o backlog | OBRIG | — | Encerramento |
 | `ORC-031` | Registrar as notas para comparação | RECOM | — | Encerramento |
 | `ORC-032` | Recomendar o próximo item de maior valor | OBRIG | — | Encerramento |
+
+## 📔 Volume 13 — Seleção de Arquitetura
+
+Arquivo: [`volumes/vol-13-selecao-de-arquitetura.md`](volumes/vol-13-selecao-de-arquitetura.md) · 33 regras
+
+| ID | Regra | Nível | Sev. | Capítulo |
+| --- | --- | --- | --- | --- |
+| `SEL-001` | O padrão é o mais simples que resolve | IMUT | — | A regra que governa toda escolha |
+| `SEL-002` | Toda escolha declara o gatilho de mudança | OBRIG | — | A regra que governa toda escolha |
+| `SEL-003` | Escolha por restrição observada, nunca por escala hipotética | IMUT | — | A regra que governa toda escolha |
+| `SEL-004` | Nenhuma escolha de estilo sem ADR | OBRIG | — | A regra que governa toda escolha |
+| `SEL-005` | Clean, Hexagonal e Onion: escolha o vocabulário, não a arquitetura | OBRIG | — | Estilos de organização interna |
+| `SEL-006` | Camadas técnicas versus fatia vertical | RECOM | — | Estilos de organização interna |
+| `SEL-007` | Feature First não dispensa fronteira de domínio | OBRIG | — | Estilos de organização interna |
+| `SEL-008` | Monólito modular é o padrão para produto em evolução | RECOM | — | Monólito, monólito modular e serviços |
+| `SEL-009` | Separar em serviço exige autonomia real em três eixos | OBRIG | — | Monólito, monólito modular e serviços |
+| `SEL-010` | Dois serviços que sempre sobem juntos são um serviço com custo de rede | IMUT | — | Monólito, monólito modular e serviços |
+| `SEL-011` | Separar exige a infraestrutura da separação, antes | OBRIG | — | Monólito, monólito modular e serviços |
+| `SEL-012` | Extraia um serviço por vez, pela fronteira mais clara | OBRIG | — | Monólito, monólito modular e serviços |
+| `SEL-013` | Banco compartilhado entre serviços anula a separação | OBRIG | — | Monólito, monólito modular e serviços |
+| `SEL-014` | BFF só com clientes de necessidades divergentes | RECOM | — | Monólito, monólito modular e serviços |
+| `SEL-015` | CQRS é resposta a uma assimetria medida | RECOM | — | CQRS e event sourcing |
+| `SEL-016` | CQRS assíncrono cria consistência eventual visível ao usuário | OBRIG | — | CQRS e event sourcing |
+| `SEL-017` | Event sourcing exige compromisso permanente | OBRIG | — | CQRS e event sourcing |
+| `SEL-018` | Evento de domínio não é event sourcing | OBRIG | — | CQRS e event sourcing |
+| `SEL-019` | Nenhum dos dois é padrão; a escolha é registrada | OBRIG | — | Síncrono e assíncrono |
+| `SEL-020` | Assíncrono para o que o usuário não espera | RECOM | — | Síncrono e assíncrono |
+| `SEL-021` | Assíncrono exige consumidor idempotente, sem exceção | OBRIG | — | Síncrono e assíncrono |
+| `SEL-022` | Fila não conserta dependência instável | OBRIG | — | Síncrono e assíncrono |
+| `SEL-023` | Escolha o modelo de entrega conscientemente | RECOM | — | Síncrono e assíncrono |
+| `SEL-024` | Escolha por natureza do conteúdo, não por moda de framework | OBRIG | — | Estratégia de renderização |
+| `SEL-025` | Dado por usuário nunca em resposta cacheada publicamente | OBRIG | `S0` | Estratégia de renderização |
+| `SEL-026` | A fronteira servidor/cliente é uma fronteira de segurança | OBRIG | — | Estratégia de renderização |
+| `SEL-027` | Streaming exige espaço reservado | OBRIG | — | Estratégia de renderização |
+| `SEL-028` | Misturar estratégias é normal; misturar sem critério declarado não é | RECOM | — | Estratégia de renderização |
+| `SEL-029` | Construir o que é diferencial; comprar o resto | RECOM | — | Comprar, usar ou construir |
+| `SEL-030` | Dependência é decisão com quatro perguntas | OBRIG | — | Comprar, usar ou construir |
+| `SEL-031` | Fornecedor entra pela borda, com tradução | OBRIG | — | Comprar, usar ou construir |
+| `SEL-032` | Fornecedor crítico exige comportamento em falha declarado | OBRIG | — | Comprar, usar ou construir |
+| `SEL-033` | Construir para evitar custo de assinatura exige o cálculo completo | RECOM | — | Comprar, usar ou construir |
+
+## 📒 Volume 14 — Escala e Multi-Inquilino
+
+Arquivo: [`volumes/vol-14-escala-e-multi-inquilino.md`](volumes/vol-14-escala-e-multi-inquilino.md) · 42 regras
+
+| ID | Regra | Nível | Sev. | Capítulo |
+| --- | --- | --- | --- | --- |
+| `ESC-001` | Escala é sempre resposta a um número, nunca a uma ambição | IMUT | — | A disciplina de escalar |
+| `ESC-002` | A ordem de intervenção é fixa | OBRIG | — | A disciplina de escalar |
+| `ESC-003` | Aumentar infraestrutura não é correção | OBRIG | — | A disciplina de escalar |
+| `ESC-004` | Toda decisão estrutural declara a condição de invalidação | OBRIG | — | A disciplina de escalar |
+| `ESC-005` | Normalize por padrão | OBRIG | — | Normalizar e desnormalizar |
+| `ESC-006` | Desnormalizar é decisão com quatro respostas obrigatórias | OBRIG | — | Normalizar e desnormalizar |
+| `ESC-007` | Desnormalização exige detecção de divergência | OBRIG | — | Normalizar e desnormalizar |
+| `ESC-008` | Dado histórico é cópia legítima, não desnormalização | RECOM | — | Normalizar e desnormalizar |
+| `ESC-009` | Contador agregado precisa de estratégia de concorrência | OBRIG | — | Normalizar e desnormalizar |
+| `ESC-010` | Visão materializada declara a janela de obsolescência | RECOM | — | Normalizar e desnormalizar |
+| `ESC-011` | Réplica introduz atraso, e o atraso é visível | OBRIG | — | Réplicas de leitura |
+| `ESC-012` | Classifique cada leitura por tolerância a atraso | OBRIG | — | Réplicas de leitura |
+| `ESC-013` | Atraso de replicação é monitorado com alerta | OBRIG | — | Réplicas de leitura |
+| `ESC-014` | Réplica não é backup | OBRIG | — | Réplicas de leitura |
+| `ESC-015` | Roteamento de leitura é explícito, nunca implícito | RECOM | — | Réplicas de leitura |
+| `ESC-016` | Particione quando o problema é o conjunto quente, não o total | RECOM | — | Particionamento e sharding |
+| `ESC-017` | A chave de partição precisa aparecer nas consultas | OBRIG | — | Particionamento e sharding |
+| `ESC-018` | Retenção e arquivamento antes de particionar | RECOM | — | Particionamento e sharding |
+| `ESC-019` | Sharding é o último recurso, e exige as cinco respostas | OBRIG | — | Particionamento e sharding |
+| `ESC-020` | Chave de fragmentação errada é praticamente irreversível | IMUT | — | Particionamento e sharding |
+| `ESC-021` | Sharding e integridade referencial não coexistem bem | OBRIG | — | Particionamento e sharding |
+| `ESC-022` | Sem estado em memória do processo | OBRIG | — | Estado e escala horizontal |
+| `ESC-023` | Nenhuma afinidade de sessão como requisito | RECOM | — | Estado e escala horizontal |
+| `ESC-024` | Trabalho agendado roda uma vez, não uma vez por instância | OBRIG | — | Estado e escala horizontal |
+| `ESC-025` | Trava distribuída tem expiração e trata perda | OBRIG | — | Estado e escala horizontal |
+| `ESC-026` | Arquivo em disco local não sobrevive | OBRIG | — | Estado e escala horizontal |
+| `ESC-027` | Pool de conexões dimensionado pelo total, não por instância | OBRIG | — | Estado e escala horizontal |
+| `ESC-028` | Todo recurso tem limite explícito | OBRIG | — | Contrapressão e descarte de carga |
+| `ESC-029` | Rejeitar rápido é melhor que aceitar e morrer | OBRIG | — | Contrapressão e descarte de carga |
+| `ESC-030` | Fila com limite e política de descarte declarada | OBRIG | — | Contrapressão e descarte de carga |
+| `ESC-031` | Interromper trabalho abandonado | RECOM | — | Contrapressão e descarte de carga |
+| `ESC-032` | Disjuntor em dependência que pode ficar lenta | RECOM | — | Contrapressão e descarte de carga |
+| `ESC-033` | Priorize tráfego quando saturado | RECOM | — | Contrapressão e descarte de carga |
+| `ESC-034` | Limite de taxa por sujeito, não global | OBRIG | — | Contrapressão e descarte de carga |
+| `ESC-035` | Capacidade conhecida por teste, não por inferência | RECOM | — | Contrapressão e descarte de carga |
+| `ESC-036` | Escolha o modelo de isolamento com critério declarado | OBRIG | — | Multi-inquilino |
+| `ESC-037` | Mudar de modelo depois é migração de dados | OBRIG | — | Multi-inquilino |
+| `ESC-038` | Isolamento aplicado no ponto mais interno possível | OBRIG | `S0` | Multi-inquilino |
+| `ESC-039` | O inquilino vem do contexto autenticado, nunca da requisição | OBRIG | `S0` | Multi-inquilino |
+| `ESC-040` | Toda chave de cache e de busca inclui o inquilino | OBRIG | `S0` | Multi-inquilino |
+| `ESC-041` | Vizinho ruidoso é contido por cota | OBRIG | — | Multi-inquilino |
+| `ESC-042` | Operações por inquilino precisam existir desde cedo | RECOM | — | Multi-inquilino |
+
+## 📕 Volume 15 — Playbooks
+
+Arquivo: [`volumes/vol-15-playbooks.md`](volumes/vol-15-playbooks.md) · 58 regras
+
+| ID | Regra | Nível | Sev. | Capítulo |
+| --- | --- | --- | --- | --- |
+| `PLB-001` | Playbook não substitui os portões | IMUT | — | Como usar um playbook |
+| `PLB-002` | A ordem dos passos é a substância, não a formalidade | OBRIG | — | Como usar um playbook |
+| `PLB-003` | Pule passo declarando que pulou | OBRIG | — | Como usar um playbook |
+| `PLB-004` | Playbook divergente da realidade é achado | OBRIG | — | Como usar um playbook |
+| `PLB-005` | Comece pelas invariantes, não pela tabela | OBRIG | — | Playbook: criar um CRUD |
+| `PLB-006` | Enumere os estados e as transições válidas | OBRIG | — | Playbook: criar um CRUD |
+| `PLB-007` | Modele com as constraints desde a primeira migração | OBRIG | — | Playbook: criar um CRUD |
+| `PLB-008` | Escreva a regra de negócio antes de qualquer borda | OBRIG | — | Playbook: criar um CRUD |
+| `PLB-009` | Trate as quatro operações como quatro decisões | OBRIG | — | Playbook: criar um CRUD |
+| `PLB-010` | Autorize por objeto em todas as quatro | OBRIG | `S0` | Playbook: criar um CRUD |
+| `PLB-011` | Valide no servidor com lista de permitidos e rejeite campo desconhecido | OBRIG | — | Playbook: criar um CRUD |
+| `PLB-012` | Índice para cada filtro e ordenação que a listagem oferece | OBRIG | — | Playbook: criar um CRUD |
+| `PLB-013` | Conte as consultas com 1 e com 50 itens | OBRIG | — | Playbook: criar um CRUD |
+| `PLB-014` | Interface com os oito estados | OBRIG | — | Playbook: criar um CRUD |
+| `PLB-015` | Impeça envio duplicado no formulário | OBRIG | `S1` | Playbook: criar um CRUD |
+| `PLB-016` | Teste os casos de negócio e os caminhos de erro | OBRIG | — | Playbook: criar um CRUD |
+| `PLB-017` | Registre a operação sensível | OBRIG | — | Playbook: criar um CRUD |
+| `PLB-018` | Comece pelo contrato, e pelo que ele **não** expõe | OBRIG | — | Playbook: criar um endpoint |
+| `PLB-019` | Método e status corretos desde o início | OBRIG | — | Playbook: criar um endpoint |
+| `PLB-020` | Autenticação e autorização antes da lógica | OBRIG | — | Playbook: criar um endpoint |
+| `PLB-021` | Paginação com limite do servidor desde a primeira versão | OBRIG | — | Playbook: criar um endpoint |
+| `PLB-022` | Idempotência se houver efeito externo | OBRIG | — | Playbook: criar um endpoint |
+| `PLB-023` | Limite de taxa e limite de tamanho de entrada | OBRIG | — | Playbook: criar um endpoint |
+| `PLB-024` | Formato de erro igual ao do resto da API, com identificador de rastreamento | OBRIG | — | Playbook: criar um endpoint |
+| `PLB-025` | Declare timeout e comportamento em falha de cada chamada externa | OBRIG | — | Playbook: criar um endpoint |
+| `PLB-026` | Atualize o contrato declarado e teste o caminho de erro | OBRIG | — | Playbook: criar um endpoint |
+| `PLB-027` | Log com contexto correlacionável e métrica de erro | OBRIG | — | Playbook: criar um endpoint |
+| `PLB-028` | Comece pelo objetivo do usuário e pelo critério de sucesso dele | OBRIG | — | Playbook: criar uma tela |
+| `PLB-029` | Liste os oito estados antes de escrever componente | OBRIG | — | Playbook: criar uma tela |
+| `PLB-030` | Use componentes do design system; variante antes de sobreposição | OBRIG | — | Playbook: criar uma tela |
+| `PLB-031` | Nenhum valor literal de cor, espaçamento ou tipografia | OBRIG | — | Playbook: criar uma tela |
+| `PLB-032` | Nenhuma regra de negócio na tela | OBRIG | — | Playbook: criar uma tela |
+| `PLB-033` | Declare a invalidação de cada mutação | OBRIG | — | Playbook: criar uma tela |
+| `PLB-034` | Proteja o trabalho do usuário | OBRIG | `S1` em formulário longo | Playbook: criar uma tela |
+| `PLB-035` | Percorra a tela inteira pelo teclado antes de considerar pronta | OBRIG | — | Playbook: criar uma tela |
+| `PLB-036` | Todo controle com nome acessível; estado comunicado programaticamente | OBRIG | — | Playbook: criar uma tela |
+| `PLB-037` | Reserve espaço para conteúdo assíncrono | OBRIG | — | Playbook: criar uma tela |
+| `PLB-038` | Verifique em tela pequena e em zoom 200% | OBRIG | — | Playbook: criar uma tela |
+| `PLB-039` | Percorra os caminhos infelizes na tela real | OBRIG | — | Playbook: criar uma tela |
+| `PLB-040` | Conte os registros que violam a nova regra, primeiro | OBRIG | — | Playbook: alterar o schema |
+| `PLB-041` | Aditivo primeiro, sempre | OBRIG | — | Playbook: alterar o schema |
+| `PLB-042` | Verifique a compatibilidade nos dois sentidos | OBRIG | — | Playbook: alterar o schema |
+| `PLB-043` | Escreva a reversa e **execute-a** | OBRIG | — | Playbook: alterar o schema |
+| `PLB-044` | Verifique o risco de bloqueio de tabela na versão em uso | OBRIG | — | Playbook: alterar o schema |
+| `PLB-045` | Migração de dados é `R4` | OBRIG | — | Playbook: alterar o schema |
+| `PLB-046` | Nunca junte migração destrutiva com mudança de comportamento | OBRIG | — | Playbook: alterar o schema |
+| `PLB-047` | Cinco fases, cinco deploys | OBRIG | — | Playbook: alterar o schema |
+| `PLB-048` | Traduza na borda; o modelo do fornecedor não entra no domínio | OBRIG | — | Playbook: integrar um serviço externo |
+| `PLB-049` | Declare timeout, retry, idempotência e comportamento em falha | OBRIG | — | Playbook: integrar um serviço externo |
+| `PLB-050` | Segredo no gerenciador, rotacionável sem deploy | OBRIG | — | Playbook: integrar um serviço externo |
+| `PLB-051` | Erro do fornecedor mapeado para erro de domínio | OBRIG | — | Playbook: integrar um serviço externo |
+| `PLB-052` | Nenhuma chamada externa dentro de transação | OBRIG | — | Playbook: integrar um serviço externo |
+| `PLB-053` | Webhook de entrada: verifique origem, seja idempotente, responda rápido | OBRIG | — | Playbook: integrar um serviço externo |
+| `PLB-054` | Registre a chamada com correlação e monitore a taxa de falha | OBRIG | — | Playbook: integrar um serviço externo |
+| `PLB-055` | Reproduza antes de corrigir | IMUT | — | Playbook: corrigir um bug |
+| `PLB-056` | Escreva o teste que falha, antes da correção | OBRIG | — | Playbook: corrigir um bug |
+| `PLB-057` | Corrija a classe, não só a instância reportada | OBRIG | — | Playbook: corrigir um bug |
+| `PLB-058` | Nada de "enquanto eu estava lá" | IMUT | — | Playbook: corrigir um bug |
 

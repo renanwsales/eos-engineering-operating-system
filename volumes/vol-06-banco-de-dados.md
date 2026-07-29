@@ -4,6 +4,10 @@ Prefixo: `DAT` · Regras: DAT-001 a DAT-040 · Papel: [Database Architect](../ag
 
 Camada coberta: **4 (dados)**.
 
+Este volume trata de integridade, consulta correta e migração segura. As decisões **estruturais** de
+crescimento — normalizar ou desnormalizar, réplicas, particionamento, sharding, isolamento de inquilino —
+estão no [Volume 14](vol-14-escala-e-multi-inquilino.md).
+
 ---
 
 ## Princípio central do volume

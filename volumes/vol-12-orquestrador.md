@@ -126,7 +126,7 @@ confiança na classificação inteira.**
 
 ### ORC-017 — `S0` e achado de segurança em caminho sensível não são rebaixáveis **[IMUTÁVEL]**
 
-Eles escalam para o dono humano. Ver SEC-061.
+Eles escalam para o dono humano. Ver SEC-066.
 
 ### ORC-018 — Resolver conflito pela regra de desempate, nunca pela média **[OBRIGATÓRIA]**
 

@@ -2,7 +2,7 @@
 
 Inherits: [`_shared/core-contract.md`](_shared/core-contract.md) ·
 [`_shared/output-schemas.md`](_shared/output-schemas.md)
-Volume: [10 — DevOps e SRE](../volumes/vol-10-devops-sre.md) `OPS`
+Volumes: [10 — DevOps e SRE](../volumes/vol-10-devops-sre.md) `OPS` · [14 — Escala e Multi-Inquilino](../volumes/vol-14-escala-e-multi-inquilino.md) `ESC`
 
 ---
 

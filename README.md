@@ -1,7 +1,7 @@
 # EOS — Engineering Operating System
 
-Especificação operacional de engenharia para agentes de IA e times humanos. **572 regras técnicas
-numeradas** em **12 volumes**, mais uma cadeia de **11 papéis especializados** que trabalham juntos.
+Especificação operacional de engenharia para agentes de IA e times humanos. **735 regras técnicas
+numeradas** em **15 volumes**, mais uma cadeia de **11 papéis especializados** que trabalham juntos.
 
 Não é um prompt. É o manual interno que define **como se pensa, decide, revisa, implementa e valida** —
 reutilizável em qualquer módulo, de qualquer projeto.
@@ -22,6 +22,8 @@ O EOS separa em camadas, cada uma respondendo a uma pergunta diferente:
 | --- | --- | --- |
 | **Constituição** | Como pensamos? Em que ordem? O que nunca fazemos? | [`volumes/vol-01`](volumes/vol-01-constituicao.md) |
 | **Normas técnicas** | O que é certo e errado neste domínio? | [`volumes/vol-02` a `vol-11`](volumes/) |
+| **Escolhas** | Qual abordagem, entre alternativas legítimas? | [`vol-13`](volumes/vol-13-selecao-de-arquitetura.md), [`vol-14`](volumes/vol-14-escala-e-multi-inquilino.md) |
+| **Execução** | Em que ordem eu faço esta tarefa? | [`vol-15`](volumes/vol-15-playbooks.md) |
 | **Papéis** | Quem analisa o quê, com que profundidade? | [`agents/`](agents/) |
 | **Coordenação** | Quem é despachado, em que ordem, com que pergunta? | [`volumes/vol-12`](volumes/vol-12-orquestrador.md) |
 | **Portões e provas** | Como sei que terminei? | [`checklists/`](checklists/) |
@@ -34,15 +36,15 @@ framework inteiro.
 
 ---
 
-## Os 12 volumes
+## Os 15 volumes
 
 | Vol | Título | Prefixo | Regras | Cobre |
 | --- | --- | --- | --- | --- |
 | 📘 01 | [Constituição da Engenharia](volumes/vol-01-constituicao.md) | `CON` | 86 | Princípios, seis portões, ordem de análise, decisão, severidade, priorização, risco, DoD, DoE, métricas, ofício |
 | 📗 02 | [Arquitetura](volumes/vol-02-arquitetura.md) | `ARC` | 40 | Clean Architecture, DDD, modularização, integração entre módulos |
-| 📙 03 | [Backend](volumes/vol-03-backend.md) | `BAK` | 48 | APIs, regras de negócio, autorização, erros, versionamento, concorrência |
+| 📙 03 | [Backend](volumes/vol-03-backend.md) | `BAK` | 73 | APIs, regras de negócio, autorização, erros, webhooks, GraphQL, trabalho agendado |
 | 📕 04 | [Frontend](volumes/vol-04-frontend.md) | `FRT` | 42 | Estados, gerenciamento de estado, componentes, design system |
-| 📓 05 | [Segurança e DevSecOps](volumes/vol-05-seguranca.md) | `SEC` | 61 | OWASP Top 10, segredos, criptografia, permissões, dados pessoais |
+| 📓 05 | [Segurança e DevSecOps](volumes/vol-05-seguranca.md) | `SEC` | 66 | OWASP Top 10, segredos, criptografia, permissões, dados pessoais, níveis de verificação |
 | 📒 06 | [Banco de Dados](volumes/vol-06-banco-de-dados.md) | `DAT` | 40 | Modelagem, integridade, índices, transações, migrações |
 | 📔 07 | [Performance](volumes/vol-07-performance.md) | `PRF` | 38 | Medição, acesso a dados, cache, renderização, limiares |
 | 📘 08 | [UX/UI Premium](volumes/vol-08-ux-ui.md) | `UXI` | 55 | Estados, microinterações, erros, consistência, fluxos, WCAG 2.2 AA |
@@ -50,6 +52,13 @@ framework inteiro.
 | 📙 10 | [DevOps e SRE](volumes/vol-10-devops-sre.md) | `OPS` | 48 | Rollback, compatibilidade de deploy, observabilidade, CI/CD, backups, HA |
 | 📕 11 | [Auditoria Técnica](volumes/vol-11-auditoria.md) | `AUD` | 42 | Code review, regressões, notas, veredito, backlog |
 | 📓 12 | [Orquestrador Mestre](volumes/vol-12-orquestrador.md) | `ORC` | 32 | Cadeia de agentes, despacho, integração, aprovação |
+| 📔 13 | [Seleção de Arquitetura](volumes/vol-13-selecao-de-arquitetura.md) | `SEL` | 33 | Estilos, monólito vs serviços, CQRS, síncrono vs assíncrono, renderização, comprar vs construir |
+| 📒 14 | [Escala e Multi-Inquilino](volumes/vol-14-escala-e-multi-inquilino.md) | `ESC` | 42 | Normalização, réplicas, particionamento, sharding, contrapressão, isolamento de inquilino |
+| 📕 15 | [Playbooks](volumes/vol-15-playbooks.md) | `PLB` | 58 | CRUD, endpoint, tela, schema, integração externa, correção de bug |
+
+Os volumes 01 a 12 dizem **o que é certo**. Os volumes 13 e 14 tratam de **escolher entre alternativas
+legítimas** — a pergunta que uma norma não responde. O volume 15 diz **em que ordem executar** as tarefas que
+se repetem toda semana.
 
 Índice completo pesquisável: [`RULES-INDEX.md`](RULES-INDEX.md).
 
@@ -120,9 +129,9 @@ Está registrado como [`EOS-001`](backlog/BACKLOG.md), severidade `S1`.
 
 ```
 AGENTS.md                  Roteador para agentes: não negociáveis e ordem de carga
-RULES-INDEX.md             Índice gerado das 572 regras, com nível e severidade
+RULES-INDEX.md             Índice gerado das 735 regras, com nível e severidade
 
-volumes/                   Os 12 volumes (PT) — fonte de verdade das normas
+volumes/                   Os 15 volumes (PT) — fonte de verdade das normas
 agents/                    11 prompts de papel (EN) + contrato e schemas compartilhados
 checklists/                Portões acionáveis (PT): pré-análise, review, pré-merge, OWASP,
                            performance, acessibilidade, módulo concluído
@@ -162,5 +171,6 @@ Correção de texto é `PATCH`.
 IDs de regra são **estáveis**: uma regra removida deixa o número aposentado, nunca reaproveitado, para que
 relatórios antigos continuem legíveis.
 
-Versão atual: **2.0.0** — reorganização em 12 volumes com regras numeradas.
+Versão atual: **2.1.0** — volumes 13 a 15 (seleção, escala, playbooks) e capítulos de webhooks,
+GraphQL, trabalho agendado e níveis de verificação de segurança.
 Decisão de adoção: [`ADR-0001`](backlog/adr/0001-adocao-do-eos.md).

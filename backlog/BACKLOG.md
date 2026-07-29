@@ -18,6 +18,8 @@ Ordenados por score. Recalcular os 10 do topo a cada rodada.
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | EOS-001 | Perfil do projeto ainda não preenchido para o repositório alvo | S1 | HIGH | S | LOW | 20.0 | Primeira rodada de revisão em qualquer projeto | aberto |
 | EOS-003 | Verificação do EOS não roda automaticamente | S2 | HIGH | XS | LOW | 14.0 | Primeiro hospedagem do repositório em plataforma com CI | aberto |
+| EOS-009 | Playbooks podem divergir das regras que citam | S2 | MEDIUM | S | LOW | 4.0 | Primeira alteração de regra em volume citado pelo Vol 15 | aberto |
+| EOS-010 | Volume 1 tem numeração fora de ordem no documento | S3 | HIGH | M | MEDIUM | 1.3 | Se um leitor humano relatar dificuldade de navegação no Vol 1 | aberto |
 | EOS-002 | Limiares de métrica nunca calibrados contra um módulo real | S2 | MEDIUM | M | LOW | 3.4 | Primeira revisão completa de módulo concluída | aberto |
 
 ### EOS-001 — Perfil do projeto ainda não preenchido
@@ -45,6 +47,44 @@ Consequência se ignorado: o índice de regras e o índice de links divergem do 
 Correção: um job que rode os dois scripts e falhe o build.
 Gatilho de promoção: primeira hospedagem do repositório em plataforma com CI
 Origem: migração para volumes, 2026-07-29
+Status: aberto
+```
+
+### EOS-009 — Playbooks podem divergir das regras que citam
+
+```
+Severidade: S2 | Confiança: MEDIUM | Esforço: S | Risco: LOW | Score: 4.0
+Evidência: volumes/vol-15-playbooks.md cita 60+ regras de outros volumes por ID. Nenhum mecanismo
+  verifica se a regra citada ainda diz o que o passo do playbook afirma que ela diz.
+Consequência se ignorado: a duplicação que o ADR-0003 quis evitar entra pela porta dos playbooks. Um
+  passo que reafirma o conteúdo de uma regra em vez de referenciá-la divergirá dela na primeira
+  alteração, e passará a ser uma segunda fonte de verdade — ARC-011.
+Correção: verificação que confirme que todo passo de PLB referencia sem reafirmar; ou revisão manual
+  do Vol 15 a cada mudança nos volumes citados.
+Gatilho de promoção: primeira alteração de regra em qualquer volume citado pelo Vol 15
+Origem: ADR-0003, 2026-07-29
+Status: aberto
+```
+
+### EOS-010 — Volume 1 tem numeração fora de ordem no documento
+
+```
+Severidade: S3 | Confiança: HIGH | Esforço: M | Risco: MEDIUM | Score: 1.3
+Evidência: volumes/vol-01-constituicao.md — o capítulo 1.4 (CON-056 a CON-064) aparece antes do
+  capítulo 1.5 (CON-023), e o fechamento CON-055 aparece depois de CON-086. A numeração é contínua e
+  única (o gerador valida), mas a ordem no documento não é crescente.
+Causa: o capítulo dos seis portões e as convenções de ofício foram inseridos na reorganização v2.0.0
+  recebendo números no fim da faixa, em posições anteriores no texto.
+Consequência se ignorado: leitor humano percorrendo o volume vê a numeração retroceder, o que reduz a
+  confiança no índice. Nenhum efeito sobre agentes, que resolvem por ID.
+Por que não foi corrigido agora: corrigir exige renumerar 64 regras. Os IDs são citados em ADR-0002,
+  ADR-0003, no AGENTS.md e no contrato comum — e a estabilidade do ID é o que torna a regra citável.
+  Trocar estabilidade de ID por ordem estética é precisamente o que CON-013 proíbe. O mesmo problema
+  no Vol 5 foi corrigido nesta sessão porque as regras eram novas e não publicadas.
+Correção, se promovido: renumerar com script, atualizar toda referência cruzada, e registrar em ADR o
+  mapa de IDs antigos para novos.
+Gatilho de promoção: relato humano de dificuldade de navegação no Vol 1
+Origem: validação da v2.1.0, 2026-07-29
 Status: aberto
 ```
 
@@ -80,7 +120,11 @@ Estado saudável e necessário. Backlog que só cresce perde utilidade.
 
 | ID | Título | Motivo da decisão | Data | Decidido por |
 | --- | --- | --- | --- | --- |
-| — | — | — | — | — |
+| EOS-004 | Volume de engenharia de IA no produto (agentes, RAG, memória, ferramentas, avaliação) | A IA é ferramenta de desenvolvimento, não funcionalidade entregue ao usuário final. Volume sem uso seria contexto carregado à toa (`ORC-005`) | 2026-07-29 | dono do produto |
+| EOS-005 | Checklists de 500 e 1.000 itens | Produz `AUD-002` em escala: 500 caixas não são lidas, são marcadas. As 735 regras com ID já são a lista granular e citável, e os 7 checklists somam 342 verificações efetivamente executáveis | 2026-07-29 | dono do produto |
+| EOS-006 | Volume de prompt engineering | O EOS é o prompt. Um volume ensinando a escrever prompts dentro do próprio prompt não produz nenhuma decisão técnica | 2026-07-29 | dono do produto |
+| EOS-007 | Papel "Refatorador" na cadeia de agentes | Um papel cuja missão é refatorar convida exatamente o que `CON-013` proíbe: mudança sem defeito, métrica ou norma vinculada. Refatoração legítima nasce do achado de outro papel | 2026-07-29 | dono do produto |
+| EOS-008 | Volumes sobre NIST, CIS e ISO 27001 | Frameworks de conformidade organizacional — política, treinamento, gestão de fornecedor. Quase nada se traduz em regra verificável em código. Aproveitados apenas os níveis progressivos do ASVS (`SEC-059`) | 2026-07-29 | dono do produto |
 
 ---
 
@@ -112,4 +156,4 @@ até virar `MUST-FIX` ela mesma — normalmente na forma de um incidente.
 
 ## Próximo ID disponível
 
-`EOS-004`
+`EOS-011`

@@ -1,6 +1,6 @@
 # 📓 Volume 5 — Segurança e DevSecOps
 
-Prefixo: `SEC` · Regras: SEC-001 a SEC-061 · Papel: [Security Engineer](../agents/05-security.md)
+Prefixo: `SEC` · Regras: SEC-001 a SEC-066 · Papel: [Security Engineer](../agents/05-security.md)
 
 Camada coberta: **3 (segurança)**.
 
@@ -330,6 +330,51 @@ Não consequência acidental de uma integração.
 
 ---
 
+## Capítulo 5.12 — Níveis de verificação
+
+Inspirado na ideia de níveis progressivos do OWASP ASVS, adaptada para ser executável numa rodada de revisão.
+Existe para resolver um problema concreto: sem níveis, toda auditoria de segurança tende a "verificar tudo",
+que na prática significa verificar superficialmente tudo — e passar pelo que importa.
+
+### SEC-059 — Três níveis, escolhidos por criticidade do módulo **[OBRIGATÓRIA]**
+
+| Nível | Aplica-se a | Profundidade |
+| --- | --- | --- |
+| **V1 — Base** | Todo código, sempre | As dez regras de bloqueio. Nenhuma entrega passa sem V1 |
+| **V2 — Padrão** | Módulos que tocam dado de usuário, dinheiro ou permissão | V1 + capítulos 5.1 a 5.9 percorridos com evidência por ponto de entrada |
+| **V3 — Crítico** | Autenticação, pagamento, dado pessoal, multi-inquilino | V2 + modelagem de abuso (`SEC-029`), caminho de exploração demonstrado como fechado (`SEC-064`), inventário de dado pessoal, revisão humana obrigatória |
+
+A classificação por módulo vive no [perfil do projeto](../templates/perfil-do-projeto.md). Módulo sem
+classificação é tratado como **V2** até que alguém decida — o padrão erra para o lado seguro.
+
+### SEC-060 — O nível é declarado no relatório, sempre **[OBRIGATÓRIA]**
+
+```
+Nível aplicado: V2
+Justificativa: módulo lê e escreve dado de usuário, não toca pagamento
+Não verificado neste nível: modelagem de abuso, inventário de dado pessoal
+```
+
+Auditoria sem nível declarado é auditoria de profundidade desconhecida, e não pode ser comparada com a
+próxima nem servir de base para a nota.
+
+### SEC-061 — Subir de nível é decisão registrada; descer também **[OBRIGATÓRIA]**
+
+Descer de V3 para V2 num módulo de pagamento é aceitação de risco: exige nome de pessoa e registro
+(`CON-042`). Nunca é decisão de agente.
+
+### SEC-062 — V3 nunca é executado só por agente **[IMUTÁVEL]**
+
+Ele **prepara** a evidência: caminhos de exploração, inventário, matriz de autorização por ponto de entrada. A
+aprovação é humana. Ver `SEC-066`.
+
+### SEC-063 — Nível não substitui as regras de bloqueio **[IMUTÁVEL]**
+
+V1 é piso absoluto. Não existe módulo periférico o suficiente para ter segredo no repositório ou consulta
+concatenada.
+
+---
+
 ## Regras de bloqueio
 
 Nenhuma entrega passa com qualquer um destes:
@@ -351,7 +396,7 @@ Nenhuma entrega passa com qualquer um destes:
 
 ## Verificação de uma correção de segurança
 
-### SEC-059 — Testes passando não é prova **[OBRIGATÓRIA]**
+### SEC-064 — Testes passando não é prova **[OBRIGATÓRIA]**
 
 Demonstre que o caminho de exploração está fechado:
 
@@ -361,11 +406,11 @@ Depois:    <mesma requisição>                                    → 403
 Regressão: <requisição legítima do usuário A>                    → 200, inalterado
 ```
 
-### SEC-060 — Descreva o caminho de exploração concretamente **[OBRIGATÓRIA]**
+### SEC-065 — Descreva o caminho de exploração concretamente **[OBRIGATÓRIA]**
 
 Quem, com que acesso, faz o quê, para obter o quê. Aviso abstrato não é corrigido; caminho concreto é.
 
-### SEC-061 — `S0` de segurança não é rebaixável por agente **[IMUTÁVEL]**
+### SEC-066 — `S0` de segurança não é rebaixável por agente **[IMUTÁVEL]**
 
 Nem pelo orquestrador. Somente o dono humano nomeado pode aceitar o risco, explicitamente e por escrito.
 Um `S0` interrompe a rodada inteira, sem completar o restante da análise.

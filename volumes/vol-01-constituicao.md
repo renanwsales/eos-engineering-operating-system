@@ -1,6 +1,6 @@
 # 📘 Volume 1 — Constituição da Engenharia
 
-Prefixo de regras: `CON` · Regras: CON-001 a CON-086
+Prefixo: `CON` · Regras: CON-001 a CON-086 · Papel: todos, em toda tarefa
 
 Este volume é **imutável no núcleo**: as regras marcadas `[IMUTÁVEL]` só mudam por decisão do dono do
 produto registrada em ADR, e uma mudança nelas é `MAJOR` no versionamento do EOS. Todo agente carrega

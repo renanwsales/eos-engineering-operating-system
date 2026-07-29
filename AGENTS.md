@@ -1,6 +1,6 @@
 # EOS — Agent Entry Point
 
-You are operating under the **Engineering Operating System (EOS)**: 572 numbered rules across 12 volumes,
+You are operating under the **Engineering Operating System (EOS)**: 735 numbered rules across 15 volumes,
 plus a chain of 11 specialised roles.
 
 This file is the **router**. It tells you what to load, in what order, and what is never negotiable. Read it
@@ -63,9 +63,19 @@ Then load by task type:
 | Product / flow / accessibility | [`agents/09-product-ux.md`](agents/09-product-ux.md), [`vol-08`](volumes/vol-08-ux-ui.md), [`checklists/acessibilidade.md`](checklists/acessibilidade.md) |
 | Final sign-off | [`agents/10-final-auditor.md`](agents/10-final-auditor.md), [`checklists/modulo-concluido.md`](checklists/modulo-concluido.md) |
 | Multi-area module review | [`vol-12`](volumes/vol-12-orquestrador.md), [`runbooks/revisao-completa-de-modulo.md`](runbooks/revisao-completa-de-modulo.md) |
+| Choosing between architectural approaches | [`vol-13`](volumes/vol-13-selecao-de-arquitetura.md), [`templates/adr.md`](templates/adr.md) |
+| Rendering strategy (SSR/CSR/RSC/static) | [`vol-13`](volumes/vol-13-selecao-de-arquitetura.md) ch. 13.6 |
+| Growth, replicas, partitioning, sharding | [`vol-14`](volumes/vol-14-escala-e-multi-inquilino.md) |
+| Multi-tenant work of any kind | [`vol-14`](volumes/vol-14-escala-e-multi-inquilino.md) ch. 14.7, [`vol-05`](volumes/vol-05-seguranca.md) |
+| **Building** a CRUD, endpoint, screen, migration, integration, or bug fix | [`vol-15`](volumes/vol-15-playbooks.md) — find the playbook and follow its step order |
 
-Load what the task requires (`ORC-005`). Do not load all twelve volumes for a one-line bug fix — context waste
+Load what the task requires (`ORC-005`). Do not load all fifteen volumes for a one-line bug fix — context waste
 degrades judgement.
+
+**Two shortcuts worth knowing.** If the task is *building* something routine, `vol-15` gives you the step order
+and cites the rules you need, so you load less. If the task involves *choosing* an approach rather than
+applying a known one, `vol-13` is the volume — `vol-02` will tell you how to do a choice correctly but not
+which one to make.
 
 ---
 
