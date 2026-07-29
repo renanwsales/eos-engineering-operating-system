@@ -38,6 +38,38 @@ Dois tipos de lista não se misturam. Checklist de **leitura** orienta descobert
 julgar"). Checklist de **confirmação** exige prova ("rodei o comando; a saída está aqui"). Marcar o
 segundo como se fosse o primeiro é fraude de processo: a caixa preenchida mente sobre o que aconteceu.
 
+### O mecanismo de falha da lista longa
+
+O recusa registrada em `EOS-005` não é gosto editorial. É mecânica de atenção. Cada item adicional
+compete pela mesma janela de trabalho. Depois de um limiar — tipicamente poucas dezenas sob pressão —
+o executor troca a estratégia: deixa de **confrontar** e passa a **liquidar**. Liquidar é marcar.
+Marcar produz um artefato verde. O artefato verde entra no relatório da rodada. O relatório da rodada
+entra no portão G5. G5, se confia no artefato, aprova. A cadeia inteira herda uma mentira barata.
+
+Três propriedades tornam a mentira estável:
+
+1. **Custo assimétrico.** Ler e verificar o item 47 custa minutos; marcá-lo custa um segundo. Sob
+   prazo, a racionalidade local escolhe o segundo.
+2. **Sinal social invertido.** Lista completa marcada sinaliza "rigor" para quem não amostra. Quem
+   amostra descobre o buraco tarde — depois do merge.
+3. **Substituição da norma.** Times passam a tratar o checklist como a fonte de verdade e param de
+   citar IDs. Quando a lista diverge do volume, ninguém nota (`A-001` violado na prática).
+
+A correção não é "treinar as pessoas a serem virtuosas". É limitar o tamanho, separar tipos, exigir
+evidência no item de confirmação, assinar com papel, e retirar do checklist o que o CI já bloqueia.
+Virtude sob pressão é projeto frágil; mecanismo sob pressão é o que este volume exige.
+
+### Relação com DoD e com o índice de regras
+
+A Definition of Done (`CON-043`) já é um checklist normativo com estados `OK` / `N/A` / `PENDENTE`.
+Este volume generaliza a doutrina para **qualquer** lista operacional: mesmos estados, mesma proibição
+de carimbo, mesma regra de que um `PENDENTE` impede `DONE`. A DoD não é substituída; os arquivos em
+[`checklists/`](checklists/) são a aplicação da doutrina a momentos concretos da rodada.
+
+O [`RULES-INDEX.md`](RULES-INDEX.md) continua sendo o inventário citável. Quem transforma o índice em
+checklist diário recria `EOS-005` com outra capa. O uso correto: ao falhar um item, cite a regra; ao
+passar o item, anexe a evidência — não "andei por todas as regras SEC".
+
 ---
 
 ## Capítulo 22.1 — Memória sob pressão
@@ -118,10 +150,18 @@ Com dezenas de itens sob prazo, o custo marginal de ler o próximo item supera o
 O executor otimiza: marca o bloco. O relatório fica verde. A garantia morreu. Esta é a falha que
 `EOS-005` recusou institucionalizar: checklist de 500–1.000 itens como produto.
 
+Cenário típico em SaaS de faturamento: alguém propõe "checklist de release com toda OWASP + toda
+DoD + toda acessibilidade + toda performance". São centenas de caixas. Na sexta à tarde, o release
+manager marca tudo em oito minutos. Segunda de manhã, `GET /invoices/:id` ainda autoriza só por
+papel. O checklist estava verde. A norma `SEC-004` também. Só a verificação não aconteceu.
+
 ### CHK-012 — Marcar sem ler é a falha mais grave do framework aplicado a checklists **[IMUTÁVEL]**
 
 É `CON-043` e `AUD-002` no instrumento: a caixa mentirosa corrompe todo relatório que a cita. Prefira
 lista curta com três `PENDENTE` honestos a lista longa toda `OK` sem evidência.
+
+O dano não é só o defeito que passou. É a **corrupção do histórico**: a próxima auditoria lê "OWASP
+ok na release 2.14" e reduz a profundidade. Teatro composto parece maturidade.
 
 ### CHK-013 — As 735 regras com ID não são um checklist operacional **[OBRIGATÓRIA]**
 
@@ -129,16 +169,33 @@ O índice ([`RULES-INDEX.md`](RULES-INDEX.md)) é citável e pesquisável. Opera
 regra do livro" recria a lista de mil itens. Operação usa o subconjunto do momento; auditoria cita a
 regra pelo ID quando encontra violação.
 
+Número ilustrativo: o inventário cresce com o livro. A doutrina não muda se forem 400 ou 900 IDs —
+a operação nunca percorre o inventário inteiro como caixas.
+
 ### CHK-014 — Acúmulo é o inimigo; contexto de uso é a divisão correta **[OBRIGATÓRIA]**
 
 Se o domínio "parece" exigir mais de 25 itens no checklist do volume (`A-011`), o domínio tem
 submomentos. Divida por contexto (pré-merge vs G5 vs OWASP), não por acúmulo alfabético de preocupações.
+
+Exemplo de divisão correta para "segurança no caminho de cobrança":
+
+| Momento | Lista | Tamanho alvo |
+| --- | --- | --- |
+| Diff toca `/charges` | Bloco controle de acesso de [`seguranca-owasp.md`](checklists/seguranca-owasp.md) | dezenas, com foco |
+| Release sem mudança de auth | N/A justificado no G5 | zero itens executados |
+| Auditoria trimestral de módulo crítico | Amostragem + ASVS do nível do perfil | sessão própria, não merge |
+
+Acúmulo errado: um único "checklist de segurança do monorepo" com 400 linhas para todo PR.
 
 ### CHK-015 — Cada item além do limite reduz a taxa de leitura real **[RECOMENDADA]**
 
 Trate 25 como teto duro por artefato de checklist de volume; nos arquivos de [`checklists/`](checklists/),
 prefira seções com cabeçalho de parada ("reprovou? pare") a uma parede única. Seção com critério de
 parada precoce protege atenção (`AUD-006`).
+
+Heurística prática: se você não consegue percorrer a lista em voz alta em menos de quinze minutos
+incluindo a verificação dos itens de confirmação, ela está grande demais para o momento em que foi
+encaixada. Encurte ou mude o momento — não peça "mais disciplina".
 
 ---
 
@@ -184,24 +241,39 @@ olhar o restante.
 
 O ruim convida carimbo. O bom descreve o ato e o artefato.
 
+Teste rápido de redação: peça a um colega que **não** fez o trabalho para dizer, só lendo o item
+marcado `OK`, o que foi feito e onde está a prova. Se ele não conseguir, o enunciado falhou antes
+mesmo da verificação.
+
 ### CHK-022 — Todo item de confirmação cita a regra ou o artefato mínimo **[OBRIGATÓRIA]**
 
 Citação por ID (`A-012`) ou comando literal. Sem os dois, o item não é auditável por terceiro.
+
+Cláusula de contexto basta; não reafirme a norma. Errado: colar o parágrafo inteiro de `SEC-004` no
+checklist. Certo: `SEC-004` + path do `authorize` verificado.
 
 ### CHK-023 — Item negativo explícito quando a falha é omissão **[RECOMENDADA]**
 
 "Nenhum segredo no diff" · "Nenhuma asserção afrouxada sem justificativa" · "Nenhum `N/A` sem
 motivo". Omissão é o defeito mais comum; enunciado só positivo esconde o buraco.
 
+Em revisão de cobrança, "tratei erros de pagamento" passa fácil sem cobrir timeout. "Nenhum caminho
+de `payment.charge` deixa o pedido em `pending` eterno" força o caso que dói.
+
 ### CHK-024 — Um item, um veredito **[OBRIGATÓRIA]**
 
 "Auth e tenant e SQL" são três verificações. Item composto recebe um `OK` que mascara dois
 `PENDENTE`.
 
+Se o tempo aperta, é legítimo deixar dois `PENDENTE` e um `OK` — ilegítimo é um `OK` triplo.
+
 ### CHK-025 — Escreva a consequência no item quando o custo de pular não for óbvio **[RECOMENDADA]**
 
 "Contei linhas que violam a nova constraint — senão a migração falha em produção com dado legado"
 obedece `A-004`. Item sem consequência é o primeiro a ser pulado sob pressão.
+
+Consequência concreta de domínio SaaS, não virtude: "cliente de outro tenant lê a fatura", "rollback
+impossível às 3h", "p95 estoura o limiar do perfil".
 
 ---
 
@@ -309,6 +381,35 @@ caso X". Checklist é memória; teste é trava.
 
 Novos checklists operacionais entram neste diretório com cabeçalho de tipo e momento — não como
 apêndice de mil linhas num volume.
+
+**Como ler cada um sem reafirmar o conteúdo.**
+
+[`pre-analise.md`](checklists/pre-analise.md) — mapa do terreno. Saída esperada: descrição do sistema,
+zonas de risco, o que já existe de teste/CI. Proibido: lista de problemas. Se o executor sair com
+dez "achados", violou o tipo leitura (`CHK-007`).
+
+[`pre-merge.md`](checklists/pre-merge.md) — autorrevisão. A regra âncora é não submeter diff não lido
+(`AUD-015`). Evidência típica: comando de typecheck/lint/teste com saída. É o filtro mais barato do
+sistema; pular empurra custo para revisor e auditor.
+
+[`code-review.md`](checklists/code-review.md) — níveis com parada precoce. Comentários com força
+(`AUD-008`, detalhados em `REV`). Quem marca o nível 7 (clareza) com o nível 1 (escopo) falho
+produziu ruído, não revisão.
+
+[`modulo-concluido.md`](checklists/modulo-concluido.md) — portão G5. Só o auditor que não implementou.
+Seções de afirmações, escopo, regressão, DoD, backlog e notas. Interpretação do veredito: volume
+[24](24-auditoria-final.md).
+
+[`seguranca-owasp.md`](checklists/seguranca-owasp.md) — ônus da prova em quem afirma segurança. Começa
+sempre por controle de acesso. Não substitui o volume `SEC`; operacionaliza o momento em que o
+caminho tocado exige verificação explícita (`ORC-012`).
+
+[`performance.md`](checklists/performance.md) — sem número, não há achado. Método antes da lista.
+Item não medido sai como hipótese, nunca como `OK` de performance.
+
+[`acessibilidade.md`](checklists/acessibilidade.md) — automático é piso; teclado e leitor são manuais.
+Ferramenta sozinha não aprova. Mistura legítima de tipos: bloco automático (confirmação via CI) +
+blocos manuais (confirmação por percurso).
 
 ### CHK-042 — Não forkue checklist canônico por time sem motivo registrado **[OBRIGATÓRIA]**
 
