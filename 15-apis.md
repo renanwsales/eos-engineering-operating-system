@@ -1,6 +1,6 @@
 # 📙 Volume 15 — APIs
 
-Prefixo: `API` · Regras: API-001 a API-062 · Papel: [Backend](agents/02-backend.md)
+Prefixo: `API` · Regras: API-001 a API-058 · Papel: [Backend](agents/02-backend.md)
 
 Uma API publicada é um **produto com usuários que você não controla**. Eles versionam clientes, cacheiam
 respostas, geram SDK a partir do seu schema e cobram o custo de qualquer mudança incompatível — em

@@ -1,6 +1,6 @@
 # RULES-INDEX — índice de regras do EOS
 
-**1001 regras** em 18 volumes. Este arquivo é **gerado** por
+**1117 regras** em 20 volumes. Este arquivo é **gerado** por
 `scripts/build-rules-index.py`; não edite à mão. Se um volume e este índice divergirem,
 **o volume** é a fonte de verdade.
 
@@ -21,7 +21,7 @@ deixa o número aposentado, nunca reaproveitado, para que relatórios antigos co
 | `[RECOMENDADA]` | Padrão esperado; exceção é normal | Justificativa no momento, sem ADR |
 | `[REVOGADA]` | Não vale mais; o número fica aposentado | — |
 
-Distribuição: **84 imutáveis** · **746 obrigatórias** · **171 recomendadas**.
+Distribuição: **86 imutáveis** · **841 obrigatórias** · **190 recomendadas**.
 
 ## Volumes
 
@@ -42,10 +42,12 @@ Distribuição: **84 imutáveis** · **746 obrigatórias** · **171 recomendadas
 | 12 | [Auditoria Técnica](12-auditoria.md) | `AUD` | 42 |
 | 13 | [Revisão de Código](13-revisao-de-codigo.md) | `REV` | 58 |
 | 14 | [Escala e Multi-Inquilino](14-escalabilidade.md) | `ESC` | 42 |
+| 15 | [APIs](15-apis.md) | `API` | 58 |
+| 16 | [Multi-Tenant](16-multi-tenant.md) | `MTN` | 58 |
 | 17 | [Observabilidade](17-observabilidade.md) | `OBS` | 70 |
 | 19 | [IA no Produto](19-ia-no-produto.md) | `IAX` | 69 |
 | 21 | [Playbooks](21-playbooks.md) | `PLB` | 58 |
-| | **Total** | | **1001** |
+| | **Total** | | **1117** |
 
 ---
 
@@ -957,6 +959,136 @@ Arquivo: [`14-escalabilidade.md`](14-escalabilidade.md) · 42 regras
 | `ESC-040` | Toda chave de cache e de busca inclui o inquilino | OBRIG | `S0` | Multi-inquilino |
 | `ESC-041` | Vizinho ruidoso é contido por cota | OBRIG | — | Multi-inquilino |
 | `ESC-042` | Operações por inquilino precisam existir desde cedo | RECOM | — | Multi-inquilino |
+
+## 📙 Volume 15 — APIs
+
+Arquivo: [`15-apis.md`](15-apis.md) · 58 regras
+
+| ID | Regra | Nível | Sev. | Capítulo |
+| --- | --- | --- | --- | --- |
+| `API-001` | Toda API pública tem dono, consumidores conhecidos e política de compatibilidade | OBRIG | — | API como produto |
+| `API-002` | Distinga API pública, parceiro e interna — por escrito | OBRIG | — | API como produto |
+| `API-003` | O modelo de recurso não é o modelo de tabela | OBRIG | — | API como produto |
+| `API-004` | Estabilidade do identificador é parte do contrato | OBRIG | — | API como produto |
+| `API-005` | Erros de projeto que só aparecem com consumidores | OBRIG | — | API como produto |
+| `API-006` | Recurso é substantivo; ação arriscada vira sub-recurso ou comando explícito | OBRIG | — | REST e recursos |
+| `API-007` | Semântica de método é parte do contrato | OBRIG | — | REST e recursos |
+| `API-008` | Coleções têm forma estável | OBRIG | — | REST e recursos |
+| `API-009` | Hipermídia é opcional; links documentados para ações principais são recomendados | RECOM | — | REST e recursos |
+| `API-010` | Quando não usar REST puro | RECOM | — | REST e recursos |
+| `API-011` | GraphQL é contrato de schema, não "REST flexível" | OBRIG | — | GraphQL no contrato |
+| `API-012` | Escolha GraphQL por necessidade de forma de leitura divergente, não por moda | RECOM | — | GraphQL no contrato |
+| `API-013` | Nullability e depreciação no schema são decisões irreversíveis na prática | OBRIG | — | GraphQL no contrato |
+| `API-014` | Limite de profundidade e custo faz parte do contrato publicado | OBRIG | — | GraphQL no contrato |
+| `API-015` | Erro é contrato: código estável, mensagem, campo, correlação | OBRIG | — | Formato de erro |
+| `API-016` | Status HTTP alinhado à classe de erro, nunca 200 com falha escondida em REST | OBRIG | — | Formato de erro |
+| `API-017` | Não vaze detalhe interno na mensagem pública | OBRIG | — | Formato de erro |
+| `API-018` | Catálogo de códigos de erro versionado com a API | RECOM | — | Formato de erro |
+| `API-019` | Toda coleção listável é paginada com limite do servidor | OBRIG | — | Paginação, filtro e ordenação |
+| `API-020` | Escolha offset vs cursor com critério declarado | OBRIG | — | Paginação, filtro e ordenação |
+| `API-021` | Cursor é opaco para o cliente | OBRIG | — | Paginação, filtro e ordenação |
+| `API-022` | Ordenação só por campos allowlisted | OBRIG | — | Paginação, filtro e ordenação |
+| `API-023` | Filtro é allowlist de campos e operadores | OBRIG | — | Paginação, filtro e ordenação |
+| `API-024` | Resposta declara a paginação de forma consistente | OBRIG | — | Paginação, filtro e ordenação |
+| `API-025` | Política de versionamento publicada antes do segundo consumidor | OBRIG | — | Versionamento e evolução |
+| `API-026` | O que é mudança compatível | OBRIG | — | Versionamento e evolução |
+| `API-027` | O que é mudança incompatível | OBRIG | — | Versionamento e evolução |
+| `API-028` | Prefira evolução aditiva a versão nova | RECOM | — | Versionamento e evolução |
+| `API-029` | Duas versões simultâneas no máximo, salvo contrato de parceiro | RECOM | — | Versionamento e evolução |
+| `API-030` | Campo novo opcional não quebra; campo novo usado sem default no servidor pode quebrar escrita | OBRIG | — | Versionamento e evolução |
+| `API-031` | Depreciação anuncia, mede, remove — nessa ordem | OBRIG | — | Depreciação |
+| `API-032` | Cabeçalho e documentação marcam o depreciado | OBRIG | — | Depreciação |
+| `API-033` | Prazo de sunset publicado e cumprido | OBRIG | — | Depreciação |
+| `API-034` | Medição de uso por campo/endpoint antes de remover | OBRIG | — | Depreciação |
+| `API-035` | Exceção de remoção antecipada só com aceitação de risco nomeada | OBRIG | — | Depreciação |
+| `API-036` | Código de erro e valor de enum depreciados seguem o mesmo rito | OBRIG | — | Depreciação |
+| `API-037` | Limite de taxa é publicado: cota, janela, resposta, cabeçalhos | OBRIG | — | Limite de taxa e autenticação do consumidor |
+| `API-038` | Limite por sujeito autenticado, não só por IP | OBRIG | — | Limite de taxa e autenticação do consumidor |
+| `API-039` | Autenticação de API documentada no nível do consumidor | OBRIG | — | Limite de taxa e autenticação do consumidor |
+| `API-040` | Escopos mínimos por operação | OBRIG | — | Limite de taxa e autenticação do consumidor |
+| `API-041` | Ambiente de teste isolado com dados de teste | RECOM | — | Limite de taxa e autenticação do consumidor |
+| `API-042` | Documentação executável deriva do contrato, não de wiki paralela | OBRIG | — | Documentação e SDK |
+| `API-043` | Exemplos na documentação são válidos e testados no CI | OBRIG | — | Documentação e SDK |
+| `API-044` | Documente autenticação, erros, paginação e limites na primeira página útil | OBRIG | — | Documentação e SDK |
+| `API-045` | SDK oficial, se existir, versiona junto com a política da API | RECOM | — | Documentação e SDK |
+| `API-046` | Cliente gerado a partir do schema; não mantenha modelos à mão em paralelo | RECOM | — | Documentação e SDK |
+| `API-047` | Changelog de API legível por humanos e por máquina | RECOM | — | Documentação e SDK |
+| `API-048` | Webhook de saída tem contrato: eventos, payload, assinatura, reentrega | OBRIG | — | Webhooks como produto |
+| `API-049` | Evento novo é aditivo; mudança de payload de evento existente é versionada | OBRIG | — | Webhooks como produto |
+| `API-050` | Assinante consegue verificar, inspecionar entregas e reenviar | RECOM | — | Webhooks como produto |
+| `API-051` | Documente ordem não garantida e at-least-once | OBRIG | — | Webhooks como produto |
+| `API-052` | Teste de contrato tem dono e roda no CI do provedor e do consumidor quando possível | OBRIG | — | Teste de contrato |
+| `API-053` | Contrato testa o que é publicado, não o comportamento interno completo | OBRIG | — | Teste de contrato |
+| `API-054` | Breaking change detectada no CI bloqueia o merge | OBRIG | — | Teste de contrato |
+| `API-055` | Ambientes de contrato (mock/sandbox) refletem o schema atual | RECOM | — | Teste de contrato |
+| `API-056` | Métricas por rota e por código de erro estável | OBRIG | — | Observabilidade e operação do contrato |
+| `API-057` | Compatibilidade durante deploy: cliente antigo e novo contra servidor novo | OBRIG | — | Observabilidade e operação do contrato |
+| `API-058` | Idempotência documentada onde o cliente retenta | OBRIG | — | Observabilidade e operação do contrato |
+
+## 📒 Volume 16 — Multi-Tenant
+
+Arquivo: [`16-multi-tenant.md`](16-multi-tenant.md) · 58 regras
+
+| ID | Regra | Nível | Sev. | Capítulo |
+| --- | --- | --- | --- | --- |
+| `MTN-001` | Defina inquilino em linguagem de produto antes do schema | IMUT | — | O que é um inquilino |
+| `MTN-002` | Separe organização, faturamento e workspace quando os ciclos de vida divergem | OBRIG | — | O que é um inquilino |
+| `MTN-003` | Hierarquia entre inquilinos é explícita ou inexistente | OBRIG | — | O que é um inquilino |
+| `MTN-004` | Ambiente sandbox não é o inquilino de produção com flag | OBRIG | — | O que é um inquilino |
+| `MTN-005` | O identificador de inquilino é estável e não reutilizado | OBRIG | — | O que é um inquilino |
+| `MTN-006` | Escolha o modelo com ADR e critério de promoção | OBRIG | — | Modelo de isolamento |
+| `MTN-007` | Schema compartilhado exige política no banco ou camada de acesso obrigatória | OBRIG | `S0` | Modelo de isolamento |
+| `MTN-008` | Schema por inquilino: migração é frota | OBRIG | — | Modelo de isolamento |
+| `MTN-009` | Banco por inquilino: restore e compliance individuais são o benefício que se compra | RECOM | — | Modelo de isolamento |
+| `MTN-010` | Híbrido (shared + dedicated) declara o critério de upgrade | OBRIG | — | Modelo de isolamento |
+| `MTN-011` | Mudança de modelo entre isolamentos é projeto, não tarefa | OBRIG | — | Modelo de isolamento |
+| `MTN-012` | Inquilino ativo vem do contexto autenticado, nunca do body/query livre | IMUT | `S0` | Identidade e contexto |
+| `MTN-013` | Usuário multi-inquilino tem membership explícito e troca de contexto auditada | OBRIG | — | Identidade e contexto |
+| `MTN-014` | Token e sessão amarram o inquilino atual | OBRIG | — | Identidade e contexto |
+| `MTN-015` | Convenções de subdomínio/domínio customizado resolvem para tenant no edge, com prova | OBRIG | — | Identidade e contexto |
+| `MTN-016` | Impersonação de suporte é privilegiada, temporária e registrada | OBRIG | `S1` | Identidade e contexto |
+| `MTN-017` | Inventário obrigatório dos caminhos fora da query | OBRIG | — | Onde o isolamento vaza |
+| `MTN-018` | Busca full-text e embeddings filtram por tenant na recuperação | OBRIG | `S0` | Onde o isolamento vaza |
+| `MTN-019` | Objeto em storage: path ou metadata com tenant + URL assinada | OBRIG | `S0` | Onde o isolamento vaza |
+| `MTN-020` | Mensagem de fila carrega tenant_id e o consumidor não aceita override | OBRIG | — | Onde o isolamento vaza |
+| `MTN-021` | E-mail e notificação não cruzam dado de outro tenant no template | OBRIG | — | Onde o isolamento vaza |
+| `MTN-022` | Log e suporte: query por tenant sem expor outros no mesmo painel por default | OBRIG | — | Onde o isolamento vaza |
+| `MTN-023` | Relatório e export assíncronos herdam o tenant do solicitante no momento da criação | OBRIG | — | Onde o isolamento vaza |
+| `MTN-024` | Papéis são por membership, não globais por padrão | OBRIG | — | Autorização dentro e entre inquilinos |
+| `MTN-025` | Autorização por objeto continua obrigatória dentro do tenant | OBRIG | `S0` | Autorização dentro e entre inquilinos |
+| `MTN-026` | Endpoints de plataforma (super-admin) são superfície separada | OBRIG | — | Autorização dentro e entre inquilinos |
+| `MTN-027` | Convite cria membership com expiração e papel mínimo | OBRIG | — | Autorização dentro e entre inquilinos |
+| `MTN-028` | Provisionar é uma transação de produto com estados | OBRIG | — | Provisionamento e desprovisionamento |
+| `MTN-029` | Suspensão bloqueia escrita e efeitos externos, não só o login | OBRIG | — | Provisionamento e desprovisionamento |
+| `MTN-030` | Eliminação é processo, não DELETE cascade na raiva | OBRIG | — | Provisionamento e desprovisionamento |
+| `MTN-031` | Desprovisionamento verifica resíduos nos caminhos do inventário `MTN-017` | OBRIG | — | Provisionamento e desprovisionamento |
+| `MTN-032` | Reativação após suspensão é explícita; após hard delete, é novo tenant | OBRIG | — | Provisionamento e desprovisionamento |
+| `MTN-033` | Customização por configuração, não por fork de código por tenant | OBRIG | — | Customização |
+| `MTN-034` | Campo customizado tem tipo, validação e cota | OBRIG | — | Customização |
+| `MTN-035` | Domínio customizado: TLS, verificação de posse, rollback | OBRIG | — | Customização |
+| `MTN-036` | Tema/branding não remove contraste nem estados de foco | OBRIG | — | Customização |
+| `MTN-037` | Limite: customização que exige regra de negócio divergente é produto separado ou recusa | RECOM | — | Customização |
+| `MTN-038` | Cotas por tenant em API, jobs, storage e busca | OBRIG | — | Vizinho ruidoso e inquilino grande |
+| `MTN-039` | Fair scheduling em filas multi-tenant | RECOM | — | Vizinho ruidoso e inquilino grande |
+| `MTN-040` | Detecte o tenant grande antes que ele force sharding de pânico | OBRIG | — | Vizinho ruidoso e inquilino grande |
+| `MTN-041` | Hot key de tenant: plano de mitigação declarado | OBRIG | — | Vizinho ruidoso e inquilino grande |
+| `MTN-042` | Teste de carga multi-tenant inclui vizinho ruidoso | RECOM | — | Vizinho ruidoso e inquilino grande |
+| `MTN-043` | Exportação completa por tenant é requisito desde cedo | OBRIG | — | Dados, exportação e faturamento |
+| `MTN-044` | Restauração de um tenant não reescreve os outros | OBRIG | — | Dados, exportação e faturamento |
+| `MTN-045` | Medição de uso para billing é append-only e reconciliável | OBRIG | — | Dados, exportação e faturamento |
+| `MTN-046` | Fatura e uso são do tenant de faturamento, não do workspace filho sem regra | OBRIG | — | Dados, exportação e faturamento |
+| `MTN-047` | Inadimplência: degradação controlada, não delete imediato | OBRIG | — | Dados, exportação e faturamento |
+| `MTN-048` | Todo teste de feature multi-tenant usa pelo menos dois tenants | OBRIG | — | Testes e operação |
+| `MTN-049` | Teste de regressão de isolamento para cache e busca | OBRIG | — | Testes e operação |
+| `MTN-050` | Proibido tenant de teste permanente em produção com dado real misturado | OBRIG | — | Testes e operação |
+| `MTN-051` | Runbook: vazamento entre tenants | OBRIG | — | Testes e operação |
+| `MTN-052` | Migração de schema em frota (schema-por-tenant) tem canário e progresso | OBRIG | — | Testes e operação |
+| `MTN-053` | Backup prova restore de um tenant no modelo escolhido | OBRIG | — | Testes e operação |
+| `MTN-054` | Todo log e métrica de request carregam tenant_id quando houver contexto | OBRIG | — | Observabilidade multi-tenant |
+| `MTN-055` | Alertas de saturação por tenant, não só globais | RECOM | — | Observabilidade multi-tenant |
+| `MTN-056` | Painel de uso por tenant para suporte e success | RECOM | — | Observabilidade multi-tenant |
+| `MTN-057` | Onboarding declara o que o tenant isola e o que é compartilhado (catálogo global, etc.) | RECOM | — | Produto e limites |
+| `MTN-058` | Recusar requisito que quebra isolamento em nome de conveniência | OBRIG | — | Produto e limites |
 
 ## 📓 Volume 17 — Observabilidade
 
