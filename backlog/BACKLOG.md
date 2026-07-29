@@ -17,6 +17,7 @@ Ordenados por score. Recalcular os 10 do topo a cada rodada.
 | ID | Título | Sev. | Conf. | Esforço | Risco | Score | Gatilho de promoção | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | EOS-001 | Perfil do projeto ainda não preenchido para o repositório alvo | S1 | HIGH | S | LOW | 20.0 | Primeira rodada de revisão em qualquer projeto | aberto |
+| EOS-011 | Anatomia AUTHORING incompleta nos volumes herdados | S2 | HIGH | L | LOW | 8.0 | Fechamento editorial v3 / uso intenso por agentes | aberto |
 | EOS-003 | Verificação do EOS não roda automaticamente | S2 | HIGH | XS | LOW | 14.0 | Primeiro hospedagem do repositório em plataforma com CI | aberto |
 | EOS-009 | Playbooks podem divergir das regras que citam | S2 | MEDIUM | S | LOW | 4.0 | Primeira alteração de regra em volume citado pelo Vol 15 | aberto |
 | EOS-010 | Volume 1 tem numeração fora de ordem no documento | S3 | HIGH | M | MEDIUM | 1.3 | Se um leitor humano relatar dificuldade de navegação no Vol 1 | aberto |
@@ -88,6 +89,20 @@ Origem: validação da v2.1.0, 2026-07-29
 Status: aberto
 ```
 
+### EOS-011 — Anatomia AUTHORING incompleta nos volumes herdados
+
+```
+Severidade: S2 | Confiança: HIGH | Esforço: L | Risco: LOW | Score: 8.0
+Evidência: 00, 01, 02, 03, 04, 05, 06, 07, 08, 10, 11, 12, 14, 21 — faltam seções
+  obrigatórias de AUTHORING.md (Fronteira, Fundamentos, Padrões, Prompt, etc.)
+Consequência: agentes e humanos não encontram o mesmo "fechamento" operacional que
+  os volumes 09+ têm; prompts por volume ausentes; checklists do volume ausentes.
+Correção: acrescentar seções sem criar regras novas nem renumerar IDs (A-007).
+Gatilho: esta sessão / ADR-0004
+Origem: ADR-0004, 2026-07-29
+Status: aberto → em progresso
+```
+
 ### EOS-002 — Limiares de métrica nunca calibrados contra um módulo real
 
 ```
@@ -110,7 +125,8 @@ Status: aberto
 
 | ID | O quê | Custo de manter | Custo de pagar | Gatilho | Aceito por |
 | --- | --- | --- | --- | --- | --- |
-| — | — | — | — | — | — |
+| EOS-011 | Volumes herdados (00–08, 10–12, 14, 21) sem anatomia completa de AUTHORING.md | Leitor/agente não acha Prompt/Checklist/Fronteira padronizados | Completar seções sem renumerar regras | Fechamento v3.0.0 / próxima sessão editorial | ADR-0004 |
+| EOS-004 | Vol 19 escrito mas **não é norma ativa na Vire** (banner de estado) | Risco de carregar IAX em tarefa sem feature de IA | Remover banner quando produto ganhar IA ao usuário | Feature de IA no produto | dono do produto |
 
 ---
 
@@ -120,11 +136,9 @@ Estado saudável e necessário. Backlog que só cresce perde utilidade.
 
 | ID | Título | Motivo da decisão | Data | Decidido por |
 | --- | --- | --- | --- | --- |
-| EOS-004 | Volume de engenharia de IA no produto (agentes, RAG, memória, ferramentas, avaliação) | A IA é ferramenta de desenvolvimento, não funcionalidade entregue ao usuário final. Volume sem uso seria contexto carregado à toa (`ORC-005`) | 2026-07-29 | dono do produto |
-| EOS-005 | Checklists de 500 e 1.000 itens | Produz `AUD-002` em escala: 500 caixas não são lidas, são marcadas. As 735 regras com ID já são a lista granular e citável, e os 7 checklists somam 342 verificações efetivamente executáveis | 2026-07-29 | dono do produto |
-| EOS-006 | Volume de prompt engineering | O EOS é o prompt. Um volume ensinando a escrever prompts dentro do próprio prompt não produz nenhuma decisão técnica | 2026-07-29 | dono do produto |
-| EOS-007 | Papel "Refatorador" na cadeia de agentes | Um papel cuja missão é refatorar convida exatamente o que `CON-013` proíbe: mudança sem defeito, métrica ou norma vinculada. Refatoração legítima nasce do achado de outro papel | 2026-07-29 | dono do produto |
-| EOS-008 | Volumes sobre NIST, CIS e ISO 27001 | Frameworks de conformidade organizacional — política, treinamento, gestão de fornecedor. Quase nada se traduz em regra verificável em código. Aproveitados apenas os níveis progressivos do ASVS (`SEC-059`) | 2026-07-29 | dono do produto |
+| EOS-005 | Checklists de 500 e 1.000 itens | Produz `AUD-002` em escala: 500 caixas não são lidas, são marcadas. Doutrina no Vol 22; 7 checklists em `checklists/` | 2026-07-29 | dono do produto |
+| EOS-007 | Papel "Refatorador" na cadeia de agentes | Convida o que `CON-013` proíbe. Refatoração nasce de achado de outro papel | 2026-07-29 | dono do produto |
+| EOS-008 | Volumes sobre NIST, CIS e ISO 27001 | Conformidade organizacional; quase nada vira regra em código. ASVS níveis em `SEC-059+` | 2026-07-29 | dono do produto |
 
 ---
 
@@ -132,7 +146,8 @@ Estado saudável e necessário. Backlog que só cresce perde utilidade.
 
 | ID | Título | Por que deixou de existir | Data |
 | --- | --- | --- | --- |
-| — | — | — | — |
+| EOS-006 | Volume de prompt engineering como "não faremos" | Invalidado por ADR-0004: Vol 20 existe como doutrina operacional (não meta-prompt vazio) | 2026-07-29 |
+| EOS-004 (não-faremos absoluto) | Não escrever Vol de IA | Substituído: Vol 19 existe como referência; dívida EOS-004 acima = não ativar como norma Vire | 2026-07-29 |
 
 ---
 
@@ -156,4 +171,4 @@ até virar `MUST-FIX` ela mesma — normalmente na forma de um incidente.
 
 ## Próximo ID disponível
 
-`EOS-011`
+`EOS-012`
