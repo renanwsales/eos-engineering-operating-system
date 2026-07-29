@@ -434,6 +434,10 @@ Pesos e escala vivem em `CON-052`, `AUD-027`, `AUD-028`. Quem reporta qualidade 
 as notas por dimensão **e** o total. Publicar só o total é achado: permite esconder segurança 4
 atrás de testes 10.
 
+O total ponderado só é legítimo depois das travas. Ordem obrigatória: notas por dimensão → aplicar
+`AUD-030` → só então calcular o agregado e o veredito (`AUD-031`). Inverter a ordem — agregar
+primeiro e "lembrar" da trava depois — é o caminho pelo qual módulos perigosos ganham slide verde.
+
 ### MET-041 — Agregação que mascara trava é proibida **[IMUTÁVEL]**
 
 Qualquer fórmula, gráfico ou "health score" que permita `S0`/`S1` abertos ou segurança < 6 aparecer
@@ -496,6 +500,10 @@ módulos, fluxos, classes de mudança, equipes apenas quando o denominador e o c
 Espelho de `OBS-038` / `OBS-045` no domínio MET: todo gráfico declara a pergunta no título e o
 papel que a faz na cadência (daily de entrega, semanal de qualidade, mensal executivo). Painel sem
 consumidor em um ciclo completo é deletado, não "arquivado para depois".
+
+"Consumidor" não é "qualquer um com acesso". É o papel que, na cadência declarada, toma uma decisão
+com base na vista — priorizar, abrir post-mortem, ajustar WIP, bloquear release. Se a única ação
+observada for "abrir e fechar", o painel não tem consumidor: tem plateia.
 
 ### MET-050 — Painel sem consulta no período é morto **[OBRIGATÓRIA]**
 
