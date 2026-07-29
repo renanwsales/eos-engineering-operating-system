@@ -17,7 +17,7 @@ Ordenados por score. Recalcular os 10 do topo a cada rodada.
 | ID | Título | Sev. | Conf. | Esforço | Risco | Score | Gatilho de promoção | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | EOS-001 | Perfil do projeto ainda não preenchido para o repositório alvo | S1 | HIGH | S | LOW | 20.0 | Primeira rodada de revisão em qualquer projeto | aberto |
-| EOS-011 | Anatomia AUTHORING incompleta nos volumes herdados | S2 | HIGH | L | LOW | 8.0 | Fechamento editorial v3 / uso intenso por agentes | aberto |
+| EOS-011 | Anatomia AUTHORING incompleta nos volumes herdados | S2 | HIGH | L | LOW | 8.0 | Fechamento editorial v3 | feito |
 | EOS-003 | Verificação do EOS não roda automaticamente | S2 | HIGH | XS | LOW | 14.0 | Primeiro hospedagem do repositório em plataforma com CI | aberto |
 | EOS-009 | Playbooks podem divergir das regras que citam | S2 | MEDIUM | S | LOW | 4.0 | Primeira alteração de regra em volume citado pelo Vol 15 | aberto |
 | EOS-010 | Volume 1 tem numeração fora de ordem no documento | S3 | HIGH | M | MEDIUM | 1.3 | Se um leitor humano relatar dificuldade de navegação no Vol 1 | aberto |
@@ -100,7 +100,7 @@ Consequência: agentes e humanos não encontram o mesmo "fechamento" operacional
 Correção: acrescentar seções sem criar regras novas nem renumerar IDs (A-007).
 Gatilho: esta sessão / ADR-0004
 Origem: ADR-0004, 2026-07-29
-Status: aberto → em progresso
+Status: feito — anatomia acrescentada sem novas regras (2026-07-29)
 ```
 
 ### EOS-002 — Limiares de métrica nunca calibrados contra um módulo real
@@ -125,7 +125,7 @@ Status: aberto
 
 | ID | O quê | Custo de manter | Custo de pagar | Gatilho | Aceito por |
 | --- | --- | --- | --- | --- | --- |
-| EOS-011 | Volumes herdados (00–08, 10–12, 14, 21) sem anatomia completa de AUTHORING.md | Leitor/agente não acha Prompt/Checklist/Fronteira padronizados | Completar seções sem renumerar regras | Fechamento v3.0.0 / próxima sessão editorial | ADR-0004 |
+| EOS-011 | Volumes herdados — anatomia AUTHORING | Pago na v3.0.0 | — | — | ADR-0004 |
 | EOS-004 | Vol 19 escrito mas **não é norma ativa na Vire** (banner de estado) | Risco de carregar IAX em tarefa sem feature de IA | Remover banner quando produto ganhar IA ao usuário | Feature de IA no produto | dono do produto |
 
 ---

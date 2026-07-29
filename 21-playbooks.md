@@ -8,6 +8,34 @@ semana. É a camada que transforma 500 regras em trabalho executável.
 A diferença em relação a [`runbooks/`](runbooks/): runbook coordena **papéis** numa rodada de revisão;
 playbook executa **uma tarefa** de construção, normalmente por um papel só.
 
+Índice operacional das tarefas: [`playbooks/README.md`](playbooks/README.md) — aponta para os capítulos
+deste volume; não duplica os passos.
+
+**Fronteira.** É deste volume: a **ordem** de execução das tarefas recorrentes (CRUD, endpoint, tela,
+schema, integração externa, correção de bug) e as regras `PLB` que tornam essa ordem citável. O
+índice em [`playbooks/README.md`](playbooks/README.md) lista as tarefas e o passo que mais se erra;
+a substância mora aqui.
+
+**Não é deste volume:** as **normas** que os passos aplicam. Autorização, schema, contrato, UX,
+teste, deploy — ficam nos volumes de domínio (`SEC`, `DAT`, `API`, `UXI`, `QAT`, `OPS`, …). Playbook
+**referencia por ID**, nunca reafirma (`A-001`). Coordenação multi-papel de revisão
+(→ [`runbooks/`](runbooks/)). Doutrina de checklist (→ [22](22-checklists.md)).
+
+---
+
+## Fundamentos
+
+Um playbook não é atalho para pular G0–G2 (`PLB-001`). É a trilha de G3: implementação na ordem que
+impede o modelo anêmico. Começar pela tela ou pelo endpoint empurra a regra para a borda (`ARC-020`)
+e deixa a integridade fora do banco (`DAT-001`).
+
+A ordem compartilhada — **invariante → dado → regra → contrato → borda → interface → teste →
+observabilidade** — é a substância (`PLB-002`), não cerimônia. Pular passo em silêncio torna o
+esquecido indistinguível do dispensado (`PLB-003`). Passo que não cabe no projeto por convenção
+local é lacuna no [perfil](templates/perfil-do-projeto.md), não exceção informal (`PLB-004`).
+
+G4 nunca é comprimido (`CON-061`). Fechar o playbook sem Definition of Done é entregar intenção.
+
 ---
 
 ## Capítulo 15.1 — Como usar um playbook
@@ -306,6 +334,202 @@ antipadrão que mais infla diff de correção e o que mais dificulta bissecar a 
 
 Se a reincidência for de um bug já corrigido antes, **o achado é o teste de regressão ausente**, não o código
 (`QAT-031`).
+
+---
+
+## Padrões reutilizáveis
+
+**Tabela de passos com status.** Uma linha por passo do playbook: `feito` · evidência path:line · ou
+`N/A` com frase (`PLB-003`). É o artefato que prova que a ordem foi seguida.
+
+**Invariantes antes do schema.** Frases de negócio que precisam ser sempre verdade, depois constraints
+(`PLB-005`, `PLB-007`). *Use* em todo CRUD novo.
+
+**Quatro operações, quatro decisões.** Create/Read/Update/Delete com autorização e invariantes
+próprias (`PLB-009`, `PLB-010`). *Não trate* como simétricas.
+
+**Contrato antes do handler.** Campos expostos e omitidos escritos antes do código da borda
+(`PLB-018`). *Não serialize* a entidade inteira.
+
+**Oito estados antes do componente.** Empty, loading, error, success, partial, forbidden, offline,
+skeleton — listados (`PLB-029`). *Não deixe* erro "para depois".
+
+**Contar violadores antes de migrar.** `SELECT` que conta registros que quebram a regra nova
+(`PLB-040`). *Antes* de escrever a migração.
+
+**Reproduzir → teste que falha → corrigir a classe.** Ordem de bug (`PLB-055`–`PLB-057`). Commit só
+com a correção (`PLB-058`).
+
+---
+
+## Matrizes de decisão
+
+**Qual playbook**
+
+| Tarefa | Capítulo | Faixa |
+| --- | --- | --- |
+| CRUD de entidade | 15.2 | `PLB-005`–`017` |
+| Endpoint / rota | 15.3 | `PLB-018`–`027` |
+| Tela | 15.4 | `PLB-028`–`039` |
+| Schema / migração | 15.5 | `PLB-040`–`047` |
+| Integração externa | 15.6 | `PLB-048`–`054` |
+| Bug | 15.7 | `PLB-055`–`058` |
+
+Índice: [`playbooks/README.md`](playbooks/README.md).
+
+**Passo vs norma**
+
+| O playbook faz | A norma mora em |
+| --- | --- |
+| Ordena "autorize por objeto" | `SEC-004` / `BAK` |
+| Ordena constraints na 1ª migração | `DAT-001` / `DAT-002` |
+| Ordena oito estados de tela | `FRT` / `UXI` |
+| Ordena aditivo primeiro | `DAT-031` / `OPS-011` |
+| Ordena timeout/retry/idempotência | `BAK` / `OPS` |
+
+**Pular passo**
+
+| Situação | Ação |
+| --- | --- |
+| Passo irrelevante de verdade | `N/A` + uma frase (`PLB-003`) |
+| "Não temos tempo" | Não é N/A — é risco aceito ou dívida (`AUD-037`) |
+| Convenção local diverge | Lacuna no perfil (`PLB-004`) |
+| Quer pular G0–G2 | Proibido (`PLB-001`) |
+
+---
+
+## Fluxo de trabalho
+
+```
+1. Identificar a tarefa em playbooks/README.md
+2. Confirmar G0–G2 feitos (ou comprimir só se trivial e declarado) — PLB-001
+3. Percorrer os passos PLB na ordem do capítulo
+4. Cada pulo = N/A justificado (PLB-003)
+5. Se passo não cabe no projeto → achar no perfil (PLB-004)
+6. Fechar com DoD (CON-043) e bloco de verificação deste volume
+7. G4: validar em isolamento (CON-061) — nunca comprimir
+```
+
+Ordem interna compartilhada: invariante → dado → regra → contrato → borda → interface → teste →
+observabilidade (`PLB-002`).
+
+---
+
+## Exemplos de implementação
+
+**CRUD ao contrário (`PLB-005`, `PLB-009`)**
+
+```
+# Ruim — tabela primeiro, update genérico depois
+CREATE TABLE pedidos (...);
+app.put('/pedidos/:id', (body) => repo.update(id, body)) // altera pedido pago
+
+# Bom — invariantes e transições antes
+# Invariante: pedido pago não muda itens.
+# Transições: rascunho→enviado→pago→cancelado (subset).
+# Update: casos de uso explícitos, não patch genérico (PLB-009).
+```
+
+**Schema sem contagem (`PLB-040`)**
+
+```sql
+-- Ruim: ADD NOT NULL direto
+ALTER TABLE clientes ALTER COLUMN documento SET NOT NULL;
+
+-- Bom: contar violadores primeiro
+SELECT count(*) FROM clientes WHERE documento IS NULL;
+-- depois: backfill / fases (PLB-047), só então NOT NULL
+```
+
+**Bug com "enquanto eu estava lá" (`PLB-058`)**
+
+```
+# Ruim — um commit: corrige NPE + renomeia módulo + ajusta lint do arquivo vizinho
+
+# Bom
+commit 1: teste que falha + correção do NPE (PLB-055–057)
+backlog: renomear módulo (CON-019)
+```
+
+---
+
+## Antipadrões
+
+| Antipadrão | Consequência |
+| --- | --- |
+| Playbook no lugar de G0–G2 | Implementa a solução errada (`PLB-001`) |
+| Começar pela tela/endpoint | Regra na borda; modelo anêmico (`PLB-002`) |
+| Pular passo em silêncio | Esquecido = dispensado (`PLB-003`) |
+| Exceção informal ao playbook | Perfil desatualizado (`PLB-004`) |
+| CRUD com update genérico | Quebra invariante de estado (`PLB-009`) |
+| Serializar entidade no endpoint | Vaza campo; acopla contrato (`PLB-018`) |
+| Estado de erro "depois" | Erro nunca existe na UI (`PLB-029`) |
+| Migrar antes de contar violadores | Deploy quebra em produção (`PLB-040`) |
+| Chamada externa dentro de transação | Lock longo; falha parcial (`PLB-052`) |
+| Corrigir sem reproduzir | Correção cosmética (`PLB-055`) |
+| Commit de bug com melhoria adjacente | Diff impossível de bisectar (`PLB-058`) |
+| Reafirmar `SEC`/`DAT` no playbook | Segunda fonte de verdade (`A-001`) |
+
+---
+
+## Checklist
+
+- [ ] Playbook certo identificado; G0–G2 não foram substituídos. (`PLB-001`)
+- [ ] Passos na ordem interna (invariante→…→observabilidade). (`PLB-002`)
+- [ ] Todo pulo tem `N/A` justificado. (`PLB-003`)
+- [ ] Divergência local registrada no perfil, não como exceção informal. (`PLB-004`)
+- [ ] CRUD: invariantes, transições, auth por objeto nas quatro operações. (`PLB-005`–`010`)
+- [ ] Endpoint: contrato, auth, paginação, idempotência se efeito externo. (`PLB-018`–`022`)
+- [ ] Tela: oito estados, tokens do DS, teclado, zoom. (`PLB-029`–`038`)
+- [ ] Schema: contagem de violadores, aditivo, reversa executada. (`PLB-040`–`043`)
+- [ ] Integração: timeout/retry/idempotência; sem call em transação. (`PLB-049`, `PLB-052`)
+- [ ] Bug: reproduzido, teste que falha, classe corrigida, commit limpo. (`PLB-055`–`058`)
+- [ ] DoD (`CON-043`) e G4 executados. (`PLB-001`, `CON-061`)
+
+---
+
+## Prompt do volume
+
+```
+You are executing an EOS playbook from Volume 21 (PLB).
+
+Mission: implement or review a recurring build task in the mandatory step order. You order work;
+you do not invent or restate domain norms — cite SEC, DAT, BAK, API, FRT, UXI, QAT, OPS, etc. by ID
+(A-001).
+
+Load: agents/_shared/core-contract.md, 00-constituicao-da-engenharia.md, 21-playbooks.md,
+playbooks/README.md, templates/perfil-do-projeto.md, and the domain volumes cited by the chosen
+playbook's steps.
+
+Mandatory sequence:
+1. Pick the playbook from playbooks/README.md (CRUD, endpoint, screen, schema, integration, bug).
+2. Confirm G0–G2 are done or explicitly compressed as trivial (PLB-001). Never skip G4 (CON-061).
+3. Walk every PLB step in order. For each: done with path:line evidence, or N/A with one sentence
+   (PLB-003).
+4. If a step conflicts with local convention, file a profile gap (PLB-004) — do not silently skip.
+5. Cite domain rule IDs; do not rephrase them as new PLB norms.
+6. Close with Definition of Done (CON-043) and the Volume 21 verification block.
+
+Do not: start from UI or endpoint when the playbook says invariants first; mix adjacent cleanups into
+a bugfix (PLB-058); duplicate playbook steps into playbooks/README.md.
+
+Output: the "Verificação obrigatória de saída" block of Volume 21, in Brazilian Portuguese.
+```
+
+---
+
+## Critérios de aceite
+
+Uma entrega via playbook só é aceita quando:
+
+1. O playbook correto foi aplicado e G0–G2 não foram substituídos por ele (`PLB-001`).
+2. A ordem dos passos foi respeitada; pulos são `N/A` justificados (`PLB-002`, `PLB-003`).
+3. Cada passo obrigatório cita evidência (`path:line` ou comando), não narrativa.
+4. Normas de domínio foram cumpridas por citação aos volumes donos — o playbook não as reescreveu
+   (`A-001`).
+5. Definition of Done (`CON-043`) completa no escopo; G4 executado (`CON-061`).
+6. Em bug: teste que falhava antes da correção existe (`PLB-056`); commit sem "enquanto eu estava lá"
+   (`PLB-058`).
 
 ---
 

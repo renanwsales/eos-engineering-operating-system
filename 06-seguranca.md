@@ -4,6 +4,25 @@ Prefixo: `SEC` · Regras: SEC-001 a SEC-066 · Papel: [Security Engineer](agents
 
 Camada coberta: **3 (segurança)**.
 
+**Fronteira.** OWASP Top 10 completo, criptografia, autenticação e sessão, segredos, dados
+pessoais, cadeia de suprimentos, SSRF, níveis progressivos de verificação. Não cobre:
+infraestrutura de deploy e política de acesso operacional (→ [10](10-devops.md)); isolamento de
+inquilino como decisão de arquitetura (→ [16](16-multi-tenant.md)), com achados classificados por
+este volume.
+
+---
+
+## Fundamentos
+
+Em autenticação, autorização, pagamento e dado pessoal, o ônus da prova é invertido (`SEC-001`):
+ausência de verificação é achado, não inconclusão. A ameaça realista é o usuário autenticado
+mal-intencionado (`SEC-002`), não só o anônimo na borda.
+
+A ordem fixa — autorização antes de tudo (`SEC-003`) — evita gastar a rodada em headers enquanto
+IDOR permanece aberto. Isolamento de tenant no banco (`SEC-006`) e autorização por objeto
+(`SEC-004`) são o núcleo `S0`; o restante do volume fecha as classes OWASP e a prova de que a
+correção realmente fechou o caminho (`SEC-064`).
+
 ---
 
 ## A regra que governa o volume inteiro
@@ -414,3 +433,188 @@ Quem, com que acesso, faz o quê, para obter o quê. Aviso abstrato não é corr
 
 Nem pelo orquestrador. Somente o dono humano nomeado pode aceitar o risco, explicitamente e por escrito.
 Um `S0` interrompe a rodada inteira, sem completar o restante da análise.
+
+---
+
+## Padrões reutilizáveis
+
+**Padrão: authz por objeto no ponto de carga.** Carregar recurso e checar sujeito×ação×instância
+antes de mutar (`SEC-004`); negar por omissão em rota nova (`SEC-005`).
+
+**Padrão: quatro perguntas por entrada.** Quem · o que · em qual recurso · por qual caminho
+esquecido (`SEC-007`, `SEC-008`).
+
+**Padrão: parametrizar tudo.** SQL/NoSQL/comando/template sem concatenação (`SEC-019`,
+`SEC-020`).
+
+**Padrão: segredo encontrado.** Rotacionar → revogar → remover do histórico → post-mortem
+(`SEC-052`) — nesta ordem.
+
+**Padrão: prova antes/depois.** Mesma requisição exploratória → 403; legítima → 200 (`SEC-064`).
+
+---
+
+## Matrizes de decisão
+
+| Pergunta | Prefira | Evite se |
+| --- | --- | --- |
+| Papel vs objeto | Objeto (`SEC-004`) | Só role check |
+| Tenant | Filtro/policy no dado (`SEC-006`) | Confiar em cada query |
+| Nível V1/V2/V3 | Por criticidade do módulo (`SEC-059`) | V3 só por agente (`SEC-062`) |
+| Hash de senha | Algoritmo lento dedicado (`SEC-012`) | MD5/SHA “com salt” |
+| CORS | Origens conhecidas (`SEC-033`) | `*` com credencial |
+| Dado pessoal em log | Redact / não logar (`SEC-050`) | “só em staging” |
+
+| Condição de bloqueio | Regra |
+| --- | --- |
+| Sem authz por objeto | `SEC-004` |
+| Multi-tenant sem isolamento | `SEC-006` |
+| Segredo no repo/cliente | `SEC-052` |
+| Concatenação em consulta | `SEC-019` |
+| Hash inadequado | `SEC-012` |
+
+---
+
+## Fluxo de trabalho
+
+```
+1. Declarar nível V1/V2/V3 do módulo (SEC-059–060)
+2. Autorização por objeto + tenant + caminhos esquecidos (SEC-004–008)
+3. Autenticação/sessão/MFA/CSRF (SEC-044–048, SEC-025–027)
+4. Entrada: injeção, upload, SSRF (SEC-019–024, SEC-049)
+5. Criptografia, TLS, segredos (SEC-012–018, SEC-052)
+6. Config, CORS, headers, superfície (SEC-031–037)
+7. Dependências e pipeline (SEC-038–043)
+8. Logs e eventos de segurança (SEC-050–051)
+9. Dados pessoais: inventário, retenção, direitos (SEC-053–058)
+10. Correção: prova de exploração fechada (SEC-064–065)
+```
+
+Checklist operacional: [`checklists/seguranca-owasp.md`](checklists/seguranca-owasp.md).
+
+---
+
+## Exemplos de implementação
+
+```
+// Ruim — SEC-004: só papel
+if (user.role === 'admin') return db.orders.find(orderId)
+
+// Bom — objeto
+const order = await db.orders.find(orderId)
+if (!can(user, 'read', order)) throw Forbidden()
+return order
+```
+
+```
+// Ruim — SEC-019
+db.query(`SELECT * FROM users WHERE email = '${email}'`)
+
+// Bom
+db.query('SELECT * FROM users WHERE email = $1', [email])
+```
+
+```
+# Ruim — SEC-064: "testes passaram"
+# Bom — prova
+Antes:  GET /orders/A  como user B → 200 + corpo
+Depois: GET /orders/A  como user B → 403
+Legítimo: GET /orders/A como user A → 200
+```
+
+---
+
+## Antipadrões
+
+| Antipadrão | Consequência |
+| --- | --- |
+| Confiar em papel sem objeto | IDOR / `S0` (`SEC-004`) |
+| Isolamento só na disciplina de query | Vazamento multi-tenant (`SEC-006`) |
+| Concatenar entrada em SQL/comando | Injeção (`SEC-019`, `SEC-020`) |
+| Segredo no repositório “por enquanto” | Compromisso permanente até rotacionar (`SEC-052`) |
+| Hash rápido de senha | Credential stuffing trivial (`SEC-012`) |
+| CORS `*` com cookies | CSRF cross-origin (`SEC-033`) |
+| Dado pessoal em log | Violação e impossível de apagar (`SEC-050`) |
+| Suprimir CVE sem análise escrita | Risco invisível (`SEC-039`) |
+| “Testes verdes” como prova de authz | Regressão de exploração (`SEC-064`) |
+| Rebaixar `S0` de segurança por prazo | `SEC-066` |
+
+---
+
+## Checklist
+
+- [ ] Ônus invertido em authz/pagamento/PII; nível declarado. (`SEC-001`, `SEC-060`)
+- [ ] Autorização por objeto; negar por omissão. (`SEC-004`, `SEC-005`)
+- [ ] Isolamento de tenant no dado quando aplicável. (`SEC-006`)
+- [ ] Caminhos esquecidos percorridos. (`SEC-008`)
+- [ ] Consulta parametrizada; sem executar entrada. (`SEC-019`, `SEC-020`)
+- [ ] Hash adequado; TLS; sem segredo no cliente/repo. (`SEC-012`, `SEC-013`, `SEC-052`)
+- [ ] Sessão/token com expiração e regeneração. (`SEC-044`, `SEC-045`)
+- [ ] SSRF com allowlist. (`SEC-049`)
+- [ ] Sem PII em log; eventos de segurança. (`SEC-050`, `SEC-051`)
+- [ ] Inventário/minimização/retenção de PII. (`SEC-053`–`SEC-055`)
+- [ ] Correção com prova antes/depois. (`SEC-064`)
+- [ ] Regras de bloqueio da tabela do volume: zero violações abertas.
+
+---
+
+## Prompt do volume
+
+```
+You are performing a security review under EOS Volume 06 (SEC).
+
+Load: core-contract, output-schemas, 00-constituicao, 06-seguranca.md,
+checklists/seguranca-owasp.md. Cite 16-multi-tenant.md for tenant product
+decisions; 10-devops.md for deploy/access ops — do not restate OPS norms.
+
+Sequence (SEC-003):
+1. authorization → 2. authentication → 3. input → 4. output → 5. secrets →
+6. dependencies → 7. configuration → 8. SSRF → 9. integrity → 10. logging.
+
+Rules of engagement:
+- Burden of proof inverted on authz/payment/PII (SEC-001).
+- Authenticated attacker threat model (SEC-002).
+- Object-level authz and tenant isolation are S0 (SEC-004, SEC-006).
+- Fix requires exploit-path closed with before/after (SEC-064).
+- Do not downgrade security S0 (SEC-066). Do not invent new SEC rules.
+
+Output: findings with path:line, severity, exploit path, verification level
+(V1/V2/V3), blocking-table hits, unverified items.
+```
+
+---
+
+## Critérios de aceite
+
+1. Nenhum endpoint em escopo sem autorização por objeto (`SEC-004`).
+2. Multi-tenant em escopo com isolamento no dado (`SEC-006`).
+3. Zero concatenação de entrada em consulta/comando (`SEC-019`, `SEC-020`).
+4. Nenhum segredo no repositório ou no cliente (`SEC-052`).
+5. Sem dado pessoal em log nos caminhos revisados (`SEC-050`).
+6. Nível de verificação declarado (`SEC-060`).
+7. Correções `S0`/`S1` com prova antes/depois (`SEC-064`).
+
+---
+
+## Verificação obrigatória de saída
+
+```
+## Escopo e nível
+Módulo/superfície: <...>
+Nível: <V1 | V2 | V3> | Criticidade: <...>
+
+## Ordem SEC-003
+| Etapa | Percorrida? | Evidência |
+
+## Bloqueios (tabela do volume)
+| # | Condição | Presente? | Evidência |
+
+## Achados
+| ID | Sev | Regra | Caminho de exploração | path:line |
+
+## Correções verificadas
+| Achado | Antes | Depois | Regressão legítima |
+
+## Não verificado
+| Item | Motivo |
+```

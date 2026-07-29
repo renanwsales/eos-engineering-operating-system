@@ -7,6 +7,33 @@ Camada coberta: **8 (entrega)**.
 Estado que impede escala horizontal, limites de recurso e descarte de carga estão no
 [Volume 14](14-escalabilidade.md).
 
+**Fronteira.** É deste volume: empacotamento e ambientes; CI/CD que bloqueia; compatibilidade durante
+rollout; rollback documentado e testado; feature flags com prazo; configuração e segredos em runtime;
+backups com restauração medida; alta disponibilidade e modo degradado; resposta a incidente e plantão;
+o núcleo de detecção — log correlacionável e estruturado, as quatro métricas mínimas, alerta acionável
+com runbook e dono (`OPS-013`–`OPS-027`).
+
+**Não é deste volume:** log, tracing, métricas, SLO e custo de telemetria em profundidade
+(→ [17](17-observabilidade.md) — opera sobre a fundação deste volume e a cita, não a reafirma).
+Capacidade, contrapressão e estado que impede escala horizontal (→ [14](14-escalabilidade.md)).
+Classificação de dado sensível em log e gestão de segredos como norma de segurança
+(→ [06](06-seguranca.md); este volume exige o controle operacional e cita `SEC`).
+
+---
+
+## Fundamentos
+
+Entrega sem caminho de volta e sem caminho de detecção não é entrega: é aposta. As duas perguntas de
+`OPS-001` — quanto tempo até sabermos, quanto tempo até voltarmos — são o filtro de tudo que segue.
+Rollback sem comando, sem teste e sem dono vira descoberta às 3h. Pipeline que só reporta é teatro.
+Log sem correlação é pilha de frases. Alerta sem runbook é interrupção sem ação.
+
+A ordem de `OPS-002` é deliberada: rollback primeiro. Se a mudança não pode ser desfeita, o resto da
+conversa é decoração. Compatibilidade de deploy vem em seguida porque versões antiga e nova
+coexistem contra o mesmo banco e a mesma fila (`OPS-010`) — a causa clássica de "testes passaram,
+produção quebrou". Detecção e alerta vêm antes de pipeline porque um portão verde sem sintoma
+visível deixa o defeito no ar até o cliente reclamar.
+
 ---
 
 ## As duas perguntas do volume
@@ -281,6 +308,126 @@ Alerta disparando em produção precede qualquer revisão. Ver CON-053.
 
 ---
 
+## Padrões reutilizáveis
+
+**Rollback em um comando.** Script versionado, documentado no runbook do serviço, executado ao menos
+uma vez em ambiente real (`OPS-003`–`OPS-005`). *Use sempre* em `R2`+. *Não trate* "reverter o PR"
+como rollback se a migração já rodou — o caminho de dados precisa estar no mesmo comando (`OPS-006`).
+
+**Rollout aditivo em duas fases.** Schema/config novos primeiro, compatíveis com código antigo; remoção
+só depois que a versão antiga saiu do ar (`OPS-011`, `DAT-031`). *Use quando* qualquer linha da tabela
+de coexistência de `OPS-010` for "não".
+
+**Flag com prazo e backlog.** Flag ligada ao risco da mudança, item de backlog com data de remoção
+(`OPS-009`, `OPS-038`). *Use* em `R3`/`R4`. *Não use* como substituto permanente de versionamento de
+contrato.
+
+**Artefato único promovido.** Um build, vários ambientes; configuração injetada de fora (`OPS-030`).
+*Use* quando a divergência "funcionava em homologação" for recorrente.
+
+**Health check que prova dependência.** Endpoint que falha se banco, fila ou config crítica estiver
+indisponível (`OPS-035`). *Não use* `return 200` estático — pior que ausência.
+
+**Alerta-sintoma com runbook e dono.** Dispara por sintoma do usuário ou do SLO local; runbook com
+passos; responsável nomeado (`OPS-023`–`OPS-027`). *Não alerte* CPU ou reinício isolado sem ação.
+
+---
+
+## Matrizes de decisão
+
+**Como reverter**
+
+| Situação | Caminho | Motivo |
+| --- | --- | --- |
+| Código sem migração | Redeploy da versão anterior | `OPS-003` |
+| Migração aditiva compatível | Redeploy; schema novo permanece | `OPS-006`, `OPS-011` |
+| Migração destrutiva já aplicada | Sem rollback limpo — evitar o cenário | `OPS-007` |
+| `R3`/`R4` com flag | Desligar flag sem deploy | `OPS-009` |
+| Cliente móvel antigo no ar | Compatibilidade, não "force update" | `OPS-012` |
+
+**O que o pipeline deve bloquear**
+
+| Portão | Bloqueia merge/deploy? | Norma |
+| --- | --- | --- |
+| Testes, types, lint | Sim | `OPS-028` |
+| Segredo detectado / CVE crítico | Sim | `OPS-034`, `SEC-038` |
+| Orçamento de bundle estourado | Sim, se declarado no perfil | `OPS-028` |
+| Aviso de estilo sem norma | Não | `CON-013` |
+| Job amarelo "só informativo" | Não conta como portão | teatro |
+
+**Detecção mínima vs Volume 17**
+
+| Necessidade | Onde vive | Quando basta o Vol 10 |
+| --- | --- | --- |
+| Correlação, log em campos, 4 métricas, alerta com runbook | `OPS-013`–`OPS-027` | Sempre — fundação |
+| Schema de log, SLO, cardinalidade, tracing | [17](17-observabilidade.md) | Quando o fluxo é crítico ou distribuído |
+| Capacidade e contrapressão | [14](14-escalabilidade.md) | Quando o risco é saturação, não deploy |
+
+---
+
+## Fluxo de trabalho
+
+```
+1. Rollback              → comando, teste prévio, caminho de dados, flag se R3/R4 (OPS-003–009)
+2. Compatibilidade       → schema, fila, cache, API, config com versão antiga no ar (OPS-010–012)
+3. Detecção              → falha silenciosa tem sinal; correlação; métrica de negócio (OPS-013–022)
+4. Alertas               → sintoma, runbook, dono; ruído é defeito (OPS-023–027)
+5. Portões do pipeline   → bloqueia de verdade; artefato reproduzível (OPS-028–034)
+6. Deploy                → health real; gradual se o risco pede (OPS-035–038)
+7. Configuração/segredos → valida no start; divergência documentada; rotação sem deploy (OPS-039–041)
+8. Recuperação           → restauração medida; RPO/RTO; modo degradado; SPOF declarado (OPS-042–046)
+9. Incidente             → se ativo, interrompe a rodada (OPS-048); depois, aprendizado com backlog (OPS-047)
+```
+
+Papel: [`agents/08-devops-sre.md`](agents/08-devops-sre.md). Aprofundamento de telemetria, se necessário,
+em [17](17-observabilidade.md) — citando `OPS`, sem reescrevê-lo.
+
+---
+
+## Exemplos de implementação
+
+**Rollback com migração (`OPS-006`, `OPS-007`)**
+
+```
+# Ruim — migração destrutiva no mesmo deploy que o comportamento novo
+deploy: migrate drop column orders.legacy_status && app v42
+# Rollback de app deixa o schema sem a coluna que v41 ainda lê.
+
+# Bom — aditivo primeiro; remoção depois que v41 saiu
+deploy 1: add column ... (nullable) ; app ainda lê a coluna antiga
+deploy 2: app v42 escreve nas duas / lê a nova
+deploy 3: remove coluna antiga + código morto
+rollback de deploy 2 = redeploy v41; schema ainda serve as duas
+```
+
+**Health check (`OPS-035`)**
+
+```js
+// Ruim — sempre verde
+app.get('/health', (_req, res) => res.status(200).send('ok'))
+
+// Bom — prova o que o serviço precisa
+app.get('/health', async (_req, res) => {
+  await db.query('select 1')
+  await fila.ping()
+  res.status(200).json({ ok: true, versao: processo.versao })
+})
+```
+
+**Alerta acionável (`OPS-023`, `OPS-025`)**
+
+```
+# Ruim
+Alerta: CPU > 80% por 1m. Runbook: (vazio). Dono: (ninguém).
+
+# Bom
+Alerta: taxa de checkout_confirmado < 50% da baseline 7d por 5m
+Consequência de ignorar: pedidos pagos sem confirmação visível ao cliente
+Ação: runbooks/checkout-drop.md · Dono: plantão-pagamentos
+```
+
+---
+
 ## Antipadrões
 
 | Antipadrão | Consequência |
@@ -298,6 +445,81 @@ Alerta disparando em produção precede qualquer revisão. Ver CON-053.
 | Configuração divergente não documentada | "Funcionava em homologação" |
 | Backup sem teste de restauração | Suposição no lugar de garantia |
 | Só métricas técnicas | Falha de negócio silenciosa passa |
+
+---
+
+## Checklist
+
+- [ ] Rollback é um comando documentado, já executado, com caminho de dados se houver migração.
+      (`OPS-003`–`OPS-006`)
+- [ ] Migração destrutiva não está no mesmo deploy que mudança de comportamento. (`OPS-007`)
+- [ ] `R3`/`R4` tem flag ou caminho de reversão em segundos. (`OPS-009`)
+- [ ] Versões antiga e nova coexistiram verificadas (schema, fila, cache, API, config). (`OPS-010`)
+- [ ] Log correlacionável, estruturado; sem dado sensível. (`OPS-013`, `OPS-014`, `OPS-016`)
+- [ ] Quatro métricas mínimas + métrica de negócio que pega falha silenciosa. (`OPS-018`, `OPS-019`)
+- [ ] Todo alerta tem sintoma, runbook e dono; ruído tratado como defeito. (`OPS-023`–`OPS-027`)
+- [ ] Pipeline bloqueia em teste, type, lint, segredo e CVE crítico. (`OPS-028`, `OPS-034`)
+- [ ] Health check prova dependência real. (`OPS-035`)
+- [ ] Config válida no start; divergência entre ambientes documentada. (`OPS-039`, `OPS-040`)
+- [ ] Segredos rotacionáveis sem deploy. (`OPS-041`)
+- [ ] Restauração de backup testada com duração medida; RPO/RTO declarados. (`OPS-042`, `OPS-043`)
+- [ ] Incidente ativo interrompe a rodada. (`OPS-048`)
+
+---
+
+## Prompt do volume
+
+```
+You are the DevOps/SRE agent of the EOS, operating Volume 10 — DevOps (`OPS`).
+
+Mission: for every change in scope, answer OPS-001 — how long until we know it failed, and how long
+until we are back — with evidence, not narrative.
+
+Load first: agents/_shared/core-contract.md, 00-constituicao-da-engenharia.md, 10-devops.md,
+agents/08-devops-sre.md, and the filled templates/perfil-do-projeto.md. Cite Volume 17 for deep
+telemetry design; do not restate OBS rules. Cite Volume 14 for capacity and backpressure; do not
+restate ESC rules.
+
+Mandatory sequence (OPS-002). Do not reorder.
+1. Rollback: documented command, previously executed, data path if migration, flag if R3/R4.
+2. Deploy compatibility: old and new vs same DB, queue, cache, API, config (OPS-010).
+3. Detection: silent-failure modes, correlation, structured logs, four baseline metrics, business
+   metric, actionable alerts with runbook and owner.
+4. Pipeline gates: does CI block, or only report? Reproducible artifact; no secrets in logs.
+5. Configuration and secrets: startup validation; documented env drift; rotatable without deploy.
+6. Recovery: restore tested with measured duration; RPO/RTO; degraded mode; declared SPOFs.
+7. If an active production incident exists, stop the round (OPS-048).
+
+Rules of engagement.
+- Evidence or nothing (CON-009). "Rollback exists" requires the command and the last execution date.
+- Personal data in logs is S0 — hand to Security (OPS-016); do not invent SEC rules.
+- Never claim "observability is fine" because Volume 17 exists; verify the OPS foundation first.
+
+Output: exactly the "Verificação obrigatória de saída" block of Volume 10, in Brazilian Portuguese,
+with MUST-FIX and OPPORTUNITY separated (CON-018), and unfixed opportunities in the backlog with
+promotion triggers (AUD-036).
+```
+
+---
+
+## Critérios de aceite
+
+Um módulo ou mudança passa em DevOps quando todos são verdadeiros:
+
+1. Rollback documentado, executado ao menos uma vez, com caminho de dados quando há migração
+   (`OPS-003`–`OPS-006`).
+2. Nenhuma migração destrutiva no mesmo deploy que mudança de comportamento (`OPS-007`).
+3. Coexistência old/new verificada nos eixos de `OPS-010`, ou rollout aditivo em fases.
+4. Falha silenciosa do escopo tem detecção; logs correlacionáveis; quatro métricas + métrica de
+   negócio (`OPS-013`–`OPS-022`).
+5. Todo alerta do escopo tem runbook e dono (`OPS-025`, `OPS-027`).
+6. Pipeline bloqueia nos portões obrigatórios (`OPS-028`, `OPS-034`).
+7. Health check real (`OPS-035`); config válida no start (`OPS-039`).
+8. Restauração testada com duração medida e objetivos de recuperação declarados (`OPS-042`,
+   `OPS-043`) — ou N/A justificado no perfil para serviço sem estado persistente próprio.
+
+Falha em 1, 4 ou 6 é reprovação direta: sem volta, sem detecção ou com teatro de CI, a entrega não
+é operável.
 
 ---
 

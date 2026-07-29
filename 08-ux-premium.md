@@ -8,6 +8,26 @@ Camada coberta: **6 (UX/A11y)**.
 Escopo deste volume: o que é **verificável em revisão de engenharia** — estados, feedback, prevenção de
 erro, consistência, microinterações, acessibilidade e proteção do trabalho do usuário.
 
+**Fronteira.** Princípios de usabilidade que produtos de referência aplicam, estados e
+microinterações, redação de erro, consistência, fluxos, caminhos infelizes, acessibilidade
+WCAG 2.2 AA, proteção do trabalho do usuário. Não cobre: tokens e componentes concretos
+(→ [09](09-design-system.md)); decidir *o que* construir e para quem (→ [18](18-produto.md)).
+Detalhe técnico dos oito estados na implementação: [04](04-frontend.md) (`FRT-001`).
+
+---
+
+## Fundamentos
+
+UX verificável em engenharia não é gosto (`UXI-001`): é estado ausente, erro incompreensível,
+trabalho perdido e barreira de acesso. O mesmo produto que cobre o caminho feliz e abandona o
+caminho infeliz (`UXI-039`) gera suporte e abandono — não “dívida de design”.
+
+Consistência é economia cognitiva (`UXI-028`): um padrão por problema. Acessibilidade não é capa
+no fim — semântica, teclado e nome acessível (`UXI-041`, `UXI-044`, `UXI-049`) são requisitos do
+fluxo. Ferramenta automática sozinha cobre uma fração; o restante exige teclado, leitor e zoom.
+
+---
+
 ### UXI-001 — Gosto visual não é achado **[IMUTÁVEL]**
 
 Escolha estética, layout e estilo de texto que sejam apenas diferentes da sua preferência **não** são
@@ -297,6 +317,82 @@ Sem rolagem horizontal e sem perda de conteúdo ou funcionalidade. Também com e
 
 ---
 
+## Padrões reutilizáveis
+
+**Padrão: oito estados projetados.** Mesma matriz de `FRT-001`, com cópia e próxima ação
+(`UXI-002`–`UXI-004`).
+
+**Padrão: erro acionável.** O que aconteceu + o que fazer + saída (`UXI-015`–`UXI-018`).
+
+**Padrão: desfazer > confirmar.** Confirmação só quando nomeia destruição (`UXI-020`,
+`UXI-021`).
+
+**Padrão: um padrão por problema.** Inventário de variantes → escolher uma (`UXI-028`).
+
+**Padrão: a11y em cinco etapas.** Automático bloqueante → teclado → leitor → zoom → contraste
+(tabela de verificação abaixo; `UXI-041`–`UXI-054`).
+
+---
+
+## Matrizes de decisão
+
+| Pergunta | Prefira | Evite se |
+| --- | --- | --- |
+| Vazio vs erro | Três vazios distintos (`UXI-003`) | Uma tela “sem dados” genérica |
+| Desfazer vs confirmar | Desfazer (`UXI-020`) | Confirmar ação comum |
+| Feedback de espera | Proporcional (`UXI-006`) | Spinner eterno |
+| ARIA vs HTML | Semântica nativa (`UXI-041`) | `div`+ARIA por padrão |
+| Token/componente | [09](09-design-system.md) | Inventar token neste volume |
+| O que construir | [18](18-produto.md) | Priorizar feature aqui |
+
+---
+
+## Fluxo de trabalho
+
+```
+1. Objetivo do usuário e critério de sucesso (UXI-036)
+2. Oito estados + três vazios (UXI-002–004); cite FRT para implementação
+3. Feedback, duplicidade, sucesso (UXI-005–008)
+4. Erros na linguagem do usuário (UXI-015–019)
+5. Proteção do trabalho e destrutivo (UXI-020–027)
+6. Consistência de padrão e vocabulário (UXI-028–035)
+7. Caminhos infelizes e degradação (UXI-039–040)
+8. A11y: semântica → teclado → nome/estado → contraste/zoom (UXI-041–055)
+```
+
+Playbook de tela: [21](21-playbooks.md). Checklist: [`checklists/acessibilidade.md`](checklists/acessibilidade.md).
+
+---
+
+## Exemplos de implementação
+
+```
+# Ruim — UXI-015 / UXI-016
+"Erro 500"
+
+# Bom
+"Não conseguimos salvar agora. Tente novamente em instantes."
+[Tentar de novo]
+```
+
+```
+# Ruim — UXI-021
+"Tem certeza?"
+
+# Bom
+"Excluir o pedido #1234 e seus 3 itens? Esta ação não pode ser desfeita."
+```
+
+```
+<!-- Ruim — UXI-041 / UXI-049 -->
+<div onclick="submit()">Salvar</div>
+
+<!-- Bom -->
+<button type="submit">Salvar</button>
+```
+
+---
+
 ## Verificação de acessibilidade
 
 | Etapa | Como | Cobertura real |
@@ -332,6 +428,57 @@ anúncio ausente nem alternativa textual inadequada — que são a maioria dos p
 | Erro só por cor | Invisível para parte dos usuários |
 | `tabindex` positivo | Quebra a ordem natural da página inteira |
 | Animação longa | Parece lentidão do sistema |
+
+---
+
+## Checklist
+
+- [ ] Gosto não vira achado; objetivo do fluxo declarado. (`UXI-001`, `UXI-036`)
+- [ ] Oito estados; vazios distintos e acionáveis. (`UXI-002`–`UXI-004`)
+- [ ] Feedback imediato; envio duplicado impedido. (`UXI-005`, `UXI-007`)
+- [ ] Erro acionável, sem jargão técnico. (`UXI-015`–`UXI-017`)
+- [ ] Trabalho do usuário preservado; destrutivo nomeado. (`UXI-021`–`UXI-023`)
+- [ ] Um padrão por problema; vocabulário único. (`UXI-028`, `UXI-029`)
+- [ ] Caminhos infelizes percorridos. (`UXI-039`)
+- [ ] Semântica antes de ARIA; tarefa por teclado; foco visível. (`UXI-041`, `UXI-044`, `UXI-045`)
+- [ ] Nome acessível e estado programático. (`UXI-049`, `UXI-050`)
+- [ ] Contraste AA; zoom 200% sem perda. (`UXI-053`, `UXI-054`)
+- [ ] Verificação a11y além do automático (teclado/leitor/zoom).
+
+---
+
+## Prompt do volume
+
+```
+You are reviewing UX/UI under EOS Volume 08 (UXI).
+
+Load: core-contract, output-schemas, 00-constituicao, 08-ux-premium.md,
+04-frontend.md (FRT states), 09-design-system.md for tokens/components,
+checklists/acessibilidade.md. Cite 18-produto.md for build/priority — do not
+decide product scope here.
+
+Sequence:
+1. Reject taste-only findings (UXI-001 / CON-013).
+2. Declare user goal; map eight states and unhappy paths (UXI-002, UXI-036, UXI-039).
+3. Errors, duplicate submit, work preservation (UXI-015–023).
+4. Consistency: one pattern per problem (UXI-028–035).
+5. Accessibility: semantic → keyboard → name/state → contrast/zoom (UXI-041–055).
+6. Cite FRT for implementation gaps; DSY for token/component gaps; do not restate.
+
+Output: flow table, unhappy paths, a11y evidence, ambiguities needing human decision.
+```
+
+---
+
+## Critérios de aceite
+
+1. Fluxos em escopo com objetivo e oito estados (`UXI-002`, `UXI-036`).
+2. Erros acionáveis sem detalhe técnico (`UXI-015`–`UXI-017`).
+3. Trabalho do usuário não se perde nos caminhos revisados (`UXI-023`).
+4. Um padrão por problema nas inconsistências encontradas (`UXI-028`).
+5. Tarefa crítica completável por teclado com foco visível (`UXI-044`, `UXI-045`).
+6. Contraste AA e zoom 200% sem perda de conteúdo (`UXI-053`, `UXI-054`).
+7. A11y não aprovada só por ferramenta automática.
 
 ---
 

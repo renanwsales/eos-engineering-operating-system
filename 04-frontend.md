@@ -14,6 +14,26 @@ violado.
 O achado de maior valor aqui não é arquitetural: é **estado ausente**. Interface que não trata erro e vazio
 é o defeito de frontend mais comum e o que mais gera suporte.
 
+**Fronteira.** Os oito estados de tela, gerenciamento de estado, cache de cliente e invalidação,
+composição de componentes, fronteira servidor/cliente, code splitting, carregamento tardio,
+formulários, segurança de cliente. Não cobre: tokens, escalas, tipografia, movimento e catálogo
+de componentes (→ [09](09-design-system.md)); princípios de usabilidade e fluxo
+(→ [08](08-ux-premium.md)); escolha de estratégia de renderização (→ [02](02-arquitetura.md),
+`SEL`).
+
+---
+
+## Fundamentos
+
+Interface que só trata o caminho feliz é incompleta por definição. Os oito estados (`FRT-001`) são
+o modelo mental: cada tela e cada componente que busca ou envia dados precisa deles, ou o usuário
+preenche o vazio com hipóteses — e o suporte herda a hipótese.
+
+Estado do servidor e estado do cliente são coisas diferentes (`FRT-006`). Duplicar o servidor no
+cliente cria divergência silenciosa; derivar e invalidar após mutação (`FRT-009`) é o padrão que
+mantém a UI alinhada à verdade. Segurança no cliente é experiência, não controle (`FRT-038`,
+`FRT-039`) — o atacante não executa o seu JavaScript.
+
 ---
 
 ## Capítulo 4.1 — Cobertura de estados
@@ -251,6 +271,83 @@ Redirecionamento controlado por parâmetro de URL permite phishing com o seu dom
 
 ---
 
+## Padrões reutilizáveis
+
+**Padrão: matriz dos oito estados.** Por tela/componente, checklist explícito dos oito
+(`FRT-001`) antes de chamar a tela de pronta.
+
+**Padrão: server state vs UI state.** Biblioteca de cache/query para dado do servidor; estado local
+só para UI efêmera (`FRT-006`, `FRT-008`).
+
+**Padrão: invalidação nomeada.** Após mutação, lista das queries/chaves invalidadas (`FRT-009`).
+
+**Padrão: optimistic + rollback.** Atualização otimista só com caminho de reverter (`FRT-011`).
+
+**Padrão: token, não literal.** Cor, espaço e tipo vêm do design system (`FRT-021`); detalhe de
+token em [09](09-design-system.md).
+
+---
+
+## Matrizes de decisão
+
+| Pergunta | Prefira | Evite se |
+| --- | --- | --- |
+| Estado no cliente vs no servidor | Servidor como fonte; derive no cliente (`FRT-006`, `FRT-007`) | Espelho local do servidor |
+| Escopo do estado | Menor escopo possível (`FRT-008`) | Store global por conveniência |
+| Otimista vs pessimista | Otimista com rollback (`FRT-011`) | Otimista sem tratamento de falha |
+| Memoização | Quando medido (`FRT-031`) | Memoizar tudo por precaução |
+| Componente do sistema vs da tela | Sistema genérico; tela dá significado (`FRT-027`) | `<BotaoConfirmarPedido>` no DS |
+| Renderização | Decisão em `SEL` ([02](02-arquitetura.md)) | Reabrir SSR/CSR neste volume |
+
+---
+
+## Fluxo de trabalho
+
+```
+1. Declarar objetivo da tela e dados (playbook em 21-playbooks.md)
+2. Matriz dos oito estados (FRT-001–005)
+3. Separar server state / UI state; invalidação (FRT-006–011)
+4. Composição: apresentação vs orquestração; chave estável (FRT-014–020)
+5. Tokens e um componente por padrão (FRT-021–027); cite 09 para DS
+6. Orçamento de bundle e divisão por rota (FRT-028–030)
+7. Segurança de cliente (FRT-038–042); cite SEC para authz de servidor
+8. A11y/fluxo: cite UXI (08); não reescrever princípios aqui
+```
+
+---
+
+## Exemplos de implementação
+
+```
+// Ruim — FRT-006: espelho do servidor
+const [orders, setOrders] = useState([])
+useEffect(() => { api.list().then(setOrders) }, [])
+// mutação atualiza só setOrders; outra aba / refetch diverge
+
+// Bom — cache com invalidação (FRT-009)
+const { data } = useQuery(['orders'], api.list)
+const mutation = useMutation(api.create, {
+  onSuccess: () => queryClient.invalidateQueries(['orders']),
+})
+```
+
+```
+// Ruim — FRT-018
+{items.map((item, i) => <Row key={i} item={item} />)}
+
+// Bom
+{items.map((item) => <Row key={item.id} item={item} />)}
+```
+
+```
+// Ruim — FRT-038
+const API_KEY = process.env.NEXT_PUBLIC_SECRET_KEY
+
+// Bom — segredo só no servidor; cliente chama BFF/rota autenticada
+```
+
+---
+
 ## Antipadrões
 
 | Antipadrão | Consequência |
@@ -266,6 +363,57 @@ Redirecionamento controlado por parâmetro de URL permite phishing com o seu dom
 | `div` com clique no lugar de botão | Inacessível e não anunciado |
 | Segredo em variável de ambiente do frontend | `S0` — tudo no cliente é público |
 | Atualização otimista sem rollback | Interface mente sobre o resultado |
+
+---
+
+## Checklist
+
+- [ ] Oito estados cobertos por tela em escopo. (`FRT-001`)
+- [ ] Vazio ≠ erro; envio duplicado impedido. (`FRT-002`, `FRT-003`)
+- [ ] Server state separado; invalidação após mutação. (`FRT-006`, `FRT-009`)
+- [ ] Otimista com rollback; sem efeito em render. (`FRT-011`, `FRT-012`)
+- [ ] Sem regra de negócio no componente; chave estável. (`FRT-016`, `FRT-018`)
+- [ ] Tokens, não literais; um componente por padrão. (`FRT-021`, `FRT-022`)
+- [ ] Orçamento de bundle no pipeline. (`FRT-028`)
+- [ ] Sem segredo nem decisão de segurança só no cliente. (`FRT-038`, `FRT-039`)
+- [ ] Sem HTML não confiável; storage sem dado sensível. (`FRT-040`, `FRT-041`)
+- [ ] Redirect validado. (`FRT-042`)
+
+---
+
+## Prompt do volume
+
+```
+You are reviewing or building client UI under EOS Volume 04 (FRT).
+
+Load: core-contract, output-schemas, 00-constituicao, 04-frontend.md,
+08-ux-premium.md and 09-design-system.md for citations, 02-arquitetura.md
+(SEL) only for rendering strategy, 07-performance.md when claiming perf.
+
+Sequence:
+1. Map each screen/component to the eight states (FRT-001). Missing error/empty = finding.
+2. Separate server vs client state; require invalidation after mutation (FRT-006–011).
+3. Components: one responsibility, no business rules, stable keys (FRT-014–020).
+4. Design tokens and one interaction pattern (FRT-021–027); do not restate DSY.
+5. Bundle budget and measured perf only (FRT-028+, PRF).
+6. Client security: no secrets, no security decisions only on client (FRT-038–042).
+7. Usability/a11y findings cite UXI; do not invent UX rules here.
+
+Output: state matrix, findings with path:line, unverified items.
+Ignore cosmetic structure preference (CON-013).
+```
+
+---
+
+## Critérios de aceite
+
+1. Toda tela em escopo tem os oito estados ou lacuna registrada (`FRT-001`).
+2. Server state não é espelhado sem invalidação (`FRT-006`, `FRT-009`).
+3. Sem regra de negócio no componente de apresentação (`FRT-016`).
+4. Tokens do sistema; sem literais de cor/espaço em escopo (`FRT-021`).
+5. Orçamento de bundle verificado no pipeline (`FRT-028`).
+6. Nenhum segredo no cliente (`FRT-038`).
+7. Achados de fluxo/a11y citam `UXI` / DS citam `DSY` — não reafirmam.
 
 ---
 

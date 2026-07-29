@@ -8,6 +8,25 @@ Este volume trata de integridade, consulta correta e migração segura. As decis
 crescimento — normalizar ou desnormalizar, réplicas, particionamento, sharding, isolamento de inquilino —
 estão no [Volume 14](14-escalabilidade.md).
 
+**Fronteira.** Modelagem, integridade declarativa, constraints, chaves, índices, planos de
+execução, transações, isolamento, migrações, retenção. Não cobre: normalizar vs desnormalizar como
+decisão de escala, réplicas, particionamento, sharding (→ [14](14-escalabilidade.md)); isolamento
+por inquilino como produto (→ [16](16-multi-tenant.md)) — quando aplicável, cite `DAT-040` /
+`SEC-006` sem reabrir o modelo de tenant.
+
+---
+
+## Fundamentos
+
+A aplicação tem bugs, é reescrita e recebe scripts pontuais. **O que o banco garante está
+garantido; o que só a aplicação verifica será contornado** (`DAT-001`). Por isso a auditoria de
+invariantes — onde cada regra de negócio vive no schema — é o primeiro entregável (`DAT-002`), não
+um apêndice.
+
+Consulta correta sem plano de execução é hipótese (`DAT-016`). Migração sem reversa e sem contagem
+de violadores transforma deploy em incidente (`DAT-030`, `DAT-032`). Escala estrutural (réplica,
+shard) não substitui índice e limite (`DAT-015`, `DAT-021`); isso é [14](14-escalabilidade.md).
+
 ---
 
 ## Princípio central do volume
@@ -244,6 +263,90 @@ Política de linha ou equivalente é mais forte do que confiar em cada consulta.
 
 ---
 
+## Padrões reutilizáveis
+
+**Padrão: auditoria de invariantes.** Tabela invariante → tipo → constraint → app → veredito
+(`DAT-002`) como primeiro artefato da revisão.
+
+**Padrão: constraint antes de convenção.** `NOT NULL`, `UNIQUE`, `FK`, `CHECK` no schema
+(`DAT-003`–`DAT-006`).
+
+**Padrão: 1 vs 50.** Contar consultas em resposta com 1 item e com 50 para detectar N+1
+(`DAT-019`).
+
+**Padrão: migração em duas fases.** Expand → migrate data → contract (`DAT-031`); nunca
+renomear/dropar em um passo com app antiga no ar.
+
+**Padrão: nada externo na transação.** HTTP/fila/e-mail fora do `BEGIN`/`COMMIT` (`DAT-026`).
+
+---
+
+## Matrizes de decisão
+
+| Pergunta | Prefira | Evite se |
+| --- | --- | --- |
+| Onde vive a invariante | Constraint no banco (`DAT-001`) | Só validação na API |
+| JSON vs colunas | Colunas tipadas (`DAT-009`, `DAT-010`) | JSON para fugir de modelagem |
+| Índice novo | Plano prova uso (`DAT-016`) | Índice "por precaução" |
+| Transação larga | Escopo pela invariante (`DAT-025`) | Chamada externa dentro (`DAT-026`) |
+| Mudança incompatível | Duas fases (`DAT-031`) | Drop/rename em um deploy |
+| Escala (réplica/shard) | [14](14-escalabilidade.md) | Decidir sharding neste volume |
+
+---
+
+## Fluxo de trabalho
+
+```
+1. Auditoria de invariantes (DAT-002)
+2. Schema: nullability, unique, FK, check, tipos (DAT-003–014)
+3. Consultas quentes: índice + plano (DAT-015–018)
+4. Contagem 1 vs 50; eliminar N+1 e laço (DAT-019–021)
+5. Transações: escopo, isolamento, concorrência (DAT-025–029)
+6. Migração: reversível, violadores, bloqueio, R4 se dados (DAT-030–036)
+7. Operação: backup testado, privilégio mínimo, retenção (DAT-037–039)
+8. Tenant no banco quando o produto exige (DAT-040) — cite 16/SEC
+```
+
+Playbook de schema: [21](21-playbooks.md) (alterar o schema).
+
+---
+
+## Exemplos de implementação
+
+```sql
+-- Ruim — DAT-001: integridade só na app
+-- app: if (qty < 0) throw
+CREATE TABLE stock (sku text, qty int);
+
+-- Bom
+CREATE TABLE stock (
+  sku text PRIMARY KEY,
+  qty int NOT NULL CHECK (qty >= 0)
+);
+```
+
+```
+# Ruim — DAT-019: N+1
+for order in orders:
+    order.items = db.query("SELECT * FROM items WHERE order_id=?", order.id)
+
+# Bom — lote
+items = db.query("SELECT * FROM items WHERE order_id = ANY(?)", order_ids)
+# agrupar em memória
+```
+
+```sql
+-- Ruim — DAT-031: rename em um passo
+ALTER TABLE orders RENAME COLUMN total TO amount;
+
+-- Bom — expand/contract
+ALTER TABLE orders ADD COLUMN amount ...;
+-- backfill + app lê/escreve ambos
+-- depois drop total em migração separada
+```
+
+---
+
 ## Antipadrões
 
 | Antipadrão | Consequência |
@@ -259,6 +362,57 @@ Política de linha ou equivalente é mais forte do que confiar em cada consulta.
 | JSON para fugir de modelagem | Perde tipo, integridade e índice |
 | `EAV` genérico | Abandona as três garantias de uma vez |
 | Renomear coluna em um passo | Derruba a aplicação durante o deploy |
+
+---
+
+## Checklist
+
+- [ ] Auditoria de invariantes preenchida. (`DAT-002`)
+- [ ] `NOT NULL` / `UNIQUE` / FK / `CHECK` onde o domínio exige. (`DAT-003`–`DAT-006`)
+- [ ] Tipos corretos; dinheiro sem float. (`DAT-009`)
+- [ ] Consultas frequentes com índice e plano. (`DAT-015`, `DAT-016`)
+- [ ] Zero N+1; limite em caminho de request. (`DAT-019`, `DAT-021`)
+- [ ] Transação sem I/O externo; concorrência declarada. (`DAT-026`, `DAT-027`)
+- [ ] Migrações versionadas e reversíveis; violadores contados. (`DAT-030`, `DAT-032`)
+- [ ] Mudança incompatível em fases. (`DAT-031`)
+- [ ] Backup com restore testado; privilégio mínimo. (`DAT-037`, `DAT-038`)
+- [ ] Volume de dados assumido declarado. (`DAT-024`)
+
+---
+
+## Prompt do volume
+
+```
+You are reviewing or changing the database under EOS Volume 05 (DAT).
+
+Load: core-contract, output-schemas, 00-constituicao, 05-banco-de-dados.md.
+Cite 14-escalabilidade.md for replicas/partition/shard; 16-multi-tenant.md /
+06-seguranca.md for tenant isolation — do not restate ESC/MTN/SEC norms.
+
+Sequence:
+1. Produce invariant audit table (DAT-002) before debating indexes.
+2. Check declarative integrity: null, unique, FK, check, types (DAT-003–014).
+3. Hot queries: index + execution plan evidence (DAT-015–018).
+4. Count queries at 1 vs 50 items; ban loops (DAT-019–021).
+5. Transactions: scope, no external I/O, concurrency control (DAT-025–029).
+6. Migrations: reversible, violator count, two-phase for breaking (DAT-030–036).
+7. Ops: backup restore, least privilege, retention (DAT-037–039).
+
+Output: integrity audit, index/plan findings, migration risk, assumed volume.
+Hypothesis without plan = HYPOTHESIS, not FINDING (DAT-016).
+```
+
+---
+
+## Critérios de aceite
+
+1. Invariantes críticas têm constraint (ou veredito explícito de risco) (`DAT-001`, `DAT-002`).
+2. Consultas frequentes em escopo têm índice com plano verificado (`DAT-015`, `DAT-016`).
+3. Sem N+1 no caminho revisado (`DAT-019`).
+4. Migrações reversíveis; incompatíveis em fases (`DAT-030`, `DAT-031`).
+5. Transações sem chamada externa (`DAT-026`).
+6. Backup com restauração testada quando operação está em escopo (`DAT-037`).
+7. Volume de dados assumido declarado (`DAT-024`).
 
 ---
 

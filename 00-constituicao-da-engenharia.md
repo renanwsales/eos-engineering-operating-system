@@ -9,6 +9,28 @@ este volume, sempre, em qualquer tarefa.
 Os demais volumes definem *o que é certo em cada domínio*. Este define *como se pensa, decide e prova*
 — e vence qualquer volume que o contradiga.
 
+**Fronteira.** É deste volume: princípios inegociáveis; definições de excelência, qualidade e pronto;
+os seis portões; a ordem de análise em oito camadas; protocolo de decisão; classificação de
+severidade; matriz de priorização; matriz de risco; DoD e DoE; convenções de nome, código e commit.
+Não é norma técnica de nenhum domínio — a Constituição diz *como se decide*; os volumes técnicos
+dizem *o que é certo* (a partir de [02](02-arquitetura.md)).
+
+---
+
+## Fundamentos
+
+Este volume é o contrato operacional de todo o livro: evidência antes de opinião (`CON-009`),
+decisão antes de código (`CON-012`, `CON-030`), e validação que não se comprime (`CON-061`). Os
+volumes de domínio respondem *o que* é certo; este responde *como* se chega lá sem fingir certeza.
+
+Três assimetrias governam a leitura. **Custo versus progresso:** toda linha alterada carrega risco
+(`CON-003`); a ausência de mudança é o estado padrão. **Severidade versus gosto:** consequência
+nomeada vence preferência (`CON-036`, `CON-013`). **Portão versus atalho:** comprimir G0–G2 exige
+declarar o porquê; G4 nunca se comprime (`CON-063`, `CON-061`).
+
+Quando dois princípios conflitam, a ordem lexicográfica de `CON-021` decide — nunca a média das
+opiniões nem a autoridade de quem falou mais alto (`CON-022`).
+
 ---
 
 ## Capítulo 1.1 — Princípios
@@ -908,3 +930,237 @@ Misturar reformatação com comportamento inutiliza a revisão e a bissecção. 
 
 Ela mede simultaneamente clareza, testes, documentação, acoplamento e observabilidade — porque a falha
 em qualquer um deles obriga a pergunta.
+
+---
+
+## Padrões reutilizáveis
+
+**Cartão de achado.** Cada item em G1 carrega evidência (`path:linha` ou saída de comando),
+severidade, confiança, esforço e risco de correção (`CON-010`, `CON-037`). Sem evidência →
+`HYPOTHESIS`, nunca `FINDING` (`CON-009`).
+
+**Proposta com opção zero.** Em G2: ≥2 alternativas reais mais a opção de não mudar, comparadas
+nas seis dimensões (`CON-029`–`CON-031`). A troca aceita e a condição de invalidação ficam
+escritas (`CON-032`, `CON-033`).
+
+**Orçamento 70/20/10.** Capacidade da rodada: correção obrigatória, melhoria no escopo, e margem
+para o inesperado (`CON-040`). `MUST-FIX` acima da capacidade é o achado principal, não mais
+lista.
+
+**DoD item a item.** Cada entrega passa pela Definition of Done com `N/A` justificado
+(`CON-043`). Redução só em `S0` de produção (`CON-044`).
+
+**Backlog com gatilho.** Todo `OPPORTUNITY` não corrigido vira entrada com severidade, esforço,
+evidência e gatilho de promoção (`CON-019`). Nada morre no chat.
+
+---
+
+## Matrizes de decisão
+
+**Severidade pela consequência (`CON-036`)**
+
+| Consequência | Severidade | Tratamento |
+| --- | --- | --- |
+| Dados errados, vazamento, perda irreversível, indisponibilidade total | `S0` | Bloqueia agora |
+| Falha grave em caminho crítico ou regra de dinheiro/acesso | `S1` | Bloqueia entrega |
+| Defeito real com contorno ou impacto limitado | `S2` | `MUST-FIX` no orçamento |
+| Melhoria sem falha atual demonstrável | `S3` / `OPPORTUNITY` | Backlog com gatilho |
+
+**Faixa de risco da mudança (`CON-041`)**
+
+| Faixa | Exemplos | Mitigação mínima |
+| --- | --- | --- |
+| `R1` | Copy, typo, teste isolado | Diff + validação estreita |
+| `R2` | Comportamento local com testes | Teste + DoD |
+| `R3` | Contrato, schema, fluxo crítico | Teste de regressão *antes*; rollback |
+| `R4` | Migração/deleção de dados, auth | Aprovação humana nomeada (`CON-042`) |
+
+**Desempate quando princípios conflitam:** aplicar `CON-021` na ordem; registrar a resolução
+(`CON-034`).
+
+---
+
+## Fluxo de trabalho
+
+Os seis portões (`CON-056`). Não reordenar. Não pular.
+
+1. **G0 Descoberta** — mapa do terreno; proibido propor (`CON-057`).
+2. **G1 Diagnóstico** — oito camadas na ordem (`CON-011`, `CON-023`); achados com evidência
+   (`CON-058`).
+3. **G2 Decisão** — alternativas, risco, ADR se exigido (`CON-059`, `CON-034`).
+4. **G3 Implementação** — menor mudança reversível; um concern por commit (`CON-060`, `CON-015`,
+   `CON-016`).
+5. **G4 Validação** — nunca comprimida; DoD verificada (`CON-061`, `CON-043`).
+6. **G5 Auditoria** — conjunto, notas, backlog (`CON-062`, `CON-019`).
+
+Surpresa em compressão → voltar a G0 (`CON-064`). Pare e escale sob `CON-053`.
+
+---
+
+## Exemplos de implementação
+
+**Evidência versus impressão (`CON-009`)**
+
+```
+Ruim — FINDING: "o checkout parece lento"
+Bom  — FINDING: GET /checkout p95=840ms (n=200, homologação, ferramenta X); limiar 300ms
+       Evidência: output do comando … ; path do handler: checkout.ts:118
+```
+
+**Opção zero omitida (`CON-029`, `CON-030`)**
+
+```
+Ruim — "vamos extrair um serviço de preços" (única opção)
+Bom  — A) não mudar (custo: duplicação anotada)
+       B) extrair função pura compartilhada (menor raio)
+       C) serviço separado (maior raio; ADR)
+       Escolha: B; troca aceita: duplicação residual até 3º uso (CON-004)
+```
+
+**Commit misturado (`CON-015`, `CON-086`)**
+
+```
+Ruim — um commit: formata o módulo + corrige arredondamento de frete
+Bom  — commit 1: impede frete negativo quando peso=0 (porquê no corpo)
+       commit 2: formatação do módulo de frete (separado)
+```
+
+---
+
+## Antipadrões
+
+| Antipadrão | Consequência |
+| --- | --- |
+| Achado sem `path:linha` nem saída de comando | Opinião disfarçada de evidência (`CON-009`) |
+| Pular camada porque "já sei onde está" | Defeito estrutural descoberto tarde (`CON-011`) |
+| Uma alternativa só na proposta | Decisão teatral (`CON-030`) |
+| Refatorar "enquanto estou aqui" | Diff ilegível; rollback impossível (`CON-013`) |
+| Validação "deve funcionar" | G4 fingido (`CON-061`) |
+| Misturar `MUST-FIX` e `OPPORTUNITY` | Prioridade destruída (`CON-018`) |
+| `OPPORTUNITY` que morre no chat | Dívida invisível (`CON-019`) |
+| Negociar `S0`/`S1` por prazo | Integridade trocada por calendário (`CON-036`) |
+| Modernizar módulo que funciona | Custo real, benefício assumido (`CON-054`) |
+| Afrouxar teste para passar | Bug vira especificação (`CON-054`, `QAT-008`) |
+
+---
+
+## Checklist
+
+- [ ] Evidência em todo achado, ou rótulo `HYPOTHESIS`. (`CON-009`)
+- [ ] Confiança declarada. (`CON-010`)
+- [ ] Camadas na ordem; avanço só com camada atual limpa o suficiente. (`CON-011`, `CON-024`)
+- [ ] Protocolo de decisão seguido antes de mudança não trivial. (`CON-012`)
+- [ ] Sem refatoração cosmética. (`CON-013`)
+- [ ] Validação isolada por mudança; G4 não comprimido. (`CON-014`, `CON-061`)
+- [ ] Um concern por commit; formatação em massa separada. (`CON-015`, `CON-086`)
+- [ ] Menor mudança reversível; justificativa de quatro campos. (`CON-016`, `CON-017`)
+- [ ] `MUST-FIX` e `OPPORTUNITY` em listas separadas. (`CON-018`)
+- [ ] `OPPORTUNITY` residual no backlog com gatilho. (`CON-019`)
+- [ ] Não verificado declarado. (`CON-020`)
+- [ ] Conflito resolvido por `CON-021`, não por média.
+- [ ] ≥2 alternativas + opção zero; troca e invalidação escritas.
+      (`CON-029`–`CON-033`)
+- [ ] Severidade por consequência; score e orçamento da rodada.
+      (`CON-036`, `CON-039`, `CON-040`)
+- [ ] Faixa de risco com mitigação; `R4` com humano. (`CON-041`, `CON-042`)
+- [ ] DoD verificada item a item. (`CON-043`)
+- [ ] Condições de parada respeitadas. (`CON-053`)
+- [ ] Antipadrões de `CON-054` ausentes no diff.
+
+---
+
+## Prompt do volume
+
+```
+ROLE: You operate under EOS Volume 00 — Constitution of Engineering (`CON`). Every task loads this
+volume. Domain volumes never override it.
+
+MISSION
+Enforce how work is thought, decided, and proven: evidence before opinion, decision before code,
+validation that is never skipped. You do not invent domain norms; you cite domain volumes by ID.
+
+LOAD
+- `AGENTS.md`, `agents/_shared/core-contract.md`, `agents/_shared/output-schemas.md`
+- `00-constituicao-da-engenharia.md` (always)
+- The filled `templates/perfil-do-projeto.md` — if missing, proposing it is the first deliverable
+- Only the domain volumes the task requires (`ORC-005`)
+
+MANDATORY SEQUENCE — the six gates (`CON-056`); do not skip forward
+1. G0 Discovery — map the terrain; no findings yet (`CON-057`).
+2. G1 Diagnosis — eight layers in order (`CON-011`, `CON-023`); FINDING needs evidence (`CON-009`).
+3. G2 Decision — ≥2 real alternatives + option zero; risk band; ADR when required
+   (`CON-029`–`CON-034`, `CON-041`).
+4. G3 Implementation — smallest reversible change; one concern per commit (`CON-016`, `CON-015`).
+5. G4 Validation — never compressed; DoD item by item (`CON-061`, `CON-043`).
+6. G5 Audit — set of changes, residual risk, backlog (`CON-062`, `CON-019`).
+
+RULES OF ENGAGEMENT
+- No citation → label `HYPOTHESIS`, never `FINDING` (`CON-009`).
+- Separate `MUST-FIX` from `OPPORTUNITY` (`CON-018`).
+- Cosmetic refactor is forbidden (`CON-013`).
+- Stop and escalate under `CON-053`; never silently degrade.
+- Cite rule IDs; do not restate domain volumes.
+
+OUTPUT
+Use the "Verificação obrigatória de saída" block of `00-constituicao-da-engenharia.md`.
+Declare layers covered and not covered (`CON-027`). Lead with outcome, then evidence.
+```
+
+---
+
+## Critérios de aceite
+
+Uma entrega passa neste volume quando **todas** são verdadeiras e verificadas:
+
+1. Todo achado tem evidência ou está rotulado `HYPOTHESIS`. (`CON-009`)
+2. Mudança não trivial passou por decisão com ≥2 alternativas e opção zero. (`CON-030`)
+3. G4 foi executada; DoD está completa com `N/A` justificados. (`CON-061`, `CON-043`)
+4. `MUST-FIX` e `OPPORTUNITY` estão separados; residual no backlog com gatilho. (`CON-018`,
+   `CON-019`)
+5. Faixa de risco respeitada; `R4` com aprovação humana nomeada. (`CON-041`, `CON-042`)
+6. Nenhum `S0`/`S1` aberto sem aceitação de risco registrada. (`CON-036`, `CON-038`)
+7. Camadas não cobertas estão declaradas. (`CON-027`)
+8. Diff não contém antipadrão de `CON-054`.
+
+Falha em 1, 3 ou 5 é reprovação direta: sem evidência não há engenharia; sem G4 não há entrega;
+sem mitigação de risco a mudança é roleta.
+
+---
+
+## Verificação obrigatória de saída
+
+```
+## Portões
+| Portão | Compactado? | Evidência de passagem |
+| G0 | | |
+| G1 | | |
+| G2 | | |
+| G3 | | |
+| G4 | nunca | |
+| G5 | | |
+
+## Camadas (CON-023)
+| Camada | Coberto | Achados | Por que fora (se N/A) |
+
+## Achados
+MUST-FIX (ordenados por CON-039):
+OPPORTUNITY (com entrada de backlog e gatilho):
+
+## Decisões
+| Item | Alternativas (≥2 + zero) | Escolha | Troca (CON-032) | Invalidação (CON-033) |
+
+## Risco
+| Mudança | Faixa | Mitigação | Aprovação humana |
+
+## Validação (G4)
+| Verificação | Comando/resultado | Passou? |
+
+## DoD
+| Item | Status | N/A justificado? |
+
+## Não verificado
+| Item | Por quê | Como verificar |
+
+## Antipadrões CON-054 no diff
+| Item | Presente? | Evidência |
+```

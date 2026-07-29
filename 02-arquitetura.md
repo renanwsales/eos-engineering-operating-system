@@ -13,6 +13,27 @@ arquiteturais costumam ter esforço `L`/`XL` sem defeito ativo, o que os coloca 
 de parecerem importantes. O valor deste volume está nas **poucas** fronteiras erradas que causam defeitos
 reais — não em redesenhar o sistema.
 
+**Fronteira.** `ARC` — regra de dependência, fronteiras de módulo, modelagem de domínio, integração
+entre módulos, eventos, versionamento de contrato interno. `SEL` — escolha entre estilos (Clean,
+Hexagonal, Onion, monólito modular, microsserviços, event driven, CQRS, vertical slice, feature
+first, BFF, API first), síncrono vs assíncrono, estratégia de renderização, comprar vs construir.
+Não cobre: contrato de API externa (→ [15](15-apis.md)); isolamento de inquilino
+(→ [16](16-multi-tenant.md)); decisões de crescimento de dados (→ [14](14-escalabilidade.md)).
+
+---
+
+## Fundamentos
+
+Arquitetura correta sem a abordagem certa é trabalho impecável e inútil. A Parte I (`ARC`) fixa
+**como** manter dependências, domínio e módulos coerentes depois da escolha; a Parte II (`SEL`)
+fixixa **qual** degrau de complexidade e qual estilo cabem às restrições observadas — nunca à escala
+hipotética.
+
+O erro caro que este volume previne não é "código feio": é fronteira errada que multiplica o custo
+de cada mudança, ou subir um degrau (serviço, CQRS, event sourcing) antes de ter o problema que ele
+resolve. Achado arquitetural sem defeito ativo ou caminho incremental é dívida de opinião
+(`ARC-040`, `SEL-001`).
+
 ---
 
 ## Capítulo 2.1 — Clean Architecture: direção das dependências
@@ -626,6 +647,94 @@ comparação honesta inverte a conclusão intuitiva.
 
 ---
 
+## Padrões reutilizáveis
+
+**Padrão: dependências para dentro.** Domínio declara portas; infraestrutura implementa (`ARC-001`,
+`ARC-002`). Teste de domínio sem banco nem rede.
+
+**Padrão: módulo por capacidade.** Um diretório por capacidade de negócio; interface pública
+explícita (`ARC-006`, `ARC-019`).
+
+**Padrão: degrau nomeado.** Função → módulo → fronteira → monólito modular → serviço, com gatilho
+escrito (`SEL-001`, `SEL-002`).
+
+**Padrão: ADR + condição de invalidação.** Toda escolha `SEL` e decisão `ARC-036` com o que faria
+escolher diferente (`SEL-002`, `CON-033`).
+
+**Padrão: anticorrupção na borda.** Terceiro e fornecedor traduzidos na borda (`ARC-028`,
+`SEL-031`).
+
+---
+
+## Matrizes de decisão
+
+| Pergunta | Prefira | Evite se |
+| --- | --- | --- |
+| Clean vs Hexagonal vs Onion | Um vocabulário consistente (`SEL-005`) | Misturar os três mapas |
+| Camadas vs fatia vertical | Fatia quando mudança típica toca um domínio (`SEL-006`) | Camadas técnicas que multiplicam PRs |
+| Monólito modular vs serviço | Modular até autonomia real em deploy/escala/falha (`SEL-008`, `SEL-009`) | Separar o que sempre sobe junto (`SEL-010`) |
+| Síncrono vs assíncrono | Síncrono quando o usuário espera o resultado (`SEL-019`, `SEL-020`) | Fila para mascarar dependência instável (`SEL-022`) |
+| CQRS | Assimetria de leitura/escrita medida (`SEL-015`) | CQRS por moda |
+| Event sourcing | Compromisso permanente justificado (`SEL-017`) | ES por elegância |
+| SSR / CSR / estático | Natureza do conteúdo (`SEL-024`) | Cache público com dado por usuário (`SEL-025`) |
+| Comprar vs construir | Comprar o não diferencial (`SEL-029`) | Construir auth/pagamentos sem cálculo (`SEL-033`) |
+
+---
+
+## Fluxo de trabalho
+
+```
+1. Nomear restrição observada e degrau atual (SEL-001–003)
+2. Escolher estilo/vocabulário com ADR (SEL-004, SEL-005)
+3. Mapear fronteiras de módulo e direção de dependência (ARC-001, ARC-019)
+4. Modelar domínio: invariantes, agregados, vocabulário (ARC-009–015)
+5. Definir integração: sync/async, contratos, falha (ARC-025–031, SEL-019)
+6. Estratégia de renderização por rota, se UI (SEL-024–028)
+7. Comprar/construir e caminho de saída de dependência (SEL-029–033)
+8. Documentar mapa e divergências (ARC-035–037)
+9. Achado só com custo e caminho incremental (ARC-040)
+```
+
+Playbooks de construção rotineira: [21](21-playbooks.md) — este volume governa a escolha e as
+fronteiras, não o passo a passo de um CRUD.
+
+---
+
+## Exemplos de implementação
+
+```
+// Ruim — ARC-002: domínio conhece ORM
+class Pedido {
+  async salvar() { await prisma.pedido.create({ data: this }) }
+}
+
+// Bom — domínio declara; infra implementa
+interface PedidoRepository { save(p: Pedido): Promise<void> }
+class Pedido { /* invariantes, sem import de framework */ }
+```
+
+```
+# Ruim — SEL-003 / SEL-009: serviço por ambição
+"Vamos precisar escalar pagamentos → microsserviço agora"
+
+# Bom — restrição e autonomia
+Degrau: monólito modular
+Gatilho para separar pagamentos: janela de deploy própria OU equipe > 12 no mesmo repo
+Autonomia demonstrada: deploy | escala | falha — evidência anexada
+```
+
+```
+# Ruim — SEL-025: SSR com cache público e dado do usuário
+Cache-Control: public, max-age=3600
+# corpo inclui nome e saldo do usuário autenticado
+
+# Bom — conteúdo por usuário não entra em cache público
+Cache-Control: private, no-store
+# ou página estática + dados via endpoint autenticado
+```
+
+---
+
 ## Antipadrões
 
 | Antipadrão | Consequência |
@@ -642,6 +751,62 @@ comparação honesta inverte a conclusão intuitiva.
 | Extrair todos os serviços de uma vez | Concentra todo o risco num momento |
 | Construir autenticação própria | Consome a capacidade que deveria ir ao diferencial |
 | Escolher por "vamos precisar escalar" | Custo hoje, benefício talvez |
+
+---
+
+## Checklist
+
+- [ ] Dependências apontam para o domínio; domínio sem infra. (`ARC-001`, `ARC-002`)
+- [ ] Sem ciclo; interface pública por módulo. (`ARC-005`, `ARC-006`)
+- [ ] Invariantes e uma fonte de verdade. (`ARC-009`–`ARC-011`)
+- [ ] Fronteiras por capacidade; regra fora das bordas. (`ARC-019`, `ARC-020`)
+- [ ] Contratos versionados; falha declarada na fronteira. (`ARC-025`, `ARC-026`)
+- [ ] Degrau atual e gatilho de mudança nomeados. (`SEL-001`, `SEL-002`)
+- [ ] Escolha por restrição observada + ADR. (`SEL-003`, `SEL-004`)
+- [ ] Um vocabulário de estilo; sem misturar mapas. (`SEL-005`)
+- [ ] Serviço só com autonomia real e infra da separação. (`SEL-009`, `SEL-011`)
+- [ ] Sync/async e renderização com critério. (`SEL-019`, `SEL-024`)
+- [ ] Dado por usuário fora de cache público. (`SEL-025`)
+- [ ] Dependência nova com quatro perguntas e saída. (`SEL-030`)
+- [ ] Achado arquitetural com custo e caminho incremental. (`ARC-040`)
+
+---
+
+## Prompt do volume
+
+```
+You are reviewing or choosing architecture under EOS Volume 02 (ARC + SEL).
+
+Load: core-contract, output-schemas, 00-constituicao, 02-arquitetura.md,
+templates/adr.md. Load 15-apis.md / 16-multi-tenant.md / 14-escalabilidade.md
+only when the topic crosses those frontiers — cite, do not restate.
+
+Sequence:
+1. Separate Part II (SEL choice) from Part I (ARC execution). Do not redesign
+   style when the defect is a missing invariant.
+2. State current complexity rung and named change trigger (SEL-001–003).
+3. Trace dependency direction and module boundaries (ARC-001, ARC-019–020).
+4. Check domain: unrepresentable invalid states, single source of truth (ARC-009–011).
+5. Integration: sync/async, contracts, idempotent consumers (ARC-025–031).
+6. Rendering and buy/build only when in scope (SEL-024–033).
+7. Every architectural finding needs cost + incremental path (ARC-040). Prefer
+   S2/backlog over speculative rewrite (CON-013).
+
+Output: decisions with ADR need, findings with path:line, open questions.
+Stop if proposing R4 data move or service split without autonomy evidence.
+```
+
+---
+
+## Critérios de aceite
+
+1. Dependências do domínio não apontam para infraestrutura (`ARC-001`, `ARC-002`).
+2. Fronteiras de módulo alinhadas a capacidade, com interface explícita (`ARC-006`, `ARC-019`).
+3. Toda escolha `SEL` em escopo tem ADR e gatilho de mudança (`SEL-002`, `SEL-004`).
+4. Nenhum degrau pulado sem restrição observada (`SEL-001`, `SEL-003`).
+5. Serviço separado só com autonomia e infraestrutura da separação (`SEL-009`, `SEL-011`).
+6. Cache público nunca serve dado por usuário (`SEL-025`).
+7. Achados arquiteturais trazem custo e caminho incremental (`ARC-040`).
 
 ---
 

@@ -7,6 +7,28 @@ Camada coberta: **5 (performance)**.
 Este volume trata do gargalo **medido de hoje**. As decisões estruturais de crescimento e a contrapressão sob
 saturação estão no [Volume 14](14-escalabilidade.md).
 
+**Fronteira.** É deste volume: disciplina de medição; o gargalo de hoje; acesso a dados; cache com
+invalidação declarada; custo de renderização; limiares; orçamento de performance.
+Não é decisão estrutural de crescimento nem contrapressão (→ [14](14-escalabilidade.md)). Não é
+instrumentação, tracing nem dashboards (→ [17](17-observabilidade.md)). Normas profundas de índice e
+plano: [05](05-banco-de-dados.md); UI detalhada: [04](04-frontend.md).
+
+---
+
+## Fundamentos
+
+Performance sem medição é cosmética (`PRF-001`, `CON-006`, `CON-013`). O volume existe para impedir
+duas falhas caras: otimizar o suspeito em vez do gargalo (`PRF-005`), e instalar cache que troca
+latência por dado errado (`PRF-019`, `PRF-020`).
+
+Modelo mental em três passos. **Meça** com método declarado e p95 no volume real (`PRF-002`–
+`PRF-004`). **Ordene** a investigação do maior impacto típico — dados antes de algoritmo
+(`PRF-007`). **Prove** o ganho com o mesmo método; ruído de medição não é vitória (`PRF-006`).
+
+Escalabilidade (réplicas, sharding, backpressure) é outro volume: aqui o alvo é o gargalo **medido
+hoje**, com limiar e proteção automática contra regressão (`PRF-038`).
+
+
 ---
 
 ## O portão de entrada do volume
@@ -214,6 +236,92 @@ gradualmente e ninguém percebe até o usuário reclamar.
 
 ---
 
+---
+
+## Padrões reutilizáveis
+
+**Contagem de consultas 1× e 50×.** Primeira medição barata: se cresce com N, é N+1 (`PRF-008`,
+`DAT-019`). Corrija a origem antes de cache (`PRF-022`).
+
+**Cartão de cache.** Quatro respostas obrigatórias antes de adicionar: o quê, TTL, invalidação por
+mutação, efeito de dado velho (`PRF-019`, `PRF-021`). Chave inclui tenant/usuário/permissão
+(`PRF-020`).
+
+**Paralelo com teto.** Chamadas independentes em paralelo; semáforo no paralelismo; timeout em toda
+externa (`PRF-013`–`PRF-015`). Retry com jitter (`PRF-016`).
+
+**Um nível de cache por vez.** Processo → compartilhado → CDN → cliente, medindo a cada degrau
+(`PRF-023`).
+
+**Registro antes/depois.** Mesmo método, n, ambiente; causa; proteção de regressão (ver registro
+obrigatório ao final do volume).
+
+---
+
+## Matrizes de decisão
+
+**Onde investigar primeiro (`PRF-007`)**
+
+| Sintoma | Primeira hipótese | Medição |
+| --- | --- | --- |
+| Latência sobe com tamanho da página | N+1 / listagem sem limite | Contagem de queries (`PRF-008`) |
+| Cauda alta sob carga | Contenção / timeout ausente | p95 + locks / timeouts (`PRF-012`, `PRF-014`) |
+| Bom no servidor, ruim na UI | Bundle / thread principal / CLS | Orçamento + perfil (`PRF-030`–`PRF-033`) |
+| Pico após deploy de cache | Chave incompleta / invalidação | Auditoria de chave (`PRF-020`) |
+
+**Cache: adicionar ou recusar**
+
+| Condição | Decisão |
+| --- | --- |
+| Quatro respostas de `PRF-019` incompletas | Recusar |
+| N+1 ainda presente | Corrigir dados primeiro (`PRF-022`) |
+| Dado sensível | Só com decisão registrada (`PRF-024`) |
+| Ganho dentro do ruído | Não houve ganho (`PRF-006`) |
+
+---
+
+## Fluxo de trabalho
+
+1. Declarar método de medição (ambiente, volume, n, percentil, ferramenta) (`PRF-002`).
+2. Obter baseline p95 no volume real (`PRF-003`, `PRF-004`).
+3. Percorrer a ordem de `PRF-007` até achar o gargalo (`PRF-005`).
+4. Corrigir a causa (dados → rede → trabalho repetido → payload → UI → algoritmo).
+5. Se cache: cartão completo + invalidação por mutação (`PRF-019`, `PRF-021`).
+6. Remedir com o mesmo método; registrar ganho (`PRF-006`).
+7. Proteger limiar no pipeline (`PRF-038`); se N+1 corrigido, teste de contagem (`QAT-029`).
+
+Crescimento estrutural e contrapressão: parar e abrir [14](14-escalabilidade.md).
+
+---
+
+## Exemplos de implementação
+
+**Otimizar sem perfilar (`PRF-001`, `PRF-005`)**
+
+```
+Ruim — "troquei for por map; deve ficar mais rápido"
+Bom  — p95 GET /pedidos 840→120ms (n=200, 10k pedidos, homologação); causa: 1+N itens;
+       correção: batch load; teste falha se queries > 3 na página de 50
+```
+
+**Chave de cache incompleta (`PRF-020`)**
+
+```ts
+// Ruim — S0: serve plano de um tenant a outro
+const key = `planos:${planoId}`;
+
+// Bom
+const key = `planos:${tenantId}:${userId}:${planoId}:${locale}`;
+```
+
+**Cache escondendo N+1 (`PRF-022`)**
+
+```
+Ruim — TTL 60s sobre endpoint que faz 51 queries
+Bom  — eliminar N+1; só então cachear DTO estável com invalidação na mutação do pedido
+```
+
+
 ## Antipadrões
 
 | Antipadrão | Por que é problema |
@@ -241,4 +349,109 @@ Causa:   N+1 na carga de itens — 1 + N consultas viravam 51 em página de 50
 Correção: carregamento em lote único
 Risco:   baixo, coberto por teste de contagem de consultas
 Proteção contra regressão: teste que falha se a contagem crescer
+```
+
+---
+
+## Checklist
+
+- [ ] Achado de performance tem medição com método. (`PRF-001`, `PRF-002`)
+- [ ] Métrica em p95 (ou percentil declarado), não média. (`PRF-003`)
+- [ ] Volume de dados realista. (`PRF-004`)
+- [ ] Gargalo localizado por perfil/ordem, não por suspeita. (`PRF-005`, `PRF-007`)
+- [ ] Ganho provado pelo mesmo método. (`PRF-006`)
+- [ ] Consultas contadas em 1 e em 50 itens. (`PRF-008`)
+- [ ] Listagens com limite do servidor. (`PRF-010`)
+- [ ] Chamadas externas com timeout; paralelo com limite.
+      (`PRF-014`, `PRF-015`)
+- [ ] Cache com quatro respostas + invalidação por mutação.
+      (`PRF-019`, `PRF-021`)
+- [ ] Chave de cache inclui tenant/usuário/permissão. (`PRF-020`)
+- [ ] Cache não mascara N+1. (`PRF-022`)
+- [ ] Orçamento de bundle no pipeline. (`PRF-030`)
+- [ ] Limiares declarados; regressão >20% bloqueia. (`PRF-038`)
+- [ ] Registro obrigatório da correção preenchido.
+
+---
+
+## Prompt do volume
+
+```
+ROLE: Performance engineer under EOS Volume 07 (`PRF`). You attack measured bottlenecks only.
+
+MISSION
+Find today's bottleneck with declared measurement method, fix the cause in investigation order,
+and prove the gain. Never present an unmeasured suspicion as a FINDING.
+
+LOAD
+- `AGENTS.md`, `agents/_shared/core-contract.md`, `agents/_shared/output-schemas.md`
+- `00-constituicao-da-engenharia.md`, `07-performance.md`, `agents/06-performance.md`
+- Cite `05-banco-de-dados.md`, `04-frontend.md` by ID; do not restate them
+- Growth/backpressure → escalate to Volume 14; dashboards → Volume 17
+- Filled project profile (`[perfil]` thresholds)
+
+MANDATORY SEQUENCE
+1. Measurement method first (`PRF-002`). No method → HYPOTHESIS only (`PRF-001`).
+2. Baseline p95 at realistic volume (`PRF-003`, `PRF-004`).
+3. Investigate in order (`PRF-007`); attack the bottleneck (`PRF-005`).
+4. Data access before cache; never hide N+1 (`PRF-008`, `PRF-022`).
+5. Cache only with four answers + mutation invalidation + complete key
+   (`PRF-019`–`PRF-021`).
+6. Re-measure same method; record before/after (`PRF-006`).
+7. Enforce thresholds in pipeline (`PRF-038`).
+
+OUTPUT
+Use "Verificação obrigatória de saída" and fill "Registro obrigatório da correção" when a fix ships.
+Separate MUST-FIX from OPPORTUNITY. Unmeasured "make it faster" is rejected (`CON-013`).
+```
+
+---
+
+## Critérios de aceite
+
+Uma correção de performance passa neste volume quando:
+
+1. Baseline e pós-correção usam o mesmo método declarado. (`PRF-002`, `PRF-006`)
+2. O gargalo foi o medido, não o suspeito. (`PRF-005`)
+3. Se havia N+1, a contagem de queries ficou constante vs tamanho do resultado. (`PRF-008`)
+4. Cache novo (se houver) tem cartão completo e chave segura. (`PRF-019`, `PRF-020`)
+5. Limiar relevante está protegido no pipeline. (`PRF-038`)
+6. Registro obrigatório da correção está preenchido.
+7. Nenhuma validação de negócio foi removida "para ganhar tempo" (`CON-001`).
+
+Falha em 1 ou 4 é reprovação: sem prova não há ganho; cache inseguro é `S0`.
+
+---
+
+## Verificação obrigatória de saída
+
+```
+## Medição
+Método: <ambiente, volume, n, percentil, ferramenta>
+Baseline: <métrica = valor>
+Pós: <métrica = valor> | Ganho fora do ruído: <sim/não>
+
+## Ordem PRF-007
+| Etapa | Investigada? | Evidência | Gargalo? |
+
+## Acesso a dados
+Queries (1 item / 50 itens): <n / n> | N+1: <sim/não> | Evidência:
+
+## Rede
+| Chamada | Timeout | Limite paralelo | Retry/jitter | Degradação |
+
+## Cache
+| Chave | TTL | Invalidação | Dado velho | Sensível? |
+
+## UI / bundle (se aplicável)
+Bundle: <KB> | LCP/INP/CLS: <...> | Evidência:
+
+## Limiares
+| Métrica | Limiar | Atual | Protegido no pipeline? |
+
+## Registro da correção
+<colar bloco do volume>
+
+## Não verificado
+| Item | Por quê | Como medir |
 ```

@@ -11,6 +11,30 @@ Missão do volume: garantir que **o servidor faz a coisa certa sob toda entrada,
 concorrente**. Os achados de maior valor aqui não são arquiteturais — são os casos concretos e baratos de
 corrigir em que o código simplesmente está errado para uma entrada que ele certamente vai receber.
 
+**Fronteira.** É deste volume: casos de uso, entidades, repositórios, serviços, DTOs, validação,
+erros, autorização aplicada, concorrência, idempotência, transações, filas, workers, trabalho
+agendado, webhooks de entrada e saída, GraphQL.
+Não é o design do contrato REST/GraphQL como produto público — versionamento, paginação, limite de
+taxa, depreciação e documentação vão para [15](15-apis.md). O Volume 3 é o **lado de dentro**; o 15
+é o **contrato**. Isolamento de inquilino em profundidade: [16](16-multi-tenant.md).
+
+---
+
+## Fundamentos
+
+Backend correto é o que sobrevive a entrada adversária, falha de fornecedor e duas requisições no
+mesmo milissegundo. A missão do volume não é elegância de camadas: é **enunciar a regra, percorrer
+cada entrada, e provar o caso de borda** (`BAK-001`–`BAK-003`, `BAK-015`).
+
+Três assimetrias. **Cliente versus servidor:** validação de UI é UX; o atacante fala com a API
+(`BAK-009`). **Rota versus objeto:** autorizar o endpoint e esquecer o registro é o vazamento
+clássico (`BAK-016`). **Sucesso local versus efeito externo:** sem idempotência e sem timeout, o
+retry vira cobrança duplicada ou pool esgotado (`BAK-042`, `BAK-043`).
+
+Contrato publicado e versionamento de API como produto vivem em [15](15-apis.md); aqui o contrato
+declarado ainda é fonte de verdade da implementação (`BAK-029`), sem reabrir o volume 15.
+
+
 ---
 
 ## Capítulo 3.1 — Regras de negócio
@@ -477,6 +501,112 @@ Ver `BAK-048`. Processamento único e gigante bloqueia, estoura memória e, ao f
 
 ---
 
+---
+
+## Padrões reutilizáveis
+
+**Tabela de regra → caminhos.** Enuncie a regra em português; liste todo ponto de entrada que deve
+aplicá-la (HTTP, job, webhook, GraphQL) (`BAK-001`, `BAK-002`). Lacuna = achado.
+
+**Matriz de bordas por entrada.** Para cada entrada: ausência, limite, tipo, permissão, concorrência
+(`BAK-015`). É o artefato que transforma "validamos" em verificação.
+
+**Autorização por objeto no centro.** Filtro de tenant na camada de dados; negar por omissão;
+lote/export/aninhado cobertos (`BAK-016`–`BAK-020`). Job declara autoridade (`BAK-022`, `BAK-068`).
+
+**Transação pela invariante.** Escopo mínimo; nada externo dentro; ordem de bloqueio consistente
+(`BAK-039`–`BAK-041`). Efeito externo com chave de idempotência (`BAK-042`).
+
+**Webhook: verificar → ACK rápido → processar idempotente.** Assinatura na entrada; resposta fora
+do ciclo longo; ordem não garantida (`BAK-049`–`BAK-052`). Saída assinada, URL validada, DLQ
+(`BAK-054`–`BAK-056`).
+
+---
+
+## Matrizes de decisão
+
+**Onde a regra deve viver**
+
+| Situação | Lugar | Por quê |
+| --- | --- | --- |
+| Cálculo determinístico | Função pura (`BAK-005`) | Testável sem infra |
+| Transição de estado | Máquina explícita (`BAK-008`) | Impede estado fantasma |
+| Autorização | Por objeto, centralizada (`BAK-016`, `BAK-018`) | Rota sozinha vaza |
+| Efeito em provedor externo | Fora da transação + idempotência (`BAK-040`, `BAK-042`) | Evita double-charge |
+| Trabalho longo / volume | Fila ou job em lotes (`BAK-047`, `BAK-048`) | Não bloqueia request |
+
+**Falha de dependência (`BAK-045`)**
+
+| Papel da dependência | Comportamento |
+| --- | --- |
+| Crítica para a invariante | Falhar fechado; não mentir sucesso |
+| Secundária (recomendação, enrich) | Degradar com comportamento declarado |
+| Webhook de assinante | Isolar do fluxo principal (`BAK-058`) |
+
+---
+
+## Fluxo de trabalho
+
+1. Enunciar regras em escopo e mapear caminhos (`BAK-001`, `BAK-002`).
+2. Percorrer cada entrada ponta a ponta; preencher matriz de bordas (`BAK-003`, `BAK-015`).
+3. Validação no servidor; lista de permitidos; sem campo privilegiado do cliente
+   (`BAK-009`–`BAK-012`).
+4. Autorização por objeto + tenant; reauth se sensível (`BAK-016`–`BAK-021`).
+5. Erros com contexto, formato único, sem revelar existência indevida (`BAK-023`–`BAK-028`).
+6. Concorrência e idempotência nos recursos escassos e efeitos externos (`BAK-038`, `BAK-042`).
+7. Timeouts, retry e comportamento em falha em toda chamada externa (`BAK-043`–`BAK-045`).
+8. Se houver webhook/GraphQL/jobs: capítulos 3.8–3.10 antes de declarar pronto.
+9. Contrato: não serializar entidade; paginar; mudança incompatível versionada — e citar
+   [15](15-apis.md) para o contrato público (`BAK-029`–`BAK-033`).
+
+Playbooks de endpoint/CRUD em [21](21-playbooks.md) depois dos passos 1–5.
+
+---
+
+## Exemplos de implementação
+
+**Campo privilegiado do cliente (`BAK-011`)**
+
+```ts
+// Ruim — BAK-011: cliente define o próprio papel
+const user = await createUser({ ...body, role: body.role });
+
+// Bom
+const user = await createUser({ ...body, role: "member" });
+// elevação só em caso de uso admin autenticado e autorizado por objeto
+```
+
+**Autorização só na rota (`BAK-016`)**
+
+```ts
+// Ruim — BAK-016: "está autenticado" ≠ "é dono do pedido"
+app.get("/pedidos/:id", auth, async (req, res) => {
+  res.json(await pedidos.findById(req.params.id));
+});
+
+// Bom
+app.get("/pedidos/:id", auth, async (req, res) => {
+  const pedido = await pedidos.findByIdForUser(req.params.id, req.user.id);
+  if (!pedido) return res.status(404).json(erroNotFound()); // BAK-028
+  res.json(toPedidoDto(pedido)); // BAK-033
+});
+```
+
+**Retry sem idempotência (`BAK-042`, `BAK-044`)**
+
+```ts
+// Ruim — reentrega do provedor cobra duas vezes
+await provedor.cobrar({ pedidoId, valor });
+
+// Bom
+await provedor.cobrar({
+  pedidoId,
+  valor,
+  idempotencyKey: `cobranca:${pedidoId}:${tentativa}`,
+});
+```
+
+
 ## Antipadrões
 
 | Antipadrão | Consequência |
@@ -493,6 +623,93 @@ Ver `BAK-048`. Processamento único e gigante bloqueia, estoura memória e, ao f
 | Regra de negócio no controller | Impossível reusar; divergirá do job |
 
 ---
+
+---
+
+## Checklist
+
+- [ ] Regras enunciadas e caminhos mapeados. (`BAK-001`, `BAK-002`)
+- [ ] Matriz de bordas preenchida por entrada. (`BAK-015`)
+- [ ] Validação no servidor; campos desconhecidos rejeitados. (`BAK-009`, `BAK-010`)
+- [ ] Nenhum campo privilegiado aceito do cliente. (`BAK-011`)
+- [ ] Autorização por objeto; negar por omissão; tenant na dados.
+      (`BAK-016`, `BAK-017`, `BAK-019`)
+- [ ] Lote, export e aninhado autorizados. (`BAK-020`)
+- [ ] Erros com contexto; formato único; sem engolir. (`BAK-023`, `BAK-024`,
+      `BAK-026`)
+- [ ] Dinheiro em tipo exato; arredondamento explícito. (`BAK-006`, `BAK-007`)
+- [ ] Transições de estado verificadas. (`BAK-008`)
+- [ ] Recurso escasso protegido; idempotência em efeito externo.
+      (`BAK-038`, `BAK-042`)
+- [ ] Nada externo dentro da transação. (`BAK-040`)
+- [ ] Timeout e comportamento em falha em toda chamada externa.
+      (`BAK-043`, `BAK-045`)
+- [ ] DTO explícito; listagens paginadas com limite. (`BAK-033`, `BAK-032`)
+- [ ] Webhook de entrada: origem, idempotência, ACK rápido.
+      (`BAK-049`–`BAK-051`) — se aplicável
+- [ ] Job: uma vez por cluster, idempotente, autoridade, overlap tratado.
+      (`BAK-066`–`BAK-069`) — se aplicável
+- [ ] GraphQL: sem N+1 de resolver; auth por campo/objeto.
+      (`BAK-060`, `BAK-062`) — se aplicável
+
+---
+
+## Prompt do volume
+
+```
+ROLE: Backend engineer under EOS Volume 03 (`BAK`). You own use cases, validation, applied
+authorization, concurrency, resilience, webhooks, GraphQL resolvers, and workers.
+
+MISSION
+Prove the server does the right thing under every input, every dependency failure, and every
+concurrent execution. Highest-value findings are concrete edge cases, not architectural taste.
+
+LOAD
+- `AGENTS.md`, `agents/_shared/core-contract.md`, `agents/_shared/output-schemas.md`
+- `00-constituicao-da-engenharia.md`, `03-backend.md`, `agents/02-backend.md`
+- Cite `15-apis.md` for public contract shape; do not restate API product rules here
+- Cite `06-seguranca.md` / `16-multi-tenant.md` by ID for crypto and tenant isolation depth
+- Filled project profile
+
+MANDATORY SEQUENCE
+1. Write business rules in plain language; map every entry path (`BAK-001`, `BAK-002`).
+2. Walk each path end-to-end; fill the edge matrix (`BAK-003`, `BAK-015`).
+3. Server-side validation; allow-list; reject privileged client fields (`BAK-009`–`BAK-012`).
+4. Object-level authorization + tenant filter (`BAK-016`–`BAK-020`).
+5. Errors: never swallow; context; stable format (`BAK-023`–`BAK-026`).
+6. Scarce resources, transaction scope, idempotency (`BAK-038`–`BAK-042`).
+7. External calls: timeout, bounded retry, declared failure mode (`BAK-043`–`BAK-045`).
+8. Apply webhook / GraphQL / job chapters only when that surface exists.
+
+EVIDENCE
+Every FINDING cites `path:line` or command output. Separate MUST-FIX from OPPORTUNITY.
+
+NOT YOUR JOB
+Public API product decisions (Volume 15). Deep tenant architecture (Volume 16). UX copy
+(Volume 08). Inventing business rules under ambiguity — escalate (`CON-053`).
+
+OUTPUT
+Use the "Verificação obrigatória de saída" block of `03-backend.md` verbatim.
+```
+
+---
+
+## Critérios de aceite
+
+Um módulo backend passa neste volume quando:
+
+1. Toda regra em escopo tem caminhos mapeados e bordas tratadas. (`BAK-002`, `BAK-015`)
+2. Validação e autorização estão no servidor por objeto. (`BAK-009`, `BAK-016`)
+3. Nenhum campo privilegiado é aceito do cliente. (`BAK-011`)
+4. Recursos escassos e efeitos externos têm proteção e idempotência. (`BAK-038`, `BAK-042`)
+5. Chamadas externas têm timeout e comportamento de falha declarado. (`BAK-043`, `BAK-045`)
+6. Erros não são engolidos; formato único; DTO não vaza entidade. (`BAK-023`, `BAK-026`,
+   `BAK-033`)
+7. Superfícies presentes (webhook, GraphQL, job) cumprem seus capítulos.
+8. Lacunas residuais estão no backlog com gatilho (`CON-019`).
+
+Falha em 2, 3 ou 4 é reprovação: são as classes que viram incidente de dados ou dinheiro.
+
 
 ## Verificação obrigatória de saída
 
