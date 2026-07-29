@@ -1,6 +1,6 @@
 # RULES-INDEX — índice de regras do EOS
 
-**1117 regras** em 20 volumes. Este arquivo é **gerado** por
+**1391 regras** em 25 volumes. Este arquivo é **gerado** por
 `scripts/build-rules-index.py`; não edite à mão. Se um volume e este índice divergirem,
 **o volume** é a fonte de verdade.
 
@@ -21,7 +21,7 @@ deixa o número aposentado, nunca reaproveitado, para que relatórios antigos co
 | `[RECOMENDADA]` | Padrão esperado; exceção é normal | Justificativa no momento, sem ADR |
 | `[REVOGADA]` | Não vale mais; o número fica aposentado | — |
 
-Distribuição: **86 imutáveis** · **841 obrigatórias** · **190 recomendadas**.
+Distribuição: **133 imutáveis** · **1051 obrigatórias** · **207 recomendadas**.
 
 ## Volumes
 
@@ -45,9 +45,14 @@ Distribuição: **86 imutáveis** · **841 obrigatórias** · **190 recomendadas
 | 15 | [APIs](15-apis.md) | `API` | 58 |
 | 16 | [Multi-Tenant](16-multi-tenant.md) | `MTN` | 58 |
 | 17 | [Observabilidade](17-observabilidade.md) | `OBS` | 70 |
+| 18 | [Produto](18-produto.md) | `PRD` | 58 |
 | 19 | [IA no Produto](19-ia-no-produto.md) | `IAX` | 69 |
+| 20 | [Prompt Engineering](20-prompt-engineering.md) | `PRM` | 58 |
 | 21 | [Playbooks](21-playbooks.md) | `PLB` | 58 |
-| | **Total** | | **1117** |
+| 22 | [Checklists](22-checklists.md) | `CHK` | 48 |
+| 23 | [Métricas](23-metricas.md) | `MET` | 58 |
+| 24 | [Auditoria Final](24-auditoria-final.md) | `FIN` | 52 |
+| | **Total** | | **1391** |
 
 ---
 
@@ -1167,6 +1172,71 @@ Arquivo: [`17-observabilidade.md`](17-observabilidade.md) · 70 regras
 | `OBS-069` | Retenção é declarada por sinal e por camada | OBRIG | — | Custo e retenção |
 | `OBS-070` | Corte de custo é por pergunta, nunca por percentual | OBRIG | — | Custo e retenção |
 
+## 📘 Volume 18 — Produto
+
+Arquivo: [`18-produto.md`](18-produto.md) · 58 regras
+
+| ID | Regra | Nível | Sev. | Capítulo |
+| --- | --- | --- | --- | --- |
+| `PRD-001` | Problema de produto é restrição de valor, não de tecnologia | IMUT | — | Problema antes de solução |
+| `PRD-002` | Solução disfarçada de pedido é rejeitada até reescrita | OBRIG | — | Problema antes de solução |
+| `PRD-003` | Nomeie quem sofre o problema | OBRIG | — | Problema antes de solução |
+| `PRD-004` | Frequência e custo do problema são números ou hipóteses rotuladas | OBRIG | — | Problema antes de solução |
+| `PRD-005` | Problema de um papel não é problema de todos | OBRIG | — | Problema antes de solução |
+| `PRD-006` | Sintoma relatado não é diagnóstico | OBRIG | — | Problema antes de solução |
+| `PRD-007` | Toda proposta declara o que fica de fora | OBRIG | — | O que não construir |
+| `PRD-008` | Escopo mínimo é o menor conjunto que prova o critério de sucesso | OBRIG | — | O que não construir |
+| `PRD-009` | "Também seria bom" não entra no escopo da entrega | OBRIG | — | O que não construir |
+| `PRD-010` | Opção zero é legítima em produto | OBRIG | — | O que não construir |
+| `PRD-011` | Feature para um cliente só exige contrato de custo e generalização | OBRIG | — | O que não construir |
+| `PRD-012` | Preferir configuração a fork de produto | RECOM | — | O que não construir |
+| `PRD-013` | Comprar o que não é diferencial | RECOM | — | O que não construir |
+| `PRD-014` | Critério de sucesso escrito antes do primeiro commit | IMUT | — | Critério de sucesso antes de construir |
+| `PRD-015` | Critério é observável por terceiro sem perguntar ao autor | OBRIG | — | Critério de sucesso antes de construir |
+| `PRD-016` | Métrica de sucesso distingue adoção de valor | OBRIG | — | Critério de sucesso antes de construir |
+| `PRD-017` | Horizonte de medição declarado com a entrega | OBRIG | — | Critério de sucesso antes de construir |
+| `PRD-018` | Sem critério, a entrega é experimento rotulado | OBRIG | — | Critério de sucesso antes de construir |
+| `PRD-019` | Prioridade de produto ordena valor e risco de negócio | OBRIG | — | Priorização de produto versus técnica |
+| `PRD-020` | Achado técnico S0 e S1 não entra em disputa com roadmap | IMUT | — | Priorização de produto versus técnica |
+| `PRD-021` | Capacidade da engenharia é restrição do plano | OBRIG | — | Priorização de produto versus técnica |
+| `PRD-022` | Fórmula de score de produto é declarada no perfil | RECOM | — | Priorização de produto versus técnica |
+| `PRD-023` | Trabalho que reduz custo operacional conta como produto | RECOM | — | Priorização de produto versus técnica |
+| `PRD-024` | Roadmap sem capacidade comprometida é lista de desejo | OBRIG | — | Priorização de produto versus técnica |
+| `PRD-025` | Investimento em descoberta escala com irreversibilidade | OBRIG | — | Descoberta proporcional ao risco |
+| `PRD-026` | Entrevista sem decisão pendente é teatro | OBRIG | — | Descoberta proporcional ao risco |
+| `PRD-027` | Protótipo responde uma pergunta, não antecipa a implementação | OBRIG | — | Descoberta proporcional ao risco |
+| `PRD-028` | Distinga o que o usuário diz do que o usuário faz | OBRIG | — | Descoberta proporcional ao risco |
+| `PRD-029` | Validação com N=1 não generaliza sem declaração | OBRIG | — | Descoberta proporcional ao risco |
+| `PRD-030` | Pare de descobrir quando a próxima informação não muda a decisão | OBRIG | — | Descoberta proporcional ao risco |
+| `PRD-031` | Requisito ambíguo bloqueia implementação | IMUT | — | Requisito sem ambiguidade |
+| `PRD-032` | Cada requisito tem ator, ação, condição e resultado | OBRIG | — | Requisito sem ambiguidade |
+| `PRD-033` | Casos de borda nomeados ou declarados fora de escopo | OBRIG | — | Requisito sem ambiguidade |
+| `PRD-034` | Um conceito, um nome, no glossário do domínio | OBRIG | — | Requisito sem ambiguidade |
+| `PRD-035` | Aceite é comportamental, não cosmética | OBRIG | — | Requisito sem ambiguidade |
+| `PRD-036` | Conflito com fluxo existente é escalada, não merge silencioso | OBRIG | — | Requisito sem ambiguidade |
+| `PRD-037` | "Obviamente" e "como sempre" marcam ambiguidade | OBRIG | — | Requisito sem ambiguidade |
+| `PRD-038` | Trade-off prazo/escopo/dívida é explícito e assinado | OBRIG | — | Prazo, escopo, dívida e manutenção |
+| `PRD-039` | Cortar escopo antes de cortar qualidade estrutural | OBRIG | — | Prazo, escopo, dívida e manutenção |
+| `PRD-040` | Dívida de produto registra-se como dívida, não como "v2" | OBRIG | — | Prazo, escopo, dívida e manutenção |
+| `PRD-041` | Custo de manutenção entra na decisão de construir | OBRIG | — | Prazo, escopo, dívida e manutenção |
+| `PRD-042` | Flag não autoriza escopo indefinido | OBRIG | — | Prazo, escopo, dívida e manutenção |
+| `PRD-043` | Prazo fixo sem escopo negociável é recusado | OBRIG | — | Prazo, escopo, dívida e manutenção |
+| `PRD-044` | Mudança visível ao usuário tem comunicação antes do corte | OBRIG | — | Comunicar mudança e encerrar funcionalidade |
+| `PRD-045` | Comunique o que muda para o usuário, não a implementação | OBRIG | — | Comunicar mudança e encerrar funcionalidade |
+| `PRD-046` | Encerrar funcionalidade exige medição de uso e alternativa | OBRIG | — | Comunicar mudança e encerrar funcionalidade |
+| `PRD-047` | Sunset tem data, dono e caminho de migração | OBRIG | — | Comunicar mudança e encerrar funcionalidade |
+| `PRD-048` | Remoção antecipada só com aceitação de risco nomeada | OBRIG | — | Comunicar mudança e encerrar funcionalidade |
+| `PRD-049` | Dívida de produto é lacuna entre promessa e capacidade | OBRIG | — | Dívida de produto e recusa com evidência |
+| `PRD-050` | Acúmulo de exceções por cliente é dívida estrutural | OBRIG | — | Dívida de produto e recusa com evidência |
+| `PRD-051` | Engenheiro recusa pedido com evidência, não com opinião | OBRIG | — | Dívida de produto e recusa com evidência |
+| `PRD-052` | Recusa cita o impacto de aceitar | OBRIG | — | Dívida de produto e recusa com evidência |
+| `PRD-053` | Pedido sensível sem comportamento definido para a implementação | OBRIG | — | Dívida de produto e recusa com evidência |
+| `PRD-054` | Implementação correta do pedido errado ainda é desperdício | IMUT | — | Dívida de produto e recusa com evidência |
+| `PRD-055` | Reabrir escopo após aceite exige novo critério | OBRIG | — | Dívida de produto e recusa com evidência |
+| `PRD-056` | Métrica de vaidade não justifica continuidade | OBRIG | — | Dívida de produto e recusa com evidência |
+| `PRD-057` | Toda decisão de produto tem dono nomeado | OBRIG | — | Dívida de produto e recusa com evidência |
+| `PRD-058` | Decisão de produto registra-se no nível adequado | OBRIG | — | Dívida de produto e recusa com evidência |
+
 ## 📓 Volume 19 — IA no Produto
 
 Arquivo: [`19-ia-no-produto.md`](19-ia-no-produto.md) · 69 regras
@@ -1243,6 +1313,71 @@ Arquivo: [`19-ia-no-produto.md`](19-ia-no-produto.md) · 69 regras
 | `IAX-068` | O usuário corrige, edita e rejeita a saída | OBRIG | — | Experiência de uma resposta não determinística |
 | `IAX-069` | A correção do usuário alimenta a avaliação | RECOM | — | Experiência de uma resposta não determinística |
 
+## 📔 Volume 20 — Prompt Engineering
+
+Arquivo: [`20-prompt-engineering.md`](20-prompt-engineering.md) · 58 regras
+
+| ID | Regra | Nível | Sev. | Capítulo |
+| --- | --- | --- | --- | --- |
+| `PRM-001` | Prompt que copia norma é segunda fonte de verdade | IMUT | — | Por que o prompt monolítico degrada |
+| `PRM-002` | Norma vive no volume; prompt opera por referência | IMUT | — | Por que o prompt monolítico degrada |
+| `PRM-003` | Cada token compete com os outros por atenção | OBRIG | — | Por que o prompt monolítico degrada |
+| `PRM-004` | Um prompt, uma missão | OBRIG | — | Por que o prompt monolítico degrada |
+| `PRM-005` | Monólito proibido quando a composição resolve | OBRIG | — | Por que o prompt monolítico degrada |
+| `PRM-006` | Todo prompt operacional tem os sete blocos | IMUT | — | Anatomia do prompt operacional |
+| `PRM-007` | Identidade declara responsabilidade por consequência, não por volume | OBRIG | — | Anatomia do prompt operacional |
+| `PRM-008` | Missão é resultado mensurável, não lista de tarefas | OBRIG | — | Anatomia do prompt operacional |
+| `PRM-009` | Sequência obrigatória é ordenada e proibida de reordenar | OBRIG | — | Anatomia do prompt operacional |
+| `PRM-010` | Normas entram só por ID, com uma cláusula de contexto | IMUT | — | Anatomia do prompt operacional |
+| `PRM-011` | Formato de saída é schema fechado | OBRIG | — | Anatomia do prompt operacional |
+| `PRM-012` | Condições de parada são enumeradas e concretas | OBRIG | — | Anatomia do prompt operacional |
+| `PRM-013` | "Not your job" é lista positiva de exclusões | OBRIG | — | Anatomia do prompt operacional |
+| `PRM-014` | Separe visualmente instrução, contexto e exemplo | OBRIG | — | Instrução, contexto e exemplo |
+| `PRM-015` | Instrução é estável; contexto é por invocação | OBRIG | — | Instrução, contexto e exemplo |
+| `PRM-016` | Exemplo demonstra o schema, não ensina a norma | OBRIG | — | Instrução, contexto e exemplo |
+| `PRM-017` | Exemplo sem contraste ensina o defeito se o defeito for o único mostrado | OBRIG | — | Instrução, contexto e exemplo |
+| `PRM-018` | Conteúdo não confiável no contexto é dado, nunca instrução | OBRIG | `S0` | Instrução, contexto e exemplo |
+| `PRM-019` | FINDING exige `path:line` ou saída de comando executado | IMUT | — | Ancoragem em evidência |
+| `PRM-020` | Confiança HIGH | MEDIUM | LOW acompanha todo achado | OBRIG | — | Ancoragem em evidência |
+| `PRM-021` | Declare o não verificado em lista própria | OBRIG | — | Ancoragem em evidência |
+| `PRM-022` | Afirmação de qualidade sem medição é HYPOTHESIS | OBRIG | — | Ancoragem em evidência |
+| `PRM-023` | Evidência insuficiente dispara BLOCKED, não achado inventado | OBRIG | — | Ancoragem em evidência |
+| `PRM-024` | Schema de saída é o contrato entre papéis | OBRIG | — | Formato estruturado e sequência |
+| `PRM-025` | Campo obrigatório ausente vira `n/a` com motivo, nunca some | OBRIG | — | Formato estruturado e sequência |
+| `PRM-026` | MUST-FIX e OPPORTUNITY nunca na mesma lista | IMUT | — | Formato estruturado e sequência |
+| `PRM-027` | A sequência começa pelo modo de falha mais caro do domínio | OBRIG | — | Formato estruturado e sequência |
+| `PRM-028` | Ordem de análise do EOS, quando a tarefa é revisão, não se inverte | OBRIG | — | Formato estruturado e sequência |
+| `PRM-029` | Fora de escopo é explícito em toda tarefa | OBRIG | — | Guardas de escopo e calibração de recusa |
+| `PRM-030` | O prompt não amplia o próprio escopo de permissão | IMUT | — | Guardas de escopo e calibração de recusa |
+| `PRM-031` | Recusa é calibrada por condição concreta | OBRIG | — | Guardas de escopo e calibração de recusa |
+| `PRM-032` | Recusa reporta o estabelecido, o descartado e a decisão necessária | OBRIG | — | Guardas de escopo e calibração de recusa |
+| `PRM-033` | Pedido que viola CON-013 é recusado, não negociado em silêncio | OBRIG | — | Guardas de escopo e calibração de recusa |
+| `PRM-034` | Três camadas distintas: sistema, papel, tarefa | OBRIG | — | Sistema, tarefa, papel e composição |
+| `PRM-035` | Contrato compartilhado é herdado, nunca reescrito no papel | IMUT | — | Sistema, tarefa, papel e composição |
+| `PRM-036` | Composição na ordem core → schemas → papel → tarefa | OBRIG | — | Sistema, tarefa, papel e composição |
+| `PRM-037` | Prompt de volume não substitui prompt de papel quando há julgamento e priorização | RECOM | — | Sistema, tarefa, papel e composição |
+| `PRM-038` | Papel declara Overrides em seção nomeada, e só os permitidos | OBRIG | — | Sistema, tarefa, papel e composição |
+| `PRM-039` | Prompt é artefato versionado com o volume ou o papel | OBRIG | — | Versionamento, teste e regressão |
+| `PRM-040` | Prompt e norma referenciada mudam na mesma entrega | OBRIG | — | Versionamento, teste e regressão |
+| `PRM-041` | Conjunto de regressão existe antes da edição | OBRIG | — | Versionamento, teste e regressão |
+| `PRM-042` | Mudança de prompt é mudança de comportamento | OBRIG | — | Versionamento, teste e regressão |
+| `PRM-043` | Teste mede aderência ao schema e às regras de engajamento | OBRIG | — | Versionamento, teste e regressão |
+| `PRM-044` | Caso que falhou em produção ou em revisão entra no conjunto no mesmo ciclo | OBRIG | — | Versionamento, teste e regressão |
+| `PRM-045` | Diff de prompt é revisado com o mesmo rigor de código | OBRIG | — | Versionamento, teste e regressão |
+| `PRM-046` | Aderência é taxa medida no conjunto, não impressão | OBRIG | — | Medição de aderência e custo de contexto |
+| `PRM-047` | Limiar de aderência e margem são declarados | OBRIG | — | Medição de aderência e custo de contexto |
+| `PRM-048` | Custo de contexto é orçado por tipo de tarefa | OBRIG | — | Medição de aderência e custo de contexto |
+| `PRM-049` | Carregue só volumes e arquivos que a tarefa exige | OBRIG | — | Medição de aderência e custo de contexto |
+| `PRM-050` | Contexto longo sem ranking degrada a instrução | OBRIG | — | Medição de aderência e custo de contexto |
+| `PRM-051` | Prompt em inglês; normas e volumes em português | OBRIG | — | Medição de aderência e custo de contexto |
+| `PRM-052` | Proibido no texto do prompt: hedging, metalinguagem, superlativo vazio | OBRIG | — | Medição de aderência e custo de contexto |
+| `PRM-053` | Justificativa de edição de prompt tem os quatro campos | OBRIG | — | Medição de aderência e custo de contexto |
+| `PRM-054` | Parâmetros de amostragem que afetam reprodutibilidade são fixados e versionados | RECOM | — | Medição de aderência e custo de contexto |
+| `PRM-055` | Prompt de produto e prompt de engenharia não se misturam | OBRIG | — | Medição de aderência e custo de contexto |
+| `PRM-056` | Exemplos no prompt usam domínio SaaS real | OBRIG | — | Medição de aderência e custo de contexto |
+| `PRM-057` | Biblioteca em `prompts/` indexa; não duplica | OBRIG | — | Medição de aderência e custo de contexto |
+| `PRM-058` | Checklist operacional de prompt tem no máximo 25 itens | OBRIG | — | Medição de aderência e custo de contexto |
+
 ## 📕 Volume 15 — Playbooks
 
 Arquivo: [`21-playbooks.md`](21-playbooks.md) · 58 regras
@@ -1307,4 +1442,183 @@ Arquivo: [`21-playbooks.md`](21-playbooks.md) · 58 regras
 | `PLB-056` | Escreva o teste que falha, antes da correção | OBRIG | — | Playbook: corrigir um bug |
 | `PLB-057` | Corrija a classe, não só a instância reportada | OBRIG | — | Playbook: corrigir um bug |
 | `PLB-058` | Nada de "enquanto eu estava lá" | IMUT | — | Playbook: corrigir um bug |
+
+## 📙 Volume 22 — Checklists
+
+Arquivo: [`22-checklists.md`](22-checklists.md) · 48 regras
+
+| ID | Regra | Nível | Sev. | Capítulo |
+| --- | --- | --- | --- | --- |
+| `CHK-001` | Checklist existe para o momento em que a memória falha | IMUT | — | Memória sob pressão |
+| `CHK-002` | Competência não autoriza pular o checklist | IMUT | — | Memória sob pressão |
+| `CHK-003` | Um checklist serve a um momento, não a um domínio inteiro | OBRIG | — | Memória sob pressão |
+| `CHK-004` | O checklist não substitui a norma | IMUT | — | Memória sob pressão |
+| `CHK-005` | Sob pressão de prazo, o checklist encolhe por prioridade declarada — nunca some | OBRIG | — | Memória sob pressão |
+| `CHK-006` | Declare o tipo da lista no cabeçalho | OBRIG | — | Leitura versus confirmação |
+| `CHK-007` | Checklist de leitura proíbe veredito | OBRIG | — | Leitura versus confirmação |
+| `CHK-008` | Checklist de confirmação exige evidência anexável | IMUT | — | Leitura versus confirmação |
+| `CHK-009` | Não converta leitura em confirmação por pressão social | OBRIG | — | Leitura versus confirmação |
+| `CHK-010` | Um item não pode ser ao mesmo tempo "explore" e "prove" | OBRIG | — | Leitura versus confirmação |
+| `CHK-011` | Lista longa falha por economia de atenção, não por falta de virtude | IMUT | — | Por que listas longas falham |
+| `CHK-012` | Marcar sem ler é a falha mais grave do framework aplicado a checklists | IMUT | — | Por que listas longas falham |
+| `CHK-013` | As 735 regras com ID não são um checklist operacional | OBRIG | — | Por que listas longas falham |
+| `CHK-014` | Acúmulo é o inimigo; contexto de uso é a divisão correta | OBRIG | — | Por que listas longas falham |
+| `CHK-015` | Cada item além do limite reduz a taxa de leitura real | RECOM | — | Por que listas longas falham |
+| `CHK-016` | Checklist de volume: no máximo 25 itens | OBRIG | — | Limite e divisão |
+| `CHK-017` | Checklist operacional em `checklists/` divide por nível ou bloco com parada | OBRIG | — | Limite e divisão |
+| `CHK-018` | Ao crescer, fatie por momento ou por superfície — nunca por "capítulo do livro" | OBRIG | — | Limite e divisão |
+| `CHK-019` | Item que ninguém consegue verificar em cinco minutos não entra | OBRIG | — | Limite e divisão |
+| `CHK-020` | Remova item que o pipeline já bloqueia de forma confiável | OBRIG | — | Limite e divisão |
+| `CHK-021` | Enunciado no passado verificável ou na primeira pessoa da ação | OBRIG | — | Item bem escrito |
+| `CHK-022` | Todo item de confirmação cita a regra ou o artefato mínimo | OBRIG | — | Item bem escrito |
+| `CHK-023` | Item negativo explícito quando a falha é omissão | RECOM | — | Item bem escrito |
+| `CHK-024` | Um item, um veredito | OBRIG | — | Item bem escrito |
+| `CHK-025` | Escreva a consequência no item quando o custo de pular não for óbvio | RECOM | — | Item bem escrito |
+| `CHK-026` | Só três estados legítimos | IMUT | — | Estados: OK, N/A, PENDENTE |
+| `CHK-027` | `OK` exige verificação nesta execução | IMUT | — | Estados: OK, N/A, PENDENTE |
+| `CHK-028` | `N/A` sem justificativa conta como `PENDENTE` | IMUT | — | Estados: OK, N/A, PENDENTE |
+| `CHK-029` | Um único `PENDENTE` impede `DONE` | IMUT | — | Estados: OK, N/A, PENDENTE |
+| `CHK-030` | Não use `N/A` para esconder o que não deu tempo | OBRIG | — | Estados: OK, N/A, PENDENTE |
+| `CHK-031` | Toda execução de checklist declara executor e papel | OBRIG | — | Quem assina |
+| `CHK-032` | Autor assina pré-merge; revisor assina code-review; auditor assina módulo concluído | IMUT | — | Quem assina |
+| `CHK-033` | Assinatura em bloco de seção inteira é inválida | OBRIG | — | Quem assina |
+| `CHK-034` | Agente que marca checklist anexa a mesma evidência que um humano | IMUT | — | Quem assina |
+| `CHK-035` | Segundo assinante quando o risco é `R3`/`R4` ou toca auth/dado/dinheiro | OBRIG | — | Quem assina |
+| `CHK-036` | O que o CI bloqueia com sinal claro sai do checklist humano | OBRIG | — | Automatizar e sair do checklist |
+| `CHK-037` | Automação que só reporta sem bloquear não remove o item humano | OBRIG | — | Automatizar e sair do checklist |
+| `CHK-038` | Ao automatizar, registre a remoção e o gate substituto | RECOM | — | Automatizar e sair do checklist |
+| `CHK-039` | Nunca automatize o julgamento de escopo ou de intenção | IMUT | — | Automatizar e sair do checklist |
+| `CHK-040` | Preferir um teste que falha a um item eterno no checklist | RECOM | — | Automatizar e sair do checklist |
+| `CHK-041` | Os sete arquivos em `checklists/` são a lista operacional canônica | OBRIG | — | Índice canônico dos checklists |
+| `CHK-042` | Não forkue checklist canônico por time sem motivo registrado | OBRIG | — | Índice canônico dos checklists |
+| `CHK-043` | Checklist de volume aponta para o arquivo operacional; não o duplica | OBRIG | — | Índice canônico dos checklists |
+| `CHK-044` | Ordem de uso na rodada é a dos portões | OBRIG | — | Índice canônico dos checklists |
+| `CHK-045` | Item obsoleto é removido ou marcado com data e substituto | OBRIG | — | Ciclo de vida e higiene |
+| `CHK-046` | Mudança de checklist canônico é mudança de processo — com dono | OBRIG | — | Ciclo de vida e higiene |
+| `CHK-047` | Meça aderência pela evidência, não pela taxa de caixas marcadas | OBRIG | — | Ciclo de vida e higiene |
+| `CHK-048` | Em dúvida entre item novo e regra nova, prefira a regra no volume dono | RECOM | — | Ciclo de vida e higiene |
+
+## 📗 Volume 23 — Métricas
+
+Arquivo: [`23-metricas.md`](23-metricas.md) · 58 regras
+
+| ID | Regra | Nível | Sev. | Capítulo |
+| --- | --- | --- | --- | --- |
+| `MET-001` | Uma métrica útil tem definição, limiar, reação e dono | IMUT | — | Anatomia de uma métrica útil |
+| `MET-002` | Definição é fórmula, unidade e denominador | OBRIG | — | Anatomia de uma métrica útil |
+| `MET-003` | Limiar declara valor, janela e direção | OBRIG | — | Anatomia de uma métrica útil |
+| `MET-004` | Reação nomeia ação, prazo e gatilho | OBRIG | — | Anatomia de uma métrica útil |
+| `MET-005` | Toda métrica tem dono humano nomeado | OBRIG | — | Anatomia de uma métrica útil |
+| `MET-006` | Antipadrão de uso é declarado na criação | OBRIG | — | Anatomia de uma métrica útil |
+| `MET-007` | Toda métrica usada como meta se corrompe; desenhe sabendo disso | IMUT | — | Goodhart e gamificação |
+| `MET-008` | Meta composta de um único proxy fácil é proibida | OBRIG | — | Goodhart e gamificação |
+| `MET-009` | Indicador de tendência não vira meta individual | OBRIG | — | Goodhart e gamificação |
+| `MET-010` | Gamificação detectada invalida o período | OBRIG | — | Goodhart e gamificação |
+| `MET-011` | Tendência supera absoluto até existir baseline estável | OBRIG | — | Tendência, absoluto e baseline |
+| `MET-012` | Baseline declara método, janela e data de congelamento | OBRIG | — | Tendência, absoluto e baseline |
+| `MET-013` | Divergência entre tendência e absoluto força investigação | OBRIG | — | Tendência, absoluto e baseline |
+| `MET-014` | Comparação entre times exige denominador e contexto idênticos | OBRIG | — | Tendência, absoluto e baseline |
+| `MET-015` | Cobertura de linhas não mede qualidade | IMUT | — | Métricas de código — o que não dizem |
+| `MET-016` | Complexidade e cheiros estáticos apontam; não justificam mudança sozinhos | OBRIG | — | Métricas de código — o que não dizem |
+| `MET-017` | Dívida estática sem defeito, risco ou norma ligada é decoração | OBRIG | — | Métricas de código — o que não dizem |
+| `MET-018` | Métricas de código respondem a perguntas de risco, não a ranking | OBRIG | — | Métricas de código — o que não dizem |
+| `MET-019` | Cycle time mede fluxo de valor, não esforço individual | OBRIG | — | Métricas de processo |
+| `MET-020` | Lead time inclui fila; omitir fila falseia o diagnóstico | OBRIG | — | Métricas de processo |
+| `MET-021` | Tamanho de PR tem limiar alinhado ao orçamento de mudança | OBRIG | — | Métricas de processo |
+| `MET-022` | Tempo de revisão é métrica de fluxo, não de virtude do revisor | OBRIG | — | Métricas de processo |
+| `MET-023` | Frequência de deploy é sinal de capacidade, não objetivo isolado | OBRIG | — | Métricas de processo |
+| `MET-024` | Change failure rate exige definição escrita de falha | OBRIG | — | Métricas de processo |
+| `MET-025` | MTTR conta até recuperação do usuário, não até o merge do hotfix | OBRIG | — | Métricas de processo |
+| `MET-026` | As métricas de processo se leem em conjunto | OBRIG | — | Métricas de processo |
+| `MET-027` | WIP e idade do trabalho expõem gargalo melhor que vazão | RECOM | — | Métricas de processo |
+| `MET-028` | Escape rate mede defeito que passou dos portões | OBRIG | — | Defeito e escape |
+| `MET-029` | Densidade de defeito é por módulo ou fluxo, nunca por pessoa | OBRIG | — | Defeito e escape |
+| `MET-030` | Severidade classifica impacto; volume sozinho não prioriza | OBRIG | — | Defeito e escape |
+| `MET-031` | Telemetria do produto não é métrica de engenharia | IMUT | — | Fronteira com observabilidade |
+| `MET-032` | Métrica de engenharia não substitui SLI | OBRIG | — | Fronteira com observabilidade |
+| `MET-033` | Quando MET consome dado de OBS, a definição aponta a consulta | OBRIG | — | Fronteira com observabilidade |
+| `MET-034` | Engenharia exige sinais de resultado de produto para fechar o ciclo | OBRIG | — | Produto que a engenharia precisa |
+| `MET-035` | Critério de sucesso da mudança é mensurável antes do merge | OBRIG | — | Produto que a engenharia precisa |
+| `MET-036` | Feature flag sem métrica de adoção é dívida disfarçada | RECOM | — | Produto que a engenharia precisa |
+| `MET-037` | Acessibilidade automatizada zero erros é portão; manual tem amostra | OBRIG | — | A11y e performance com limiar |
+| `MET-038` | Performance de qualidade usa limiar declarado e regressão | OBRIG | — | A11y e performance com limiar |
+| `MET-039` | Bundle e regressão bloqueiam; p95 de API investiga | OBRIG | — | A11y e performance com limiar |
+| `MET-040` | Nota é vetor de dimensões; o escalar sozinho não decide | OBRIG | — | Nota por dimensão e agregação |
+| `MET-041` | Agregação que mascara trava é proibida | IMUT | — | Nota por dimensão e agregação |
+| `MET-042` | Ausência de achados não produz excelência | OBRIG | — | Nota por dimensão e agregação |
+| `MET-043` | Nota 10 exige DoE na dimensão, não marketing | OBRIG | — | Nota por dimensão e agregação |
+| `MET-044` | Health score proprietário declara fórmula ou é rejeitado | OBRIG | — | Nota por dimensão e agregação |
+| `MET-045` | Instrumentação mede o sistema; vigilância mede a pessoa | IMUT | — | Vigilância versus instrumentação |
+| `MET-046` | LOC por pessoa e commits por pessoa nunca são coletados como desempenho | IMUT | — | Vigilância versus instrumentação |
+| `MET-047` | Coleta de processo é transparente ao time medido | OBRIG | — | Vigilância versus instrumentação |
+| `MET-048` | Não compare pessoas; compare sistemas e filas | IMUT | — | Vigilância versus instrumentação |
+| `MET-049` | Painel de engenharia sem consumidor nomeado é removido | OBRIG | — | Baseline, painéis e o que matar |
+| `MET-050` | Painel sem consulta no período é morto | OBRIG | — | Baseline, painéis e o que matar |
+| `MET-051` | Uma pergunta por vista; vistas de ego são proibidas | OBRIG | — | Baseline, painéis e o que matar |
+| `MET-052` | Métrica nova passa por revisão de Goodhart antes de virar meta | OBRIG | — | Baseline, painéis e o que matar |
+| `MET-053` | Limiares `[perfil]` vivem no perfil do projeto | OBRIG | — | Baseline, painéis e o que matar |
+| `MET-054` | Relatório periódico tem dono, cadência e decisão explícita | OBRIG | — | Baseline, painéis e o que matar |
+| `MET-055` | Mudança justificada só por mover métrica de manutenibilidade é rejeitada | IMUT | — | Baseline, painéis e o que matar |
+| `MET-056` | Tempo de suíte e flakiness são métricas de processo de qualidade | OBRIG | — | Baseline, painéis e o que matar |
+| `MET-057` | Custo de coleta de métricas de engenharia é orçado | RECOM | — | Baseline, painéis e o que matar |
+| `MET-058` | Toda métrica morta é removida no mesmo ciclo em que é reconhecida | OBRIG | — | Baseline, painéis e o que matar |
+
+## 📕 Volume 24 — Auditoria Final
+
+Arquivo: [`24-auditoria-final.md`](24-auditoria-final.md) · 52 regras
+
+| ID | Regra | Nível | Sev. | Capítulo |
+| --- | --- | --- | --- | --- |
+| `FIN-001` | O veredito final trata afirmação sem evidência como falha | IMUT | — | Portão anti-teatro |
+| `FIN-002` | Teatro de processo é motivo suficiente para `REJECTED` | IMUT | — | Portão anti-teatro |
+| `FIN-003` | O auditor não participa da implementação da rodada que julga | IMUT | — | Portão anti-teatro |
+| `FIN-004` | Pressão de prazo não rebaixa bloqueante | IMUT | — | Portão anti-teatro |
+| `FIN-005` | Primeira linha do entregável é o veredito | OBRIG | — | Portão anti-teatro |
+| `FIN-006` | Anti-teatro amostral é obrigatório em toda rodada não trivial | OBRIG | — | Portão anti-teatro |
+| `FIN-007` | Tabela de verificação de afirmações é seção obrigatória | OBRIG | — | Report OK versus realmente verificou |
+| `FIN-008` | "Melhorou performance" sem antes/depois pelo mesmo método é falha | OBRIG | — | Report OK versus realmente verificou |
+| `FIN-009` | Correção de segurança não se valida só com "testes passam" | OBRIG | — | Report OK versus realmente verificou |
+| `FIN-010` | O auditor reexecuta a suíte relevante, types e lint no escopo | OBRIG | — | Report OK versus realmente verificou |
+| `FIN-011` | Evidência de outrem exige rastreio até o artefato bruto | OBRIG | — | Report OK versus realmente verificou |
+| `FIN-012` | Declaração de "não pude validar" só vale com comando exato para humano | OBRIG | — | Report OK versus realmente verificou |
+| `FIN-013` | Ordem fixa; não comece pelas notas | OBRIG | — | Ordem de leitura do portão final |
+| `FIN-014` | Leia o diff do conjunto antes dos relatórios parciais | OBRIG | — | Ordem de leitura do portão final |
+| `FIN-015` | Pare no primeiro bloqueante estrutural | OBRIG | — | Ordem de leitura do portão final |
+| `FIN-016` | Checklist operacional deste portão é `modulo-concluido.md` | OBRIG | — | Ordem de leitura do portão final |
+| `FIN-017` | Declare quais volumes eram aplicáveis e quais foram de fato aplicados | OBRIG | — | Cobertura de volumes |
+| `FIN-018` | Camadas de análise omitidas são risco nomeado, não silêncio | OBRIG | — | Cobertura de volumes |
+| `FIN-019` | Segurança é sempre aplicável quando auth, PII, dinheiro ou upload entram no diff | IMUT | — | Cobertura de volumes |
+| `FIN-020` | Performance só "aplicada" com medição ou com N/A justificado por ausência de caminho quente | OBRIG | — | Cobertura de volumes |
+| `FIN-021` | Multi-tenant aplicável exige evidência de isolamento no ponto interno | OBRIG | — | Cobertura de volumes |
+| `FIN-022` | Volume aplicável não aplicado bloqueia `APPROVED` limpo | OBRIG | — | Cobertura de volumes |
+| `FIN-023` | Bloqueantes sem negociação | IMUT | — | Bloqueantes |
+| `FIN-024` | Teste afrouxado sem justificativa de correção do comportamento antigo é `S1` | OBRIG | — | Bloqueantes |
+| `FIN-025` | Dependência nova não prevista na proposta é bloqueante de escopo | OBRIG | — | Bloqueantes |
+| `FIN-026` | Remoção de código sem justificativa é mudança de comportamento não proposta | OBRIG | — | Bloqueantes |
+| `FIN-027` | Segurança < 6 → no máximo `APPROVED WITH CONDITIONS` | IMUT | — | Bloqueantes |
+| `FIN-028` | Nota 10 exige DoE na dimensão; ausência de problemas não basta | IMUT | — | Nota 8 versus nota 10 |
+| `FIN-029` | Faixa 8–9: DoD folgada; lacunas de DoE conhecidas e registradas | OBRIG | — | Nota 8 versus nota 10 |
+| `FIN-030` | Não negocie nota para "motivar o time" | OBRIG | — | Nota 8 versus nota 10 |
+| `FIN-031` | Justificativa por dimensão cita evidência, não impressão | OBRIG | — | Nota 8 versus nota 10 |
+| `FIN-032` | Peso das dimensões é o de `CON-052` / `AUD-027` — sem remanejo ad hoc | IMUT | — | Nota 8 versus nota 10 |
+| `FIN-033` | Meta razoável entre rodadas é +1 na dimensão mais fraca, não 10 universal | RECOM | — | Nota 8 versus nota 10 |
+| `FIN-034` | `APPROVED` exige DoD completa no escopo da rodada, não DoE | OBRIG | — | Pronto versus excelente |
+| `FIN-035` | Módulo crítico no perfil sem caminho a DoE não recebe nota 10 | OBRIG | — | Pronto versus excelente |
+| `FIN-036` | Pronto com dívida só com os cinco campos de dívida deliberada | OBRIG | — | Pronto versus excelente |
+| `FIN-037` | A pergunta final do módulo concluído é critério de aceite narrativo | RECOM | — | Pronto versus excelente |
+| `FIN-038` | Veredito do auditor final prevalece na rodada sobre o desejo de fechar do orquestrador | IMUT | — | Discordar do orquestrador |
+| `FIN-039` | Discordância cita evidência e regra, não preferência | OBRIG | — | Discordar do orquestrador |
+| `FIN-040` | Orquestrador pode pedir reabertura de G1/G2; não pode pedir "aprova assim" | OBRIG | — | Discordar do orquestrador |
+| `FIN-041` | Empate entre papéis especialistas resolve-se por evidência e `CON-021`, não por média de notas | OBRIG | — | Discordar do orquestrador |
+| `FIN-042` | Registro da discordância fica no `AUDIT REPORT` | OBRIG | — | Discordar do orquestrador |
+| `FIN-043` | `APPROVED WITH CONDITIONS` só para itens triviais e verificáveis | OBRIG | — | Aprovação parcial com dívida nomeada |
+| `FIN-044` | Lista de condições é numerada e fechável sem nova auditoria completa | OBRIG | — | Aprovação parcial com dívida nomeada |
+| `FIN-045` | Dívida que bloqueava DoD não pode ser rebaixada a condição cosmética | IMUT | — | Aprovação parcial com dívida nomeada |
+| `FIN-046` | Risco residual declara monitoramento e aceitante humano | OBRIG | — | Aprovação parcial com dívida nomeada |
+| `FIN-047` | Condições não cumpridas na rodada seguinte viram `S1` de processo | OBRIG | — | Aprovação parcial com dívida nomeada |
+| `FIN-048` | Ao fechar, audite o próprio relatório contra esta lista | OBRIG | — | Auditoria da auditoria |
+| `FIN-049` | Se a amostra anti-teatro falha, o veredito não é "corrigir a amostra" | OBRIG | — | Auditoria da auditoria |
+| `FIN-050` | Achado novo fora do escopo: registre para a próxima rodada, não expanda esta | OBRIG | — | Auditoria da auditoria |
+| `FIN-051` | Guarde o artefato do portão onde a próxima pessoa o encontra sem perguntar | OBRIG | — | Auditoria da auditoria |
+| `FIN-052` | O critério final remete a `CON-055` | IMUT | — | Auditoria da auditoria |
 
