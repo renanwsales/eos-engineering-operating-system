@@ -16,12 +16,12 @@ Ordenados por score. Recalcular os 10 do topo a cada rodada.
 
 | ID | Título | Sev. | Conf. | Esforço | Risco | Score | Gatilho de promoção | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| EOS-001 | Perfil do projeto ainda não preenchido para o repositório alvo | S1 | HIGH | S | LOW | 20.0 | Primeira rodada de revisão em qualquer projeto | aberto |
-| EOS-011 | Anatomia AUTHORING incompleta nos volumes herdados | S2 | HIGH | L | LOW | 8.0 | Fechamento editorial v3 | feito |
-| EOS-003 | Verificação do EOS não roda automaticamente | S2 | HIGH | XS | LOW | 14.0 | Primeiro hospedagem do repositório em plataforma com CI | aberto |
 | EOS-009 | Playbooks podem divergir das regras que citam | S2 | MEDIUM | S | LOW | 4.0 | Primeira alteração de regra em volume citado pelo Vol 15 | aberto |
-| EOS-010 | Volume 1 tem numeração fora de ordem no documento | S3 | HIGH | M | MEDIUM | 1.3 | Se um leitor humano relatar dificuldade de navegação no Vol 1 | aberto |
 | EOS-002 | Limiares de métrica nunca calibrados contra um módulo real | S2 | MEDIUM | M | LOW | 3.4 | Primeira revisão completa de módulo concluída | aberto |
+| EOS-010 | Volume 1 tem numeração fora de ordem no documento | S3 | HIGH | M | MEDIUM | 1.3 | Se um leitor humano relatar dificuldade de navegação no Vol 1 | aberto |
+| EOS-001 | Perfil do projeto ainda não preenchido para o repositório alvo | S1 | HIGH | S | LOW | 20.0 | Primeira rodada de revisão em qualquer projeto | feito |
+| EOS-003 | Verificação do EOS não roda automaticamente | S2 | HIGH | XS | LOW | 14.0 | Primeira hospedagem do repositório em plataforma com CI | feito |
+| EOS-011 | Anatomia AUTHORING incompleta nos volumes herdados | S2 | HIGH | L | LOW | 8.0 | Fechamento editorial v3 | feito |
 
 ### EOS-001 — Perfil do projeto ainda não preenchido
 
@@ -33,7 +33,8 @@ Consequência se ignorado: todo julgamento técnico dos agentes fica sem base �
   comandos, nenhuma mudança pode ser validada, e mudança não validada não existe.
 Gatilho de promoção: primeira rodada de revisão em qualquer projeto que adote o EOS
 Origem: criação do framework, 2026-07-29
-Status: aberto
+Status: feito — perfil preenchido vive no repositório adotante (`.eos/perfil.md`); o template
+  público permanece placeholder de propósito (2026-07-29)
 ```
 
 ### EOS-003 — Verificação do EOS não roda automaticamente
@@ -48,7 +49,8 @@ Consequência se ignorado: o índice de regras e o índice de links divergem do 
 Correção: um job que rode os dois scripts e falhe o build.
 Gatilho de promoção: primeira hospedagem do repositório em plataforma com CI
 Origem: migração para volumes, 2026-07-29
-Status: aberto
+Status: feito — `.github/workflows/ci.yml` roda `build-rules-index.py --check` e `check-links.py`
+  em push/PR (2026-07-29)
 ```
 
 ### EOS-009 — Playbooks podem divergir das regras que citam
