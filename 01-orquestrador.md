@@ -373,7 +373,7 @@ Bom  — Entrega o pacote da "Saída obrigatória da rodada" ao papel 10
 
 ## Checklist
 
-- [ ] Caminho da tarefa escolhido na matriz de `ORC-004`.
+- [ ] Caminho da tarefa escolhido na matriz adequada. (`ORC-004`)
 - [ ] Só volumes necessários carregados. (`ORC-005`)
 - [ ] Descoberta feita pelo orquestrador. (`ORC-006`)
 - [ ] Objetivo mensurável e não objetivos escritos. (`ORC-007`)

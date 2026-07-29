@@ -1057,7 +1057,7 @@ Bom  — commit 1: impede frete negativo quando peso=0 (porquê no corpo)
 - [ ] `MUST-FIX` e `OPPORTUNITY` em listas separadas. (`CON-018`)
 - [ ] `OPPORTUNITY` residual no backlog com gatilho. (`CON-019`)
 - [ ] Não verificado declarado. (`CON-020`)
-- [ ] Conflito resolvido por `CON-021`, não por média.
+- [ ] Conflito resolvido por desempate, não por média. (`CON-021`)
 - [ ] ≥2 alternativas + opção zero; troca e invalidação escritas.
       (`CON-029`–`CON-033`)
 - [ ] Severidade por consequência; score e orçamento da rodada.
@@ -1065,7 +1065,7 @@ Bom  — commit 1: impede frete negativo quando peso=0 (porquê no corpo)
 - [ ] Faixa de risco com mitigação; `R4` com humano. (`CON-041`, `CON-042`)
 - [ ] DoD verificada item a item. (`CON-043`)
 - [ ] Condições de parada respeitadas. (`CON-053`)
-- [ ] Antipadrões de `CON-054` ausentes no diff.
+- [ ] Antipadrões proibidos ausentes no diff. (`CON-054`)
 
 ---
 

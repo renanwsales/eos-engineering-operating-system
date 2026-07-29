@@ -370,7 +370,7 @@ Proteção contra regressão: teste que falha se a contagem crescer
 - [ ] Cache não mascara N+1. (`PRF-022`)
 - [ ] Orçamento de bundle no pipeline. (`PRF-030`)
 - [ ] Limiares declarados; regressão >20% bloqueia. (`PRF-038`)
-- [ ] Registro obrigatório da correção preenchido.
+- [ ] Registro obrigatório da correção preenchido. (`PRF-006`)
 
 ---
 
