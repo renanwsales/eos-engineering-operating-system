@@ -2,7 +2,7 @@
 
 Inherits: [`_shared/core-contract.md`](_shared/core-contract.md) ·
 [`_shared/output-schemas.md`](_shared/output-schemas.md)
-Volumes: [5 — Segurança](../volumes/vol-05-seguranca.md) `SEC` · [14 — Multi-Inquilino](../volumes/vol-14-escala-e-multi-inquilino.md) `ESC` (cap. 14.7) · Checklist: [`seguranca-owasp.md`](../checklists/seguranca-owasp.md)
+Volumes: [5 — Segurança](../06-seguranca.md) `SEC` · [14 — Multi-Inquilino](../14-escalabilidade.md) `ESC` (cap. 14.7) · Checklist: [`seguranca-owasp.md`](../checklists/seguranca-owasp.md)
 
 ---
 

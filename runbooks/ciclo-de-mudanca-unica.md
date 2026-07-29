@@ -49,7 +49,7 @@ Para qualquer coisa não trivial:
 - [ ] Duas alternativas reais, mais "não fazer nada".
 - [ ] Escolhi a mais reversível que resolve o problema **inteiro**.
 - [ ] Declarei a troca aceita.
-- [ ] Verifiquei a faixa de [risco](../volumes/vol-01-constituicao.md) e a mitigação obrigatória dela.
+- [ ] Verifiquei a faixa de [risco](../00-constituicao-da-engenharia.md) e a mitigação obrigatória dela.
 - [ ] Se `R4`: **parei e pedi aprovação humana** antes de implementar.
 - [ ] Se muda contrato público ou é custoso de reverter: escrevi [ADR](../templates/adr.md).
 
@@ -85,7 +85,7 @@ eu faria diferente? Se é a segunda, **pare**: é cosmético, e vai ao backlog.
 ## Passo 6 — Fechar
 
 - [ ] [Pré-merge](../checklists/pre-merge.md) executado, incluindo ler o próprio diff inteiro.
-- [ ] [Definition of Done](../volumes/vol-01-constituicao.md) item por item, com `N/A` justificados.
+- [ ] [Definition of Done](../00-constituicao-da-engenharia.md) item por item, com `N/A` justificados.
 - [ ] Mensagem de commit explica o **porquê**.
 - [ ] **Tudo que encontrei e não corrigi está no backlog com ID.**
 - [ ] Rollback declarado.

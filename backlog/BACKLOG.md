@@ -54,7 +54,7 @@ Status: aberto
 
 ```
 Severidade: S2 | Confiança: MEDIUM | Esforço: S | Risco: LOW | Score: 4.0
-Evidência: volumes/vol-15-playbooks.md cita 60+ regras de outros volumes por ID. Nenhum mecanismo
+Evidência: ../21-playbooks.md cita 60+ regras de outros volumes por ID. Nenhum mecanismo
   verifica se a regra citada ainda diz o que o passo do playbook afirma que ela diz.
 Consequência se ignorado: a duplicação que o ADR-0003 quis evitar entra pela porta dos playbooks. Um
   passo que reafirma o conteúdo de uma regra em vez de referenciá-la divergirá dela na primeira
@@ -70,7 +70,7 @@ Status: aberto
 
 ```
 Severidade: S3 | Confiança: HIGH | Esforço: M | Risco: MEDIUM | Score: 1.3
-Evidência: volumes/vol-01-constituicao.md — o capítulo 1.4 (CON-056 a CON-064) aparece antes do
+Evidência: ../00-constituicao-da-engenharia.md — o capítulo 1.4 (CON-056 a CON-064) aparece antes do
   capítulo 1.5 (CON-023), e o fechamento CON-055 aparece depois de CON-086. A numeração é contínua e
   única (o gerador valida), mas a ordem no documento não é crescente.
 Causa: o capítulo dos seis portões e as convenções de ofício foram inseridos na reorganização v2.0.0
@@ -139,7 +139,7 @@ Estado saudável e necessário. Backlog que só cresce perde utilidade.
 ## Higiene periódica
 
 Executada pelo orquestrador a cada rodada. Ver
-[gestão de backlog](../volumes/vol-11-auditoria.md).
+[gestão de backlog](../12-auditoria.md).
 
 - [ ] Verificar obsolescência: evidência (`arquivo:linha`) que não existe mais.
 - [ ] Reavaliar severidade com os modificadores de contexto.

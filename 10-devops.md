@@ -1,11 +1,11 @@
 # 📙 Volume 10 — DevOps e SRE
 
-Prefixo: `OPS` · Regras: OPS-001 a OPS-048 · Papel: [DevOps/SRE](../agents/08-devops-sre.md)
+Prefixo: `OPS` · Regras: OPS-001 a OPS-048 · Papel: [DevOps/SRE](agents/08-devops-sre.md)
 
 Camada coberta: **8 (entrega)**.
 
 Estado que impede escala horizontal, limites de recurso e descarte de carga estão no
-[Volume 14](vol-14-escala-e-multi-inquilino.md).
+[Volume 14](14-escalabilidade.md).
 
 ---
 
@@ -83,7 +83,7 @@ Ver DAT-031.
 ### OPS-012 — Cliente que você não controla nunca é atualizado pelo seu deploy **[OBRIGATÓRIA]**
 
 App instalado no dispositivo do usuário permanece na versão antiga por semanas. A janela de compatibilidade é
-declarada no [perfil do projeto](../templates/perfil-do-projeto.md).
+declarada no [perfil do projeto](templates/perfil-do-projeto.md).
 
 ---
 

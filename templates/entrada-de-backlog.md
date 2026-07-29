@@ -1,7 +1,7 @@
 # Template — Entrada de backlog
 
 Use para **toda** `OPPORTUNITY` encontrada e não corrigida, registrada na mesma sessão em que foi
-encontrada. Ver [gestão de backlog](../volumes/vol-11-auditoria.md).
+encontrada. Ver [gestão de backlog](../12-auditoria.md).
 
 ---
 

@@ -114,7 +114,7 @@ ainda vale.**
 
 Migração de dados: `<não | sim — plano, lotes, contagem antes/depois, reversa testada>`
 
-Mitigação exigida pela faixa de risco (ver [matriz de risco](../volumes/vol-01-constituicao.md)):
+Mitigação exigida pela faixa de risco (ver [matriz de risco](../00-constituicao-da-engenharia.md)):
 
 - [ ] `<itens da faixa R2/R3/R4 aplicáveis>`
 - [ ] Aprovação humana obtida antes da implementação (obrigatório em `R4`)

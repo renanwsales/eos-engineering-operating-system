@@ -3,7 +3,7 @@
 Regra que governa este checklist: **o ônus da prova é de quem afirma que está seguro.** Item que você
 não conseguiu verificar é reportado como não verificado — nunca presumido em ordem.
 
-Norma completa: [Volume 5 — Segurança](../volumes/vol-05-seguranca.md).
+Norma completa: [Volume 5 — Segurança](../06-seguranca.md).
 
 ---
 

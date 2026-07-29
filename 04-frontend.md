@@ -1,10 +1,10 @@
 # 📕 Volume 4 — Framework Frontend
 
-Prefixo: `FRT` · Regras: FRT-001 a FRT-042 · Papel: [Frontend](../agents/03-frontend.md)
+Prefixo: `FRT` · Regras: FRT-001 a FRT-042 · Papel: [Frontend](agents/03-frontend.md)
 
-Camadas cobertas: **6 (UX/A11y)** na parte técnica, com apoio de [Vol 7](vol-07-performance.md) e
-[Vol 8](vol-08-ux-ui.md). A escolha da estratégia de renderização (SSR, CSR, RSC, estático, streaming) está no
-[Volume 13](vol-13-selecao-de-arquitetura.md), capítulo 13.6.
+Camadas cobertas: **6 (UX/A11y)** na parte técnica, com apoio de [Vol 7](07-performance.md) e
+[Vol 8](08-ux-premium.md). A escolha da estratégia de renderização (SSR, CSR, RSC, estático, streaming) está no
+[Volume 13](02-arquitetura.md), capítulo 13.6.
 
 Aviso de calibragem: revisão de frontend é onde achados cosméticos se multiplicam. Estrutura de
 componentes, abordagem de estilização e organização de arquivos **não são achados** salvo violação de norma
@@ -46,7 +46,7 @@ dupla: é `S1`, não detalhe de interface.
 ### FRT-004 — Nunca exponha erro bruto do servidor **[OBRIGATÓRIA]**
 
 Stack trace, SQL ou caminho interno na tela é `S1` e é simultaneamente achado de segurança — reporte junto
-ao [Volume 5](vol-05-seguranca.md).
+ao [Volume 5](06-seguranca.md).
 
 ### FRT-005 — Percorra os caminhos de falha **[OBRIGATÓRIA]**
 
@@ -133,7 +133,7 @@ recuperação.
 
 Botão, link, campo, seleção e diálogo nativos já trazem foco, teclado, papel e estado. Recriá-los com
 elemento genérico exige reimplementar tudo isso — e quase nunca se completa. Ver
-[Volume 8](vol-08-ux-ui.md).
+[Volume 8](08-ux-premium.md).
 
 ---
 
@@ -177,7 +177,7 @@ tela dá o significado.
 
 ## Capítulo 4.5 — Performance de interface
 
-Limiares e método em [Volume 7](vol-07-performance.md). Regra que governa: **sem número, não há achado.**
+Limiares e método em [Volume 7](07-performance.md). Regra que governa: **sem número, não há achado.**
 
 ### FRT-028 — Orçamento de bundle declarado e verificado no pipeline **[OBRIGATÓRIA]**
 

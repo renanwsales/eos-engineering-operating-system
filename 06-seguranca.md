@@ -1,6 +1,6 @@
 # 📓 Volume 5 — Segurança e DevSecOps
 
-Prefixo: `SEC` · Regras: SEC-001 a SEC-066 · Papel: [Security Engineer](../agents/05-security.md)
+Prefixo: `SEC` · Regras: SEC-001 a SEC-066 · Papel: [Security Engineer](agents/05-security.md)
 
 Camada coberta: **3 (segurança)**.
 
@@ -177,7 +177,7 @@ usuário?
 ### SEC-030 — Controle de segurança que empurra para contorno é falha **[RECOMENDADA]**
 
 Política de senha que as pessoas escrevem em papel é falha de segurança disfarçada de controle. Reporte
-junto com [Product/UX](../agents/09-product-ux.md).
+junto com [Product/UX](agents/09-product-ux.md).
 
 ---
 
@@ -344,7 +344,7 @@ que na prática significa verificar superficialmente tudo — e passar pelo que 
 | **V2 — Padrão** | Módulos que tocam dado de usuário, dinheiro ou permissão | V1 + capítulos 5.1 a 5.9 percorridos com evidência por ponto de entrada |
 | **V3 — Crítico** | Autenticação, pagamento, dado pessoal, multi-inquilino | V2 + modelagem de abuso (`SEC-029`), caminho de exploração demonstrado como fechado (`SEC-064`), inventário de dado pessoal, revisão humana obrigatória |
 
-A classificação por módulo vive no [perfil do projeto](../templates/perfil-do-projeto.md). Módulo sem
+A classificação por módulo vive no [perfil do projeto](templates/perfil-do-projeto.md). Módulo sem
 classificação é tratado como **V2** até que alguém decida — o padrão erra para o lado seguro.
 
 ### SEC-060 — O nível é declarado no relatório, sempre **[OBRIGATÓRIA]**

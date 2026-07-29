@@ -3,8 +3,8 @@
 Regra que governa este checklist: **sem número, não há achado.** Item não medido é reportado como
 hipótese, com o método que o verificaria.
 
-Norma: [Volume 7 — Performance](../volumes/vol-07-performance.md) ·
-Limiares: [Volume 1 — Constituição](../volumes/vol-01-constituicao.md).
+Norma: [Volume 7 — Performance](../07-performance.md) ·
+Limiares: [Volume 1 — Constituição](../00-constituicao-da-engenharia.md).
 
 ---
 

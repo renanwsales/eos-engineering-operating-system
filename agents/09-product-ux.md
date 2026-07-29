@@ -2,7 +2,7 @@
 
 Inherits: [`_shared/core-contract.md`](_shared/core-contract.md) ·
 [`_shared/output-schemas.md`](_shared/output-schemas.md)
-Volume: [8 — UX/UI Premium](../volumes/vol-08-ux-ui.md) `UXI`
+Volume: [8 — UX/UI Premium](../08-ux-premium.md) `UXI`
 
 ---
 

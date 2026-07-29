@@ -1,6 +1,6 @@
 # 📓 Volume 12 — Orquestrador Mestre
 
-Prefixo: `ORC` · Regras: ORC-001 a ORC-032 · Papel: [Orquestrador](../agents/00-orchestrator.md)
+Prefixo: `ORC` · Regras: ORC-001 a ORC-032 · Papel: [Orquestrador](agents/00-orchestrator.md)
 
 Este volume define **como os onze papéis trabalham juntos**: quem é despachado, em que ordem, com que
 pergunta, e como os resultados se integram sem se contradizer.
@@ -13,23 +13,23 @@ pergunta, e como os resultados se integram sem se contradizer.
 
 | # | Papel | Escopo | Volume principal |
 | --- | --- | --- | --- |
-| 00 | [Orquestrador](../agents/00-orchestrator.md) | Prioriza, distribui, aprova, integra | Vol 12 |
-| 01 | [Arquiteto](../agents/01-architect.md) | Fronteiras, acoplamento, domínio | Vol 2 |
-| 02 | [Backend](../agents/02-backend.md) | APIs, regras, autorização, resiliência | Vol 3 |
-| 03 | [Frontend](../agents/03-frontend.md) | Componentes, estado, design system | Vol 4 |
-| 04 | [Database](../agents/04-database.md) | Modelagem, índices, migrações | Vol 6 |
-| 05 | [Security](../agents/05-security.md) | OWASP, autorização, segredos | Vol 5 |
-| 06 | [Performance](../agents/06-performance.md) | Gargalos medidos, cache, limiares | Vol 7 |
-| 07 | [QA](../agents/07-qa.md) | Cobertura de negócio, regressão, aceite | Vol 9 |
-| 08 | [DevOps/SRE](../agents/08-devops-sre.md) | CI/CD, observabilidade, rollback | Vol 10 |
-| 09 | [Product/UX](../agents/09-product-ux.md) | Fluxos, consistência, acessibilidade | Vol 8 |
-| 10 | [Auditor Final](../agents/10-final-auditor.md) | Regressões, notas, veto | Vol 11 |
+| 00 | [Orquestrador](agents/00-orchestrator.md) | Prioriza, distribui, aprova, integra | Vol 12 |
+| 01 | [Arquiteto](agents/01-architect.md) | Fronteiras, acoplamento, domínio | Vol 2 |
+| 02 | [Backend](agents/02-backend.md) | APIs, regras, autorização, resiliência | Vol 3 |
+| 03 | [Frontend](agents/03-frontend.md) | Componentes, estado, design system | Vol 4 |
+| 04 | [Database](agents/04-database.md) | Modelagem, índices, migrações | Vol 6 |
+| 05 | [Security](agents/05-security.md) | OWASP, autorização, segredos | Vol 5 |
+| 06 | [Performance](agents/06-performance.md) | Gargalos medidos, cache, limiares | Vol 7 |
+| 07 | [QA](agents/07-qa.md) | Cobertura de negócio, regressão, aceite | Vol 9 |
+| 08 | [DevOps/SRE](agents/08-devops-sre.md) | CI/CD, observabilidade, rollback | Vol 10 |
+| 09 | [Product/UX](agents/09-product-ux.md) | Fluxos, consistência, acessibilidade | Vol 8 |
+| 10 | [Auditor Final](agents/10-final-auditor.md) | Regressões, notas, veto | Vol 11 |
 
 ### ORC-002 — Todos herdam o mesmo contrato **[IMUTÁVEL]**
 
-[`agents/_shared/core-contract.md`](../agents/_shared/core-contract.md) e
-[`agents/_shared/output-schemas.md`](../agents/_shared/output-schemas.md), mais o
-[Volume 1](vol-01-constituicao.md). Divergência de um papel em relação ao contrato só existe se declarada na
+[`agents/_shared/core-contract.md`](agents/_shared/core-contract.md) e
+[`agents/_shared/output-schemas.md`](agents/_shared/output-schemas.md), mais o
+[Volume 1](00-constituicao-da-engenharia.md). Divergência de um papel em relação ao contrato só existe se declarada na
 seção `Overrides` do próprio papel.
 
 ### ORC-003 — Orquestrador e Auditor estão em toda combinação **[OBRIGATÓRIA]**
@@ -48,8 +48,8 @@ julgamento**.
 
 | Situação | Caminho |
 | --- | --- |
-| Bug pontual, ajuste pequeno, uma área | [Ciclo de mudança única](../runbooks/ciclo-de-mudanca-unica.md) |
-| Três ou mais áreas envolvidas | [Revisão completa de módulo](../runbooks/revisao-completa-de-modulo.md) |
+| Bug pontual, ajuste pequeno, uma área | [Ciclo de mudança única](runbooks/ciclo-de-mudanca-unica.md) |
+| Três ou mais áreas envolvidas | [Revisão completa de módulo](runbooks/revisao-completa-de-modulo.md) |
 | Módulo crítico, revisão profunda | Cadeia completa, 11 papéis |
 | Auditoria de segurança | Orquestrador, Security, Backend, Database, Auditor |
 | Área de interface | Orquestrador, Frontend, Product/UX, QA, Auditor |
@@ -243,7 +243,7 @@ OPPORTUNITY (top 10; resto no backlog)
 
 Ver CON-053. Específicas deste papel:
 
-- O objetivo não é atingível dentro da tolerância a risco do [perfil do projeto](../templates/perfil-do-projeto.md).
+- O objetivo não é atingível dentro da tolerância a risco do [perfil do projeto](templates/perfil-do-projeto.md).
 - Dois papéis discordam e CON-021 não resolve.
 - Uma mudança `R4` é necessária.
 - `MUST-FIX` excede a capacidade por duas rodadas.

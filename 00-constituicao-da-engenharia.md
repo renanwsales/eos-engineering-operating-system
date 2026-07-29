@@ -227,7 +227,7 @@ G0 Descoberta ─▶ G1 Diagnóstico ─▶ G2 Decisão ─▶ G3 Implementaçã
 
 Neste portão é **proibido** propor mudanças ou apontar problemas.
 
-**Atividades:** ler o [perfil do projeto](../templates/perfil-do-projeto.md) — se não existir, criá-lo é o
+**Atividades:** ler o [perfil do projeto](templates/perfil-do-projeto.md) — se não existir, criá-lo é o
 primeiro entregável · mapear pontos de entrada, fronteiras e fluxo de dados · identificar as entidades do
 domínio e o que o sistema promete · localizar zonas de alto risco (autenticação, pagamento, dado pessoal,
 migração) · verificar o que já existe de teste, lint, CI e observabilidade, para não recomendar o que já está
@@ -255,7 +255,7 @@ declarada em um volume.
 ### CON-059 — G2 Decisão: alternativa descartada registrada **[OBRIGATÓRIA]**
 
 Defina o escopo da rodada · produza um `CHANGE PROPOSAL` com ≥2 alternativas por item · avalie a faixa de
-risco (capítulo 1.8) e aplique a mitigação obrigatória · escreva [ADR](../templates/adr.md) quando CON-034
+risco (capítulo 1.8) e aplique a mitigação obrigatória · escreva [ADR](templates/adr.md) quando CON-034
 exigir · defina a ordem de execução, dependências primeiro e risco alto isolado.
 
 **Passagem:** nenhuma proposta com alternativa única · a opção zero foi considerada · cada proposta declara o
@@ -288,7 +288,7 @@ que um humano precisa rodar.
 
 ### CON-062 — G5 Auditoria: o conjunto, não a peça **[OBRIGATÓRIA]**
 
-Rode o [checklist de módulo concluído](../checklists/modulo-concluido.md) · busque regressões e interações
+Rode o [checklist de módulo concluído](checklists/modulo-concluido.md) · busque regressões e interações
 entre as mudanças da rodada · atribua notas via `AUDIT REPORT` · registre risco residual e quem o aceitou ·
 atualize o backlog.
 
@@ -347,14 +347,14 @@ performance de um sistema cuja modelagem está errada.
 
 | # | Camada | Pergunta central | Volume |
 | --- | --- | --- | --- |
-| 1 | Arquitetura | As fronteiras estão nos lugares certos e as dependências apontam para dentro? | [Vol 2](vol-02-arquitetura.md) |
-| 2 | Domínio | O código representa as regras do negócio, incluindo os estados que não deveriam existir? | [Vol 2](vol-02-arquitetura.md), [Vol 3](vol-03-backend.md) |
-| 3 | Segurança | Quem pode fazer o quê, e o sistema verifica isso em **todos** os caminhos? | [Vol 5](vol-05-seguranca.md) |
-| 4 | Dados | O modelo persistido protege a integridade por si mesmo? | [Vol 6](vol-06-banco-de-dados.md) |
-| 5 | Performance | Onde está o gargalo real, medido, e ele viola um limiar declarado? | [Vol 7](vol-07-performance.md) |
-| 6 | UX/A11y | O usuário entende o que acontece, especialmente quando dá errado? | [Vol 8](vol-08-ux-ui.md) |
-| 7 | Testes | Os testes existentes detectariam as falhas que importam? | [Vol 9](vol-09-qa-testes.md) |
-| 8 | Entrega | Quanto tempo até sabermos, e quanto até voltarmos? | [Vol 10](vol-10-devops-sre.md) |
+| 1 | Arquitetura | As fronteiras estão nos lugares certos e as dependências apontam para dentro? | [Vol 2](02-arquitetura.md) |
+| 2 | Domínio | O código representa as regras do negócio, incluindo os estados que não deveriam existir? | [Vol 2](02-arquitetura.md), [Vol 3](03-backend.md) |
+| 3 | Segurança | Quem pode fazer o quê, e o sistema verifica isso em **todos** os caminhos? | [Vol 5](06-seguranca.md) |
+| 4 | Dados | O modelo persistido protege a integridade por si mesmo? | [Vol 6](05-banco-de-dados.md) |
+| 5 | Performance | Onde está o gargalo real, medido, e ele viola um limiar declarado? | [Vol 7](07-performance.md) |
+| 6 | UX/A11y | O usuário entende o que acontece, especialmente quando dá errado? | [Vol 8](08-ux-premium.md) |
+| 7 | Testes | Os testes existentes detectariam as falhas que importam? | [Vol 9](11-qa.md) |
+| 8 | Entrega | Quanto tempo até sabermos, e quanto até voltarmos? | [Vol 10](10-devops.md) |
 
 ### CON-027 — Registro do percurso **[OBRIGATÓRIA]**
 
@@ -423,7 +423,7 @@ reutilizável — sem ele, ninguém no futuro sabe se a decisão ainda vale.
 
 | Tipo de decisão | Registro |
 | --- | --- |
-| Muda contrato público (API, schema, evento, tipo exportado) | [ADR](../templates/adr.md) obrigatório |
+| Muda contrato público (API, schema, evento, tipo exportado) | [ADR](templates/adr.md) obrigatório |
 | Escolhe tecnologia ou padrão que outros seguirão | ADR obrigatório |
 | Aceita risco conscientemente | ADR + matriz de risco |
 | Custosa de reverter (> 1 dia) | ADR obrigatório |
@@ -625,7 +625,7 @@ Se a resposta é não, algum item acima está marcado incorretamente.
 A DoD é o piso; a DoE é o teto. **Não se exige DoE de todo módulo** — exige-se dos que sustentam o
 negócio. Perseguir excelência em código periférico é erro de priorização, não virtude. A classificação
 por módulo (`crítico` / `padrão` / `periférico`) vive no
-[perfil do projeto](../templates/perfil-do-projeto.md).
+[perfil do projeto](templates/perfil-do-projeto.md).
 
 Nenhum módulo recebe nota 10 na auditoria sem atender a DoE. **Ausência de problemas dá, no máximo, 8.**
 
@@ -724,7 +724,7 @@ número de manutenibilidade — isso é CON-013 aplicado a métricas.
 | Observabilidade e entrega | 5% |
 
 Travas: qualquer `S0` ou `S1` não corrigido limita o total a 4 e força `REJECTED`. Segurança abaixo de 6
-limita a `APPROVED WITH CONDITIONS`. Detalhado no [Volume 11](vol-11-auditoria.md).
+limita a `APPROVED WITH CONDITIONS`. Detalhado no [Volume 11](12-auditoria.md).
 
 ---
 
@@ -769,7 +769,7 @@ existem para encerrar discussão, não para criar mais.
 
 **Formatação não está aqui.** Formatação é responsabilidade da ferramenta, configurada uma vez, aplicada
 automaticamente, e **nunca comentada em revisão**. Convenções de caixa seguem o idioma da linguagem e são
-declaradas no [perfil do projeto](../templates/perfil-do-projeto.md).
+declaradas no [perfil do projeto](templates/perfil-do-projeto.md).
 
 ### CON-065 — O nome diz a intenção, não o tipo **[OBRIGATÓRIA]**
 

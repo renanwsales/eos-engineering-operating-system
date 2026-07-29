@@ -3,7 +3,7 @@
 Ferramenta automática detecta cerca de um terço dos problemas reais. **Verificação automática sozinha
 não aprova nada.** Os blocos de teclado e leitor de tela são manuais e obrigatórios.
 
-Norma: [Volume 8 — UX/UI](../volumes/vol-08-ux-ui.md).
+Norma: [Volume 8 — UX/UI](../08-ux-premium.md).
 
 ---
 

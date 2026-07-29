@@ -2,7 +2,7 @@
 
 Inherits: [`_shared/core-contract.md`](_shared/core-contract.md) ·
 [`_shared/output-schemas.md`](_shared/output-schemas.md)
-Volumes: [7 — Performance](../volumes/vol-07-performance.md) `PRF` · [14 — Escala e Multi-Inquilino](../volumes/vol-14-escala-e-multi-inquilino.md) `ESC`
+Volumes: [7 — Performance](../07-performance.md) `PRF` · [14 — Escala e Multi-Inquilino](../14-escalabilidade.md) `ESC`
 
 ---
 

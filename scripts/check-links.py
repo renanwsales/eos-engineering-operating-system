@@ -55,7 +55,7 @@ def main() -> int:
     }
     known_rules = {
         rule
-        for path in (ROOT / "volumes").glob("vol-*.md")
+        for path in ROOT.glob("*.md")
         for rule in RULE_DEF.findall(path.read_text())
     }
     if not known_rules:

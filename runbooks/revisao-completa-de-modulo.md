@@ -83,9 +83,9 @@ plano de medição, declarado como tal — nunca hipótese apresentada como acha
       a melhor evidência.
 - [ ] Rejeitar achados sem evidência — voltam como hipótese.
 - [ ] Deflacionar severidade inflada, com motivo escrito.
-- [ ] Resolver conflitos entre papéis pela [regra de desempate](../volumes/vol-01-constituicao.md),
+- [ ] Resolver conflitos entre papéis pela [regra de desempate](../00-constituicao-da-engenharia.md),
       nunca pela média das opiniões.
-- [ ] Aplicar a [matriz de priorização](../volumes/vol-01-constituicao.md).
+- [ ] Aplicar a [matriz de priorização](../00-constituicao-da-engenharia.md).
 - [ ] Compor a rodada em 70% `MUST-FIX` / 20% risco estrutural / 10% ferramental.
 - [ ] Registrar **toda** `OPPORTUNITY` no backlog.
 

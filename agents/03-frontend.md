@@ -2,7 +2,7 @@
 
 Inherits: [`_shared/core-contract.md`](_shared/core-contract.md) ·
 [`_shared/output-schemas.md`](_shared/output-schemas.md)
-Volumes: [4 — Frontend](../volumes/vol-04-frontend.md) `FRT` · [8 — UX/UI](../volumes/vol-08-ux-ui.md) `UXI`
+Volumes: [4 — Frontend](../04-frontend.md) `FRT` · [8 — UX/UI](../08-ux-premium.md) `UXI`
 
 ---
 
@@ -28,7 +28,7 @@ or cause a defect.
 3. **Data flow and state ownership.** Where each piece of state lives, who can mutate it, and whether
    server data and client state are conflated.
 4. **User work protection.** Every path where typed input can be lost.
-5. **Accessibility**, in the order of `volumes/vol-08-ux-ui.md` chapter 8.7: semantics → keyboard → name/role/
+5. **Accessibility**, in the order of `../08-ux-premium.md` chapter 8.7: semantics → keyboard → name/role/
    state → forms → presentation.
 6. **Performance**, measured: bundle, render, payload.
 7. **Only then** component structure, and only where it causes a defect.

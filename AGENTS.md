@@ -40,7 +40,7 @@ Always, in this order:
 
 1. [`agents/_shared/core-contract.md`](agents/_shared/core-contract.md) — the behavioural contract.
 2. [`agents/_shared/output-schemas.md`](agents/_shared/output-schemas.md) — the exact shape of your output.
-3. [`volumes/vol-01-constituicao.md`](volumes/vol-01-constituicao.md) — the constitution. Loaded for **every**
+3. [`00-constituicao-da-engenharia.md`](00-constituicao-da-engenharia.md) — the constitution. Loaded for **every**
    task, no exceptions.
 4. [`templates/perfil-do-projeto.md`](templates/perfil-do-projeto.md) — the filled copy in the target repo.
    **If it does not exist, your first deliverable is to propose it**: the EOS core is stack-agnostic and every
@@ -51,23 +51,23 @@ Then load by task type:
 | Task | Also load |
 | --- | --- |
 | Any code change | [`checklists/pre-merge.md`](checklists/pre-merge.md) |
-| Review / audit of existing code | [`vol-11`](volumes/vol-11-auditoria.md), [`checklists/code-review.md`](checklists/code-review.md) |
-| Architecture or boundary change | [`agents/01-architect.md`](agents/01-architect.md), [`vol-02`](volumes/vol-02-arquitetura.md), [`templates/adr.md`](templates/adr.md) |
-| API / business rules / concurrency | [`agents/02-backend.md`](agents/02-backend.md), [`vol-03`](volumes/vol-03-backend.md) |
-| UI work | [`agents/03-frontend.md`](agents/03-frontend.md), [`vol-04`](volumes/vol-04-frontend.md), [`vol-08`](volumes/vol-08-ux-ui.md) |
-| Schema / query work | [`agents/04-database.md`](agents/04-database.md), [`vol-06`](volumes/vol-06-banco-de-dados.md) |
-| Security work | [`agents/05-security.md`](agents/05-security.md), [`vol-05`](volumes/vol-05-seguranca.md), [`checklists/seguranca-owasp.md`](checklists/seguranca-owasp.md) |
-| Performance work | [`agents/06-performance.md`](agents/06-performance.md), [`vol-07`](volumes/vol-07-performance.md), [`checklists/performance.md`](checklists/performance.md) |
-| Tests | [`agents/07-qa.md`](agents/07-qa.md), [`vol-09`](volumes/vol-09-qa-testes.md) |
-| CI/CD, deploy, monitoring, backups | [`agents/08-devops-sre.md`](agents/08-devops-sre.md), [`vol-10`](volumes/vol-10-devops-sre.md) |
-| Product / flow / accessibility | [`agents/09-product-ux.md`](agents/09-product-ux.md), [`vol-08`](volumes/vol-08-ux-ui.md), [`checklists/acessibilidade.md`](checklists/acessibilidade.md) |
+| Review / audit of existing code | [`vol-11`](12-auditoria.md), [`checklists/code-review.md`](checklists/code-review.md) |
+| Architecture or boundary change | [`agents/01-architect.md`](agents/01-architect.md), [`vol-02`](02-arquitetura.md), [`templates/adr.md`](templates/adr.md) |
+| API / business rules / concurrency | [`agents/02-backend.md`](agents/02-backend.md), [`vol-03`](03-backend.md) |
+| UI work | [`agents/03-frontend.md`](agents/03-frontend.md), [`vol-04`](04-frontend.md), [`vol-08`](08-ux-premium.md) |
+| Schema / query work | [`agents/04-database.md`](agents/04-database.md), [`vol-06`](05-banco-de-dados.md) |
+| Security work | [`agents/05-security.md`](agents/05-security.md), [`vol-05`](06-seguranca.md), [`checklists/seguranca-owasp.md`](checklists/seguranca-owasp.md) |
+| Performance work | [`agents/06-performance.md`](agents/06-performance.md), [`vol-07`](07-performance.md), [`checklists/performance.md`](checklists/performance.md) |
+| Tests | [`agents/07-qa.md`](agents/07-qa.md), [`vol-09`](11-qa.md) |
+| CI/CD, deploy, monitoring, backups | [`agents/08-devops-sre.md`](agents/08-devops-sre.md), [`vol-10`](10-devops.md) |
+| Product / flow / accessibility | [`agents/09-product-ux.md`](agents/09-product-ux.md), [`vol-08`](08-ux-premium.md), [`checklists/acessibilidade.md`](checklists/acessibilidade.md) |
 | Final sign-off | [`agents/10-final-auditor.md`](agents/10-final-auditor.md), [`checklists/modulo-concluido.md`](checklists/modulo-concluido.md) |
-| Multi-area module review | [`vol-12`](volumes/vol-12-orquestrador.md), [`runbooks/revisao-completa-de-modulo.md`](runbooks/revisao-completa-de-modulo.md) |
-| Choosing between architectural approaches | [`vol-13`](volumes/vol-13-selecao-de-arquitetura.md), [`templates/adr.md`](templates/adr.md) |
-| Rendering strategy (SSR/CSR/RSC/static) | [`vol-13`](volumes/vol-13-selecao-de-arquitetura.md) ch. 13.6 |
-| Growth, replicas, partitioning, sharding | [`vol-14`](volumes/vol-14-escala-e-multi-inquilino.md) |
-| Multi-tenant work of any kind | [`vol-14`](volumes/vol-14-escala-e-multi-inquilino.md) ch. 14.7, [`vol-05`](volumes/vol-05-seguranca.md) |
-| **Building** a CRUD, endpoint, screen, migration, integration, or bug fix | [`vol-15`](volumes/vol-15-playbooks.md) — find the playbook and follow its step order |
+| Multi-area module review | [`vol-12`](01-orquestrador.md), [`runbooks/revisao-completa-de-modulo.md`](runbooks/revisao-completa-de-modulo.md) |
+| Choosing between architectural approaches | [`vol-13`](02-arquitetura.md), [`templates/adr.md`](templates/adr.md) |
+| Rendering strategy (SSR/CSR/RSC/static) | [`vol-13`](02-arquitetura.md) ch. 13.6 |
+| Growth, replicas, partitioning, sharding | [`vol-14`](14-escalabilidade.md) |
+| Multi-tenant work of any kind | [`vol-14`](14-escalabilidade.md) ch. 14.7, [`vol-05`](06-seguranca.md) |
+| **Building** a CRUD, endpoint, screen, migration, integration, or bug fix | [`vol-15`](21-playbooks.md) — find the playbook and follow its step order |
 
 Load what the task requires (`ORC-005`). Do not load all fifteen volumes for a one-line bug fix — context waste
 degrades judgement.
@@ -114,7 +114,7 @@ G4 Validation      → prove it works and that nothing else broke
 G5 Audit           → regressions, residual risk, backlog update
 ```
 
-Full definition in [`vol-01`, chapter 1.4](volumes/vol-01-constituicao.md) (`CON-056` to `CON-064`).
+Full definition in [`vol-01`, chapter 1.4](00-constituicao-da-engenharia.md) (`CON-056` to `CON-064`).
 
 You may compress G0–G2 for trivial, obviously-correct fixes — a typo in a string, an off-by-one with a test
 that already fails — but you must say you compressed them and why. **G4 is never compressed** (`CON-061`,

@@ -1,8 +1,11 @@
 # RULES-INDEX — índice de regras do EOS
 
-**735 regras** em 15 volumes. Este arquivo é **gerado** por
+**735 regras** em 14 volumes. Este arquivo é **gerado** por
 `scripts/build-rules-index.py`; não edite à mão. Se um volume e este índice divergirem,
 **o volume** é a fonte de verdade.
+
+Sumário e fronteiras dos volumes: [`SUMARIO.md`](SUMARIO.md) ·
+contrato de autoria: [`AUTHORING.md`](AUTHORING.md)
 
 ## Como citar uma regra
 
@@ -16,6 +19,7 @@ deixa o número aposentado, nunca reaproveitado, para que relatórios antigos co
 | `[IMUTÁVEL]` | Núcleo do framework | Decisão do dono do produto + ADR. É mudança `MAJOR` do EOS |
 | `[OBRIGATÓRIA]` | Violação é achado, com severidade | ADR registrando a divergência (ARC-037) |
 | `[RECOMENDADA]` | Padrão esperado; exceção é normal | Justificativa no momento, sem ADR |
+| `[REVOGADA]` | Não vale mais; o número fica aposentado | — |
 
 Distribuição: **69 imutáveis** · **531 obrigatórias** · **135 recomendadas**.
 
@@ -23,28 +27,27 @@ Distribuição: **69 imutáveis** · **531 obrigatórias** · **135 recomendadas
 
 | Vol | Título | Prefixo | Regras |
 | --- | --- | --- | --- |
-| 01 | [Constituição da Engenharia](volumes/vol-01-constituicao.md) | `CON` | 86 |
-| 02 | [Framework de Arquitetura](volumes/vol-02-arquitetura.md) | `ARC` | 40 |
-| 03 | [Framework Backend](volumes/vol-03-backend.md) | `BAK` | 73 |
-| 04 | [Framework Frontend](volumes/vol-04-frontend.md) | `FRT` | 42 |
-| 05 | [Segurança e DevSecOps](volumes/vol-05-seguranca.md) | `SEC` | 66 |
-| 06 | [Framework de Banco de Dados](volumes/vol-06-banco-de-dados.md) | `DAT` | 40 |
-| 07 | [Framework de Performance](volumes/vol-07-performance.md) | `PRF` | 38 |
-| 08 | [UX/UI Premium](volumes/vol-08-ux-ui.md) | `UXI` | 55 |
-| 09 | [QA e Testes](volumes/vol-09-qa-testes.md) | `QAT` | 40 |
-| 10 | [DevOps e SRE](volumes/vol-10-devops-sre.md) | `OPS` | 48 |
-| 11 | [Auditoria Técnica](volumes/vol-11-auditoria.md) | `AUD` | 42 |
-| 12 | [Orquestrador Mestre](volumes/vol-12-orquestrador.md) | `ORC` | 32 |
-| 13 | [Seleção de Arquitetura](volumes/vol-13-selecao-de-arquitetura.md) | `SEL` | 33 |
-| 14 | [Escala e Multi-Inquilino](volumes/vol-14-escala-e-multi-inquilino.md) | `ESC` | 42 |
-| 15 | [Playbooks](volumes/vol-15-playbooks.md) | `PLB` | 58 |
+| 00 | [Constituição da Engenharia](00-constituicao-da-engenharia.md) | `CON` | 86 |
+| 01 | [Orquestrador Mestre](01-orquestrador.md) | `ORC` | 32 |
+| 02 | [Framework de Arquitetura](02-arquitetura.md) | `ARC` `SEL` | 73 |
+| 03 | [Framework Backend](03-backend.md) | `BAK` | 73 |
+| 04 | [Framework Frontend](04-frontend.md) | `FRT` | 42 |
+| 05 | [Framework de Banco de Dados](05-banco-de-dados.md) | `DAT` | 40 |
+| 06 | [Segurança e DevSecOps](06-seguranca.md) | `SEC` | 66 |
+| 07 | [Framework de Performance](07-performance.md) | `PRF` | 38 |
+| 08 | [UX/UI Premium](08-ux-premium.md) | `UXI` | 55 |
+| 10 | [DevOps e SRE](10-devops.md) | `OPS` | 48 |
+| 11 | [QA e Testes](11-qa.md) | `QAT` | 40 |
+| 12 | [Auditoria Técnica](12-auditoria.md) | `AUD` | 42 |
+| 14 | [Escala e Multi-Inquilino](14-escalabilidade.md) | `ESC` | 42 |
+| 21 | [Playbooks](21-playbooks.md) | `PLB` | 58 |
 | | **Total** | | **735** |
 
 ---
 
 ## 📘 Volume 1 — Constituição da Engenharia
 
-Arquivo: [`volumes/vol-01-constituicao.md`](volumes/vol-01-constituicao.md) · 86 regras
+Arquivo: [`00-constituicao-da-engenharia.md`](00-constituicao-da-engenharia.md) · 86 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -135,9 +138,48 @@ Arquivo: [`volumes/vol-01-constituicao.md`](volumes/vol-01-constituicao.md) · 8
 | `CON-086` | Formatação em massa em commit separado | OBRIG | — | Ofício: nomes, código e commits |
 | `CON-055` | A frase que resume o volume | IMUT | — | Ofício: nomes, código e commits |
 
+## 📓 Volume 12 — Orquestrador Mestre
+
+Arquivo: [`01-orquestrador.md`](01-orquestrador.md) · 32 regras
+
+| ID | Regra | Nível | Sev. | Capítulo |
+| --- | --- | --- | --- | --- |
+| `ORC-001` | Os onze papéis | OBRIG | — | A cadeia de agentes |
+| `ORC-002` | Todos herdam o mesmo contrato | IMUT | — | A cadeia de agentes |
+| `ORC-003` | Orquestrador e Auditor estão em toda combinação | OBRIG | — | A cadeia de agentes |
+| `ORC-004` | Nem toda tarefa merece a cadeia completa | IMUT | — | Escolha do caminho |
+| `ORC-005` | Carregue só os volumes que a tarefa exige | OBRIG | — | Escolha do caminho |
+| `ORC-006` | Descoberta é feita pelo orquestrador, pessoalmente | OBRIG | — | Despacho |
+| `ORC-007` | Objetivo mensurável e não objetivos declarados | OBRIG | — | Despacho |
+| `ORC-008` | Uma pergunta específica por papel | OBRIG | — | Despacho |
+| `ORC-009` | Lista explícita de fora de escopo em cada despacho | OBRIG | — | Despacho |
+| `ORC-010` | Ondas: sequencial onde há dependência, paralelo onde não há | OBRIG | — | Despacho |
+| `ORC-011` | `S0`/`S1` de modelagem interrompe a rodada | OBRIG | — | Despacho |
+| `ORC-012` | Security é despachado sempre que houver caminho sensível | OBRIG | — | Despacho |
+| `ORC-013` | Performance só entra com medição possível | OBRIG | — | Despacho |
+| `ORC-014` | Deduplicar | OBRIG | — | Integração |
+| `ORC-015` | Rejeitar achado sem evidência | OBRIG | — | Integração |
+| `ORC-016` | Deflacionar severidade inflada, com motivo escrito | OBRIG | — | Integração |
+| `ORC-017` | `S0` e achado de segurança em caminho sensível não são rebaixáveis | IMUT | — | Integração |
+| `ORC-018` | Resolver conflito pela regra de desempate, nunca pela média | OBRIG | — | Integração |
+| `ORC-019` | Discussão que passa de dois turnos sem informação nova é encerrada por decisão | OBRIG | — | Integração |
+| `ORC-020` | Aceitação de risco não é resolvida pelo orquestrador | IMUT | — | Integração |
+| `ORC-021` | Compor a rodada em 70/20/10 | OBRIG | — | Integração |
+| `ORC-022` | `MUST-FIX` acima da capacidade é o achado principal | OBRIG | — | Integração |
+| `ORC-023` | Os oito critérios | OBRIG | — | Portão de aprovação |
+| `ORC-024` | Rejeição com uma razão específica | OBRIG | — | Portão de aprovação |
+| `ORC-025` | Não reescreva a proposta do papel | OBRIG | — | Portão de aprovação |
+| `ORC-026` | Definir ordem de execução | OBRIG | — | Portão de aprovação |
+| `ORC-027` | Proposta inviável durante a implementação volta à decisão | OBRIG | — | Portão de aprovação |
+| `ORC-028` | O orquestrador não audita a própria rodada | IMUT | — | Encerramento |
+| `ORC-029` | Registrar camadas não analisadas | OBRIG | — | Encerramento |
+| `ORC-030` | Conferir o backlog | OBRIG | — | Encerramento |
+| `ORC-031` | Registrar as notas para comparação | RECOM | — | Encerramento |
+| `ORC-032` | Recomendar o próximo item de maior valor | OBRIG | — | Encerramento |
+
 ## 📗 Volume 2 — Framework de Arquitetura
 
-Arquivo: [`volumes/vol-02-arquitetura.md`](volumes/vol-02-arquitetura.md) · 40 regras
+Arquivo: [`02-arquitetura.md`](02-arquitetura.md) · 73 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -181,10 +223,43 @@ Arquivo: [`volumes/vol-02-arquitetura.md`](volumes/vol-02-arquitetura.md) · 40 
 | `ARC-038` | Trace uma mudança real | OBRIG | — | Heurísticas de diagnóstico |
 | `ARC-039` | Tabela de sinais | OBRIG | — | Heurísticas de diagnóstico |
 | `ARC-040` | Achado arquitetural exige custo e caminho incremental | OBRIG | — | Heurísticas de diagnóstico |
+| `SEL-001` | O padrão é o mais simples que resolve | IMUT | — | A regra que governa toda escolha |
+| `SEL-002` | Toda escolha declara o gatilho de mudança | OBRIG | — | A regra que governa toda escolha |
+| `SEL-003` | Escolha por restrição observada, nunca por escala hipotética | IMUT | — | A regra que governa toda escolha |
+| `SEL-004` | Nenhuma escolha de estilo sem ADR | OBRIG | — | A regra que governa toda escolha |
+| `SEL-005` | Clean, Hexagonal e Onion: escolha o vocabulário, não a arquitetura | OBRIG | — | Estilos de organização interna |
+| `SEL-006` | Camadas técnicas versus fatia vertical | RECOM | — | Estilos de organização interna |
+| `SEL-007` | Feature First não dispensa fronteira de domínio | OBRIG | — | Estilos de organização interna |
+| `SEL-008` | Monólito modular é o padrão para produto em evolução | RECOM | — | Monólito, monólito modular e serviços |
+| `SEL-009` | Separar em serviço exige autonomia real em três eixos | OBRIG | — | Monólito, monólito modular e serviços |
+| `SEL-010` | Dois serviços que sempre sobem juntos são um serviço com custo de rede | IMUT | — | Monólito, monólito modular e serviços |
+| `SEL-011` | Separar exige a infraestrutura da separação, antes | OBRIG | — | Monólito, monólito modular e serviços |
+| `SEL-012` | Extraia um serviço por vez, pela fronteira mais clara | OBRIG | — | Monólito, monólito modular e serviços |
+| `SEL-013` | Banco compartilhado entre serviços anula a separação | OBRIG | — | Monólito, monólito modular e serviços |
+| `SEL-014` | BFF só com clientes de necessidades divergentes | RECOM | — | Monólito, monólito modular e serviços |
+| `SEL-015` | CQRS é resposta a uma assimetria medida | RECOM | — | CQRS e event sourcing |
+| `SEL-016` | CQRS assíncrono cria consistência eventual visível ao usuário | OBRIG | — | CQRS e event sourcing |
+| `SEL-017` | Event sourcing exige compromisso permanente | OBRIG | — | CQRS e event sourcing |
+| `SEL-018` | Evento de domínio não é event sourcing | OBRIG | — | CQRS e event sourcing |
+| `SEL-019` | Nenhum dos dois é padrão; a escolha é registrada | OBRIG | — | Síncrono e assíncrono |
+| `SEL-020` | Assíncrono para o que o usuário não espera | RECOM | — | Síncrono e assíncrono |
+| `SEL-021` | Assíncrono exige consumidor idempotente, sem exceção | OBRIG | — | Síncrono e assíncrono |
+| `SEL-022` | Fila não conserta dependência instável | OBRIG | — | Síncrono e assíncrono |
+| `SEL-023` | Escolha o modelo de entrega conscientemente | RECOM | — | Síncrono e assíncrono |
+| `SEL-024` | Escolha por natureza do conteúdo, não por moda de framework | OBRIG | — | Estratégia de renderização |
+| `SEL-025` | Dado por usuário nunca em resposta cacheada publicamente | OBRIG | `S0` | Estratégia de renderização |
+| `SEL-026` | A fronteira servidor/cliente é uma fronteira de segurança | OBRIG | — | Estratégia de renderização |
+| `SEL-027` | Streaming exige espaço reservado | OBRIG | — | Estratégia de renderização |
+| `SEL-028` | Misturar estratégias é normal; misturar sem critério declarado não é | RECOM | — | Estratégia de renderização |
+| `SEL-029` | Construir o que é diferencial; comprar o resto | RECOM | — | Comprar, usar ou construir |
+| `SEL-030` | Dependência é decisão com quatro perguntas | OBRIG | — | Comprar, usar ou construir |
+| `SEL-031` | Fornecedor entra pela borda, com tradução | OBRIG | — | Comprar, usar ou construir |
+| `SEL-032` | Fornecedor crítico exige comportamento em falha declarado | OBRIG | — | Comprar, usar ou construir |
+| `SEL-033` | Construir para evitar custo de assinatura exige o cálculo completo | RECOM | — | Comprar, usar ou construir |
 
 ## 📙 Volume 3 — Framework Backend
 
-Arquivo: [`volumes/vol-03-backend.md`](volumes/vol-03-backend.md) · 73 regras
+Arquivo: [`03-backend.md`](03-backend.md) · 73 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -264,7 +339,7 @@ Arquivo: [`volumes/vol-03-backend.md`](volumes/vol-03-backend.md) · 73 regras
 
 ## 📕 Volume 4 — Framework Frontend
 
-Arquivo: [`volumes/vol-04-frontend.md`](volumes/vol-04-frontend.md) · 42 regras
+Arquivo: [`04-frontend.md`](04-frontend.md) · 42 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -311,9 +386,56 @@ Arquivo: [`volumes/vol-04-frontend.md`](volumes/vol-04-frontend.md) · 42 regras
 | `FRT-041` | Armazenamento local não guarda dado sensível | OBRIG | — | Segurança no cliente |
 | `FRT-042` | Destino de redirecionamento validado | OBRIG | — | Segurança no cliente |
 
+## 📒 Volume 6 — Framework de Banco de Dados
+
+Arquivo: [`05-banco-de-dados.md`](05-banco-de-dados.md) · 40 regras
+
+| ID | Regra | Nível | Sev. | Capítulo |
+| --- | --- | --- | --- | --- |
+| `DAT-001` | O banco é a última linha de defesa da integridade | IMUT | — | - |
+| `DAT-002` | Auditoria de invariantes é o primeiro entregável | OBRIG | — | Modelagem e integridade |
+| `DAT-003` | `NOT NULL` em tudo que é obrigatório | OBRIG | — | Modelagem e integridade |
+| `DAT-004` | `UNIQUE` no que é único | OBRIG | — | Modelagem e integridade |
+| `DAT-005` | Chave estrangeira com comportamento explícito | OBRIG | — | Modelagem e integridade |
+| `DAT-006` | `CHECK` para faixas e combinações válidas | OBRIG | — | Modelagem e integridade |
+| `DAT-007` | Estado inválido não representável no schema | RECOM | — | Modelagem e integridade |
+| `DAT-008` | Valor padrão válido no domínio | OBRIG | — | Modelagem e integridade |
+| `DAT-009` | Tipos corretos | OBRIG | — | Modelagem e integridade |
+| `DAT-010` | JSON não é atalho para não modelar | OBRIG | — | Modelagem e integridade |
+| `DAT-011` | Sem exclusão física de histórico | RECOM | — | Modelagem e integridade |
+| `DAT-012` | Carimbos mantidos pelo banco | RECOM | — | Modelagem e integridade |
+| `DAT-013` | Auditoria do que importa | RECOM | — | Modelagem e integridade |
+| `DAT-014` | Sem modelo genérico de entidade-atributo-valor | RECOM | — | Modelagem e integridade |
+| `DAT-015` | Toda consulta frequente usa índice | OBRIG | — | Índices e consultas |
+| `DAT-016` | Verifique o plano de execução | OBRIG | — | Índices e consultas |
+| `DAT-017` | Ordem de colunas do índice composto corresponde às consultas reais | OBRIG | — | Índices e consultas |
+| `DAT-018` | Índice não utilizado é problema | RECOM | — | Índices e consultas |
+| `DAT-019` | Zero N+1 | OBRIG | — | Índices e consultas |
+| `DAT-020` | Nenhuma consulta em laço | OBRIG | — | Índices e consultas |
+| `DAT-021` | Limite obrigatório em caminho de requisição | OBRIG | — | Índices e consultas |
+| `DAT-022` | Selecione o que precisa | RECOM | — | Índices e consultas |
+| `DAT-023` | Agregação no banco | RECOM | — | Índices e consultas |
+| `DAT-024` | Declare o volume assumido | OBRIG | — | Índices e consultas |
+| `DAT-025` | Escopo pela invariante | OBRIG | — | Transações e concorrência |
+| `DAT-026` | Nada externo dentro da transação | OBRIG | — | Transações e concorrência |
+| `DAT-027` | Recurso escasso tem proteção declarada | OBRIG | — | Transações e concorrência |
+| `DAT-028` | Nível de isolamento é decisão consciente | RECOM | — | Transações e concorrência |
+| `DAT-029` | Ordem consistente de bloqueio | RECOM | — | Transações e concorrência |
+| `DAT-030` | Versionadas, reversíveis e com reversa executada | OBRIG | — | Migrações |
+| `DAT-031` | Duas fases para mudança incompatível | OBRIG | — | Migrações |
+| `DAT-032` | Conte os registros que violam a nova regra | OBRIG | — | Migrações |
+| `DAT-033` | Não bloqueie tabela grande | OBRIG | — | Migrações |
+| `DAT-034` | Migração de dados é `R4` | OBRIG | — | Migrações |
+| `DAT-035` | Migração destrutiva separada da mudança de comportamento | OBRIG | — | Migrações |
+| `DAT-036` | Migração é testada contra volume representativo | RECOM | — | Migrações |
+| `DAT-037` | Backup com restauração testada | OBRIG | — | Operação |
+| `DAT-038` | Credencial da aplicação com privilégio mínimo | OBRIG | — | Operação |
+| `DAT-039` | Retenção definida por tabela sensível ou volumosa | RECOM | — | Operação |
+| `DAT-040` | Isolamento de tenant garantido no banco quando possível | OBRIG | — | Operação |
+
 ## 📓 Volume 5 — Segurança e DevSecOps
 
-Arquivo: [`volumes/vol-05-seguranca.md`](volumes/vol-05-seguranca.md) · 66 regras
+Arquivo: [`06-seguranca.md`](06-seguranca.md) · 66 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -384,56 +506,9 @@ Arquivo: [`volumes/vol-05-seguranca.md`](volumes/vol-05-seguranca.md) · 66 regr
 | `SEC-065` | Descreva o caminho de exploração concretamente | OBRIG | — | Níveis de verificação |
 | `SEC-066` | `S0` de segurança não é rebaixável por agente | IMUT | — | Níveis de verificação |
 
-## 📒 Volume 6 — Framework de Banco de Dados
-
-Arquivo: [`volumes/vol-06-banco-de-dados.md`](volumes/vol-06-banco-de-dados.md) · 40 regras
-
-| ID | Regra | Nível | Sev. | Capítulo |
-| --- | --- | --- | --- | --- |
-| `DAT-001` | O banco é a última linha de defesa da integridade | IMUT | — | - |
-| `DAT-002` | Auditoria de invariantes é o primeiro entregável | OBRIG | — | Modelagem e integridade |
-| `DAT-003` | `NOT NULL` em tudo que é obrigatório | OBRIG | — | Modelagem e integridade |
-| `DAT-004` | `UNIQUE` no que é único | OBRIG | — | Modelagem e integridade |
-| `DAT-005` | Chave estrangeira com comportamento explícito | OBRIG | — | Modelagem e integridade |
-| `DAT-006` | `CHECK` para faixas e combinações válidas | OBRIG | — | Modelagem e integridade |
-| `DAT-007` | Estado inválido não representável no schema | RECOM | — | Modelagem e integridade |
-| `DAT-008` | Valor padrão válido no domínio | OBRIG | — | Modelagem e integridade |
-| `DAT-009` | Tipos corretos | OBRIG | — | Modelagem e integridade |
-| `DAT-010` | JSON não é atalho para não modelar | OBRIG | — | Modelagem e integridade |
-| `DAT-011` | Sem exclusão física de histórico | RECOM | — | Modelagem e integridade |
-| `DAT-012` | Carimbos mantidos pelo banco | RECOM | — | Modelagem e integridade |
-| `DAT-013` | Auditoria do que importa | RECOM | — | Modelagem e integridade |
-| `DAT-014` | Sem modelo genérico de entidade-atributo-valor | RECOM | — | Modelagem e integridade |
-| `DAT-015` | Toda consulta frequente usa índice | OBRIG | — | Índices e consultas |
-| `DAT-016` | Verifique o plano de execução | OBRIG | — | Índices e consultas |
-| `DAT-017` | Ordem de colunas do índice composto corresponde às consultas reais | OBRIG | — | Índices e consultas |
-| `DAT-018` | Índice não utilizado é problema | RECOM | — | Índices e consultas |
-| `DAT-019` | Zero N+1 | OBRIG | — | Índices e consultas |
-| `DAT-020` | Nenhuma consulta em laço | OBRIG | — | Índices e consultas |
-| `DAT-021` | Limite obrigatório em caminho de requisição | OBRIG | — | Índices e consultas |
-| `DAT-022` | Selecione o que precisa | RECOM | — | Índices e consultas |
-| `DAT-023` | Agregação no banco | RECOM | — | Índices e consultas |
-| `DAT-024` | Declare o volume assumido | OBRIG | — | Índices e consultas |
-| `DAT-025` | Escopo pela invariante | OBRIG | — | Transações e concorrência |
-| `DAT-026` | Nada externo dentro da transação | OBRIG | — | Transações e concorrência |
-| `DAT-027` | Recurso escasso tem proteção declarada | OBRIG | — | Transações e concorrência |
-| `DAT-028` | Nível de isolamento é decisão consciente | RECOM | — | Transações e concorrência |
-| `DAT-029` | Ordem consistente de bloqueio | RECOM | — | Transações e concorrência |
-| `DAT-030` | Versionadas, reversíveis e com reversa executada | OBRIG | — | Migrações |
-| `DAT-031` | Duas fases para mudança incompatível | OBRIG | — | Migrações |
-| `DAT-032` | Conte os registros que violam a nova regra | OBRIG | — | Migrações |
-| `DAT-033` | Não bloqueie tabela grande | OBRIG | — | Migrações |
-| `DAT-034` | Migração de dados é `R4` | OBRIG | — | Migrações |
-| `DAT-035` | Migração destrutiva separada da mudança de comportamento | OBRIG | — | Migrações |
-| `DAT-036` | Migração é testada contra volume representativo | RECOM | — | Migrações |
-| `DAT-037` | Backup com restauração testada | OBRIG | — | Operação |
-| `DAT-038` | Credencial da aplicação com privilégio mínimo | OBRIG | — | Operação |
-| `DAT-039` | Retenção definida por tabela sensível ou volumosa | RECOM | — | Operação |
-| `DAT-040` | Isolamento de tenant garantido no banco quando possível | OBRIG | — | Operação |
-
 ## 📔 Volume 7 — Framework de Performance
 
-Arquivo: [`volumes/vol-07-performance.md`](volumes/vol-07-performance.md) · 38 regras
+Arquivo: [`07-performance.md`](07-performance.md) · 38 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -478,7 +553,7 @@ Arquivo: [`volumes/vol-07-performance.md`](volumes/vol-07-performance.md) · 38 
 
 ## 📘 Volume 8 — UX/UI Premium
 
-Arquivo: [`volumes/vol-08-ux-ui.md`](volumes/vol-08-ux-ui.md) · 55 regras
+Arquivo: [`08-ux-premium.md`](08-ux-premium.md) · 55 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -538,56 +613,9 @@ Arquivo: [`volumes/vol-08-ux-ui.md`](volumes/vol-08-ux-ui.md) · 55 regras
 | `UXI-054` | Zoom 200% e viewport estreita sem perda | OBRIG | — | Acessibilidade (WCAG 2.2 AA) |
 | `UXI-055` | Alvo de toque adequado | RECOM | — | Acessibilidade (WCAG 2.2 AA) |
 
-## 📗 Volume 9 — QA e Testes
-
-Arquivo: [`volumes/vol-09-qa-testes.md`](volumes/vol-09-qa-testes.md) · 40 regras
-
-| ID | Regra | Nível | Sev. | Capítulo |
-| --- | --- | --- | --- | --- |
-| `QAT-001` | Um teste existe para detectar que algo importante quebrou | IMUT | — | - |
-| `QAT-002` | Perseguir percentual de cobertura é antipadrão | IMUT | — | - |
-| `QAT-003` | Teste comportamento, não implementação | OBRIG | — | Qualidade do teste |
-| `QAT-004` | Todo teste novo deve falhar antes | OBRIG | — | Qualidade do teste |
-| `QAT-005` | Determinístico | OBRIG | — | Qualidade do teste |
-| `QAT-006` | Teste intermitente é pior do que teste ausente | OBRIG | — | Qualidade do teste |
-| `QAT-007` | `retry` não é correção | OBRIG | — | Qualidade do teste |
-| `QAT-008` | Nunca afrouxe a asserção para passar | OBRIG | `S1` | Qualidade do teste |
-| `QAT-009` | Nome descreve o cenário | OBRIG | — | Qualidade do teste |
-| `QAT-010` | Um motivo de falha por teste | RECOM | — | Qualidade do teste |
-| `QAT-011` | Sem lógica no teste | RECOM | — | Qualidade do teste |
-| `QAT-012` | Mensagem de falha no vocabulário do domínio | RECOM | — | Qualidade do teste |
-| `QAT-013` | Simule fronteiras, não o próprio código | RECOM | — | Qualidade do teste |
-| `QAT-014` | Dados de teste explícitos | RECOM | — | Qualidade do teste |
-| `QAT-015` | Snapshot lido, nunca aprovado em massa | OBRIG | — | Qualidade do teste |
-| `QAT-016` | Mapeie o que não pode quebrar | OBRIG | — | Cobertura que importa |
-| `QAT-017` | Cobertura por casos declarados de cada regra | OBRIG | — | Cobertura que importa |
-| `QAT-018` | Regra de negócio crítica sem teste é `S1` | OBRIG | — | Cobertura que importa |
-| `QAT-019` | Caminho de erro é testado | OBRIG | — | Cobertura que importa |
-| `QAT-020` | Bordas obrigatórias | OBRIG | — | Cobertura que importa |
-| `QAT-021` | Arredondamento de dinheiro testado explicitamente | OBRIG | — | Cobertura que importa |
-| `QAT-022` | Bordas por tabela ou propriedade, não por exemplos avulsos | RECOM | — | Cobertura que importa |
-| `QAT-023` | Proporção é orientação, risco é o que decide | RECOM | — | Estrutura da suíte |
-| `QAT-024` | Regra de negócio testável sem infraestrutura | OBRIG | — | Estrutura da suíte |
-| `QAT-025` | Pelo menos um teste do caminho crítico ponta a ponta | RECOM | — | Estrutura da suíte |
-| `QAT-026` | Teste de contrato onde há consumidor externo | RECOM | — | Estrutura da suíte |
-| `QAT-027` | Suíte rápida o suficiente para ser usada | RECOM | — | Estrutura da suíte |
-| `QAT-028` | Teste de concorrência onde há recurso escasso | OBRIG | — | Estrutura da suíte |
-| `QAT-029` | Teste que conta consultas onde N+1 foi corrigido | RECOM | — | Estrutura da suíte |
-| `QAT-030` | Bug corrigido ganha teste que reproduz o defeito | OBRIG | — | Regressão |
-| `QAT-031` | Reincidência de defeito: o achado é o teste ausente | OBRIG | — | Regressão |
-| `QAT-032` | Nenhum teste desabilitado sem ID de backlog | OBRIG | — | Regressão |
-| `QAT-033` | Teste de regressão antes da mudança de risco `R3`/`R4` | OBRIG | — | Regressão |
-| `QAT-034` | Critério de aceite é verificável | OBRIG | — | Critérios de aceite |
-| `QAT-035` | Critério de aceite inclui os caminhos infelizes | OBRIG | — | Critérios de aceite |
-| `QAT-036` | Critério de aceite inclui o que **não** deve acontecer | RECOM | — | Critérios de aceite |
-| `QAT-037` | Aceite não passa sem a Definition of Done | OBRIG | — | Critérios de aceite |
-| `QAT-038` | Nunca escreva asserção para comportamento não confirmado | IMUT | — | Limites do papel |
-| `QAT-039` | Não exija teste de código trivial | OBRIG | — | Limites do papel |
-| `QAT-040` | Não bloqueie por percentual | IMUT | — | Limites do papel |
-
 ## 📙 Volume 10 — DevOps e SRE
 
-Arquivo: [`volumes/vol-10-devops-sre.md`](volumes/vol-10-devops-sre.md) · 48 regras
+Arquivo: [`10-devops.md`](10-devops.md) · 48 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -640,9 +668,56 @@ Arquivo: [`volumes/vol-10-devops-sre.md`](volumes/vol-10-devops-sre.md) · 48 re
 | `OPS-047` | Incidente gera aprendizado registrado | RECOM | — | Recuperação e alta disponibilidade |
 | `OPS-048` | Incidente ativo interrompe a rodada | OBRIG | — | Recuperação e alta disponibilidade |
 
+## 📗 Volume 9 — QA e Testes
+
+Arquivo: [`11-qa.md`](11-qa.md) · 40 regras
+
+| ID | Regra | Nível | Sev. | Capítulo |
+| --- | --- | --- | --- | --- |
+| `QAT-001` | Um teste existe para detectar que algo importante quebrou | IMUT | — | - |
+| `QAT-002` | Perseguir percentual de cobertura é antipadrão | IMUT | — | - |
+| `QAT-003` | Teste comportamento, não implementação | OBRIG | — | Qualidade do teste |
+| `QAT-004` | Todo teste novo deve falhar antes | OBRIG | — | Qualidade do teste |
+| `QAT-005` | Determinístico | OBRIG | — | Qualidade do teste |
+| `QAT-006` | Teste intermitente é pior do que teste ausente | OBRIG | — | Qualidade do teste |
+| `QAT-007` | `retry` não é correção | OBRIG | — | Qualidade do teste |
+| `QAT-008` | Nunca afrouxe a asserção para passar | OBRIG | `S1` | Qualidade do teste |
+| `QAT-009` | Nome descreve o cenário | OBRIG | — | Qualidade do teste |
+| `QAT-010` | Um motivo de falha por teste | RECOM | — | Qualidade do teste |
+| `QAT-011` | Sem lógica no teste | RECOM | — | Qualidade do teste |
+| `QAT-012` | Mensagem de falha no vocabulário do domínio | RECOM | — | Qualidade do teste |
+| `QAT-013` | Simule fronteiras, não o próprio código | RECOM | — | Qualidade do teste |
+| `QAT-014` | Dados de teste explícitos | RECOM | — | Qualidade do teste |
+| `QAT-015` | Snapshot lido, nunca aprovado em massa | OBRIG | — | Qualidade do teste |
+| `QAT-016` | Mapeie o que não pode quebrar | OBRIG | — | Cobertura que importa |
+| `QAT-017` | Cobertura por casos declarados de cada regra | OBRIG | — | Cobertura que importa |
+| `QAT-018` | Regra de negócio crítica sem teste é `S1` | OBRIG | — | Cobertura que importa |
+| `QAT-019` | Caminho de erro é testado | OBRIG | — | Cobertura que importa |
+| `QAT-020` | Bordas obrigatórias | OBRIG | — | Cobertura que importa |
+| `QAT-021` | Arredondamento de dinheiro testado explicitamente | OBRIG | — | Cobertura que importa |
+| `QAT-022` | Bordas por tabela ou propriedade, não por exemplos avulsos | RECOM | — | Cobertura que importa |
+| `QAT-023` | Proporção é orientação, risco é o que decide | RECOM | — | Estrutura da suíte |
+| `QAT-024` | Regra de negócio testável sem infraestrutura | OBRIG | — | Estrutura da suíte |
+| `QAT-025` | Pelo menos um teste do caminho crítico ponta a ponta | RECOM | — | Estrutura da suíte |
+| `QAT-026` | Teste de contrato onde há consumidor externo | RECOM | — | Estrutura da suíte |
+| `QAT-027` | Suíte rápida o suficiente para ser usada | RECOM | — | Estrutura da suíte |
+| `QAT-028` | Teste de concorrência onde há recurso escasso | OBRIG | — | Estrutura da suíte |
+| `QAT-029` | Teste que conta consultas onde N+1 foi corrigido | RECOM | — | Estrutura da suíte |
+| `QAT-030` | Bug corrigido ganha teste que reproduz o defeito | OBRIG | — | Regressão |
+| `QAT-031` | Reincidência de defeito: o achado é o teste ausente | OBRIG | — | Regressão |
+| `QAT-032` | Nenhum teste desabilitado sem ID de backlog | OBRIG | — | Regressão |
+| `QAT-033` | Teste de regressão antes da mudança de risco `R3`/`R4` | OBRIG | — | Regressão |
+| `QAT-034` | Critério de aceite é verificável | OBRIG | — | Critérios de aceite |
+| `QAT-035` | Critério de aceite inclui os caminhos infelizes | OBRIG | — | Critérios de aceite |
+| `QAT-036` | Critério de aceite inclui o que **não** deve acontecer | RECOM | — | Critérios de aceite |
+| `QAT-037` | Aceite não passa sem a Definition of Done | OBRIG | — | Critérios de aceite |
+| `QAT-038` | Nunca escreva asserção para comportamento não confirmado | IMUT | — | Limites do papel |
+| `QAT-039` | Não exija teste de código trivial | OBRIG | — | Limites do papel |
+| `QAT-040` | Não bloqueie por percentual | IMUT | — | Limites do papel |
+
 ## 📕 Volume 11 — Auditoria Técnica
 
-Arquivo: [`volumes/vol-11-auditoria.md`](volumes/vol-11-auditoria.md) · 42 regras
+Arquivo: [`12-auditoria.md`](12-auditoria.md) · 42 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -689,88 +764,9 @@ Arquivo: [`volumes/vol-11-auditoria.md`](volumes/vol-11-auditoria.md) · 42 regr
 | `AUD-041` | Riscos específicos verificados explicitamente | OBRIG | — | Código gerado por IA |
 | `AUD-042` | Exija a evidência, não a narrativa | IMUT | — | Código gerado por IA |
 
-## 📓 Volume 12 — Orquestrador Mestre
-
-Arquivo: [`volumes/vol-12-orquestrador.md`](volumes/vol-12-orquestrador.md) · 32 regras
-
-| ID | Regra | Nível | Sev. | Capítulo |
-| --- | --- | --- | --- | --- |
-| `ORC-001` | Os onze papéis | OBRIG | — | A cadeia de agentes |
-| `ORC-002` | Todos herdam o mesmo contrato | IMUT | — | A cadeia de agentes |
-| `ORC-003` | Orquestrador e Auditor estão em toda combinação | OBRIG | — | A cadeia de agentes |
-| `ORC-004` | Nem toda tarefa merece a cadeia completa | IMUT | — | Escolha do caminho |
-| `ORC-005` | Carregue só os volumes que a tarefa exige | OBRIG | — | Escolha do caminho |
-| `ORC-006` | Descoberta é feita pelo orquestrador, pessoalmente | OBRIG | — | Despacho |
-| `ORC-007` | Objetivo mensurável e não objetivos declarados | OBRIG | — | Despacho |
-| `ORC-008` | Uma pergunta específica por papel | OBRIG | — | Despacho |
-| `ORC-009` | Lista explícita de fora de escopo em cada despacho | OBRIG | — | Despacho |
-| `ORC-010` | Ondas: sequencial onde há dependência, paralelo onde não há | OBRIG | — | Despacho |
-| `ORC-011` | `S0`/`S1` de modelagem interrompe a rodada | OBRIG | — | Despacho |
-| `ORC-012` | Security é despachado sempre que houver caminho sensível | OBRIG | — | Despacho |
-| `ORC-013` | Performance só entra com medição possível | OBRIG | — | Despacho |
-| `ORC-014` | Deduplicar | OBRIG | — | Integração |
-| `ORC-015` | Rejeitar achado sem evidência | OBRIG | — | Integração |
-| `ORC-016` | Deflacionar severidade inflada, com motivo escrito | OBRIG | — | Integração |
-| `ORC-017` | `S0` e achado de segurança em caminho sensível não são rebaixáveis | IMUT | — | Integração |
-| `ORC-018` | Resolver conflito pela regra de desempate, nunca pela média | OBRIG | — | Integração |
-| `ORC-019` | Discussão que passa de dois turnos sem informação nova é encerrada por decisão | OBRIG | — | Integração |
-| `ORC-020` | Aceitação de risco não é resolvida pelo orquestrador | IMUT | — | Integração |
-| `ORC-021` | Compor a rodada em 70/20/10 | OBRIG | — | Integração |
-| `ORC-022` | `MUST-FIX` acima da capacidade é o achado principal | OBRIG | — | Integração |
-| `ORC-023` | Os oito critérios | OBRIG | — | Portão de aprovação |
-| `ORC-024` | Rejeição com uma razão específica | OBRIG | — | Portão de aprovação |
-| `ORC-025` | Não reescreva a proposta do papel | OBRIG | — | Portão de aprovação |
-| `ORC-026` | Definir ordem de execução | OBRIG | — | Portão de aprovação |
-| `ORC-027` | Proposta inviável durante a implementação volta à decisão | OBRIG | — | Portão de aprovação |
-| `ORC-028` | O orquestrador não audita a própria rodada | IMUT | — | Encerramento |
-| `ORC-029` | Registrar camadas não analisadas | OBRIG | — | Encerramento |
-| `ORC-030` | Conferir o backlog | OBRIG | — | Encerramento |
-| `ORC-031` | Registrar as notas para comparação | RECOM | — | Encerramento |
-| `ORC-032` | Recomendar o próximo item de maior valor | OBRIG | — | Encerramento |
-
-## 📔 Volume 13 — Seleção de Arquitetura
-
-Arquivo: [`volumes/vol-13-selecao-de-arquitetura.md`](volumes/vol-13-selecao-de-arquitetura.md) · 33 regras
-
-| ID | Regra | Nível | Sev. | Capítulo |
-| --- | --- | --- | --- | --- |
-| `SEL-001` | O padrão é o mais simples que resolve | IMUT | — | A regra que governa toda escolha |
-| `SEL-002` | Toda escolha declara o gatilho de mudança | OBRIG | — | A regra que governa toda escolha |
-| `SEL-003` | Escolha por restrição observada, nunca por escala hipotética | IMUT | — | A regra que governa toda escolha |
-| `SEL-004` | Nenhuma escolha de estilo sem ADR | OBRIG | — | A regra que governa toda escolha |
-| `SEL-005` | Clean, Hexagonal e Onion: escolha o vocabulário, não a arquitetura | OBRIG | — | Estilos de organização interna |
-| `SEL-006` | Camadas técnicas versus fatia vertical | RECOM | — | Estilos de organização interna |
-| `SEL-007` | Feature First não dispensa fronteira de domínio | OBRIG | — | Estilos de organização interna |
-| `SEL-008` | Monólito modular é o padrão para produto em evolução | RECOM | — | Monólito, monólito modular e serviços |
-| `SEL-009` | Separar em serviço exige autonomia real em três eixos | OBRIG | — | Monólito, monólito modular e serviços |
-| `SEL-010` | Dois serviços que sempre sobem juntos são um serviço com custo de rede | IMUT | — | Monólito, monólito modular e serviços |
-| `SEL-011` | Separar exige a infraestrutura da separação, antes | OBRIG | — | Monólito, monólito modular e serviços |
-| `SEL-012` | Extraia um serviço por vez, pela fronteira mais clara | OBRIG | — | Monólito, monólito modular e serviços |
-| `SEL-013` | Banco compartilhado entre serviços anula a separação | OBRIG | — | Monólito, monólito modular e serviços |
-| `SEL-014` | BFF só com clientes de necessidades divergentes | RECOM | — | Monólito, monólito modular e serviços |
-| `SEL-015` | CQRS é resposta a uma assimetria medida | RECOM | — | CQRS e event sourcing |
-| `SEL-016` | CQRS assíncrono cria consistência eventual visível ao usuário | OBRIG | — | CQRS e event sourcing |
-| `SEL-017` | Event sourcing exige compromisso permanente | OBRIG | — | CQRS e event sourcing |
-| `SEL-018` | Evento de domínio não é event sourcing | OBRIG | — | CQRS e event sourcing |
-| `SEL-019` | Nenhum dos dois é padrão; a escolha é registrada | OBRIG | — | Síncrono e assíncrono |
-| `SEL-020` | Assíncrono para o que o usuário não espera | RECOM | — | Síncrono e assíncrono |
-| `SEL-021` | Assíncrono exige consumidor idempotente, sem exceção | OBRIG | — | Síncrono e assíncrono |
-| `SEL-022` | Fila não conserta dependência instável | OBRIG | — | Síncrono e assíncrono |
-| `SEL-023` | Escolha o modelo de entrega conscientemente | RECOM | — | Síncrono e assíncrono |
-| `SEL-024` | Escolha por natureza do conteúdo, não por moda de framework | OBRIG | — | Estratégia de renderização |
-| `SEL-025` | Dado por usuário nunca em resposta cacheada publicamente | OBRIG | `S0` | Estratégia de renderização |
-| `SEL-026` | A fronteira servidor/cliente é uma fronteira de segurança | OBRIG | — | Estratégia de renderização |
-| `SEL-027` | Streaming exige espaço reservado | OBRIG | — | Estratégia de renderização |
-| `SEL-028` | Misturar estratégias é normal; misturar sem critério declarado não é | RECOM | — | Estratégia de renderização |
-| `SEL-029` | Construir o que é diferencial; comprar o resto | RECOM | — | Comprar, usar ou construir |
-| `SEL-030` | Dependência é decisão com quatro perguntas | OBRIG | — | Comprar, usar ou construir |
-| `SEL-031` | Fornecedor entra pela borda, com tradução | OBRIG | — | Comprar, usar ou construir |
-| `SEL-032` | Fornecedor crítico exige comportamento em falha declarado | OBRIG | — | Comprar, usar ou construir |
-| `SEL-033` | Construir para evitar custo de assinatura exige o cálculo completo | RECOM | — | Comprar, usar ou construir |
-
 ## 📒 Volume 14 — Escala e Multi-Inquilino
 
-Arquivo: [`volumes/vol-14-escala-e-multi-inquilino.md`](volumes/vol-14-escala-e-multi-inquilino.md) · 42 regras
+Arquivo: [`14-escalabilidade.md`](14-escalabilidade.md) · 42 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -819,7 +815,7 @@ Arquivo: [`volumes/vol-14-escala-e-multi-inquilino.md`](volumes/vol-14-escala-e-
 
 ## 📕 Volume 15 — Playbooks
 
-Arquivo: [`volumes/vol-15-playbooks.md`](volumes/vol-15-playbooks.md) · 58 regras
+Arquivo: [`21-playbooks.md`](21-playbooks.md) · 58 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |

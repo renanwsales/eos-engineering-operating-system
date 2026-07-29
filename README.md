@@ -20,12 +20,12 @@ O EOS separa em camadas, cada uma respondendo a uma pergunta diferente:
 
 | Camada | Pergunta que responde | Onde vive |
 | --- | --- | --- |
-| **Constituição** | Como pensamos? Em que ordem? O que nunca fazemos? | [`volumes/vol-01`](volumes/vol-01-constituicao.md) |
+| **Constituição** | Como pensamos? Em que ordem? O que nunca fazemos? | [`volumes/vol-01`](00-constituicao-da-engenharia.md) |
 | **Normas técnicas** | O que é certo e errado neste domínio? | [`volumes/vol-02` a `vol-11`](volumes/) |
-| **Escolhas** | Qual abordagem, entre alternativas legítimas? | [`vol-13`](volumes/vol-13-selecao-de-arquitetura.md), [`vol-14`](volumes/vol-14-escala-e-multi-inquilino.md) |
-| **Execução** | Em que ordem eu faço esta tarefa? | [`vol-15`](volumes/vol-15-playbooks.md) |
+| **Escolhas** | Qual abordagem, entre alternativas legítimas? | [`vol-13`](02-arquitetura.md), [`vol-14`](14-escalabilidade.md) |
+| **Execução** | Em que ordem eu faço esta tarefa? | [`vol-15`](21-playbooks.md) |
 | **Papéis** | Quem analisa o quê, com que profundidade? | [`agents/`](agents/) |
-| **Coordenação** | Quem é despachado, em que ordem, com que pergunta? | [`volumes/vol-12`](volumes/vol-12-orquestrador.md) |
+| **Coordenação** | Quem é despachado, em que ordem, com que pergunta? | [`volumes/vol-12`](01-orquestrador.md) |
 | **Portões e provas** | Como sei que terminei? | [`checklists/`](checklists/) |
 | **Artefatos** | Como registro o que foi decidido? | [`templates/`](templates/), [`backlog/`](backlog/) |
 | **Índice** | Onde está a regra `SEC-004`? | [`RULES-INDEX.md`](RULES-INDEX.md) |
@@ -40,21 +40,21 @@ framework inteiro.
 
 | Vol | Título | Prefixo | Regras | Cobre |
 | --- | --- | --- | --- | --- |
-| 📘 01 | [Constituição da Engenharia](volumes/vol-01-constituicao.md) | `CON` | 86 | Princípios, seis portões, ordem de análise, decisão, severidade, priorização, risco, DoD, DoE, métricas, ofício |
-| 📗 02 | [Arquitetura](volumes/vol-02-arquitetura.md) | `ARC` | 40 | Clean Architecture, DDD, modularização, integração entre módulos |
-| 📙 03 | [Backend](volumes/vol-03-backend.md) | `BAK` | 73 | APIs, regras de negócio, autorização, erros, webhooks, GraphQL, trabalho agendado |
-| 📕 04 | [Frontend](volumes/vol-04-frontend.md) | `FRT` | 42 | Estados, gerenciamento de estado, componentes, design system |
-| 📓 05 | [Segurança e DevSecOps](volumes/vol-05-seguranca.md) | `SEC` | 66 | OWASP Top 10, segredos, criptografia, permissões, dados pessoais, níveis de verificação |
-| 📒 06 | [Banco de Dados](volumes/vol-06-banco-de-dados.md) | `DAT` | 40 | Modelagem, integridade, índices, transações, migrações |
-| 📔 07 | [Performance](volumes/vol-07-performance.md) | `PRF` | 38 | Medição, acesso a dados, cache, renderização, limiares |
-| 📘 08 | [UX/UI Premium](volumes/vol-08-ux-ui.md) | `UXI` | 55 | Estados, microinterações, erros, consistência, fluxos, WCAG 2.2 AA |
-| 📗 09 | [QA e Testes](volumes/vol-09-qa-testes.md) | `QAT` | 40 | Qualidade do teste, cobertura de negócio, regressão, aceite |
-| 📙 10 | [DevOps e SRE](volumes/vol-10-devops-sre.md) | `OPS` | 48 | Rollback, compatibilidade de deploy, observabilidade, CI/CD, backups, HA |
-| 📕 11 | [Auditoria Técnica](volumes/vol-11-auditoria.md) | `AUD` | 42 | Code review, regressões, notas, veredito, backlog |
-| 📓 12 | [Orquestrador Mestre](volumes/vol-12-orquestrador.md) | `ORC` | 32 | Cadeia de agentes, despacho, integração, aprovação |
-| 📔 13 | [Seleção de Arquitetura](volumes/vol-13-selecao-de-arquitetura.md) | `SEL` | 33 | Estilos, monólito vs serviços, CQRS, síncrono vs assíncrono, renderização, comprar vs construir |
-| 📒 14 | [Escala e Multi-Inquilino](volumes/vol-14-escala-e-multi-inquilino.md) | `ESC` | 42 | Normalização, réplicas, particionamento, sharding, contrapressão, isolamento de inquilino |
-| 📕 15 | [Playbooks](volumes/vol-15-playbooks.md) | `PLB` | 58 | CRUD, endpoint, tela, schema, integração externa, correção de bug |
+| 📘 01 | [Constituição da Engenharia](00-constituicao-da-engenharia.md) | `CON` | 86 | Princípios, seis portões, ordem de análise, decisão, severidade, priorização, risco, DoD, DoE, métricas, ofício |
+| 📗 02 | [Arquitetura](02-arquitetura.md) | `ARC` | 40 | Clean Architecture, DDD, modularização, integração entre módulos |
+| 📙 03 | [Backend](03-backend.md) | `BAK` | 73 | APIs, regras de negócio, autorização, erros, webhooks, GraphQL, trabalho agendado |
+| 📕 04 | [Frontend](04-frontend.md) | `FRT` | 42 | Estados, gerenciamento de estado, componentes, design system |
+| 📓 05 | [Segurança e DevSecOps](06-seguranca.md) | `SEC` | 66 | OWASP Top 10, segredos, criptografia, permissões, dados pessoais, níveis de verificação |
+| 📒 06 | [Banco de Dados](05-banco-de-dados.md) | `DAT` | 40 | Modelagem, integridade, índices, transações, migrações |
+| 📔 07 | [Performance](07-performance.md) | `PRF` | 38 | Medição, acesso a dados, cache, renderização, limiares |
+| 📘 08 | [UX/UI Premium](08-ux-premium.md) | `UXI` | 55 | Estados, microinterações, erros, consistência, fluxos, WCAG 2.2 AA |
+| 📗 09 | [QA e Testes](11-qa.md) | `QAT` | 40 | Qualidade do teste, cobertura de negócio, regressão, aceite |
+| 📙 10 | [DevOps e SRE](10-devops.md) | `OPS` | 48 | Rollback, compatibilidade de deploy, observabilidade, CI/CD, backups, HA |
+| 📕 11 | [Auditoria Técnica](12-auditoria.md) | `AUD` | 42 | Code review, regressões, notas, veredito, backlog |
+| 📓 12 | [Orquestrador Mestre](01-orquestrador.md) | `ORC` | 32 | Cadeia de agentes, despacho, integração, aprovação |
+| 📔 13 | [Seleção de Arquitetura](02-arquitetura.md) | `SEL` | 33 | Estilos, monólito vs serviços, CQRS, síncrono vs assíncrono, renderização, comprar vs construir |
+| 📒 14 | [Escala e Multi-Inquilino](14-escalabilidade.md) | `ESC` | 42 | Normalização, réplicas, particionamento, sharding, contrapressão, isolamento de inquilino |
+| 📕 15 | [Playbooks](21-playbooks.md) | `PLB` | 58 | CRUD, endpoint, tela, schema, integração externa, correção de bug |
 
 Os volumes 01 a 12 dizem **o que é certo**. Os volumes 13 e 14 tratam de **escolher entre alternativas
 legítimas** — a pergunta que uma norma não responde. O volume 15 diz **em que ordem executar** as tarefas que

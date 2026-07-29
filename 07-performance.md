@@ -1,11 +1,11 @@
 # 📔 Volume 7 — Framework de Performance
 
-Prefixo: `PRF` · Regras: PRF-001 a PRF-038 · Papel: [Performance Engineer](../agents/06-performance.md)
+Prefixo: `PRF` · Regras: PRF-001 a PRF-038 · Papel: [Performance Engineer](agents/06-performance.md)
 
 Camada coberta: **5 (performance)**.
 
 Este volume trata do gargalo **medido de hoje**. As decisões estruturais de crescimento e a contrapressão sob
-saturação estão no [Volume 14](vol-14-escala-e-multi-inquilino.md).
+saturação estão no [Volume 14](14-escalabilidade.md).
 
 ---
 
@@ -60,7 +60,7 @@ Investigar na ordem inversa é como se perde tempo otimizando um laço enquanto 
 
 ## Capítulo 7.2 — Acesso a dados
 
-Normas completas no [Volume 6](vol-06-banco-de-dados.md). Aqui, o recorte de performance.
+Normas completas no [Volume 6](05-banco-de-dados.md). Aqui, o recorte de performance.
 
 ### PRF-008 — Conte as consultas por requisição **[OBRIGATÓRIA]**
 
@@ -164,7 +164,7 @@ Também reduz superfície de vazamento (BAK-033).
 
 ## Capítulo 7.6 — Renderização e interface
 
-Regras detalhadas em [Volume 4](vol-04-frontend.md), capítulo 4.5.
+Regras detalhadas em [Volume 4](04-frontend.md), capítulo 4.5.
 
 ### PRF-030 — Orçamento de bundle verificado no pipeline **[OBRIGATÓRIA]**
 ### PRF-031 — Lista longa virtualizada **[OBRIGATÓRIA]**

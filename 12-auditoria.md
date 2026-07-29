@@ -1,6 +1,6 @@
 # 📕 Volume 11 — Auditoria Técnica
 
-Prefixo: `AUD` · Regras: AUD-001 a AUD-042 · Papel: [Auditor Final](../agents/10-final-auditor.md)
+Prefixo: `AUD` · Regras: AUD-001 a AUD-042 · Papel: [Auditor Final](agents/10-final-auditor.md)
 
 Este volume cobre dois momentos distintos: a **revisão de cada mudança** (code review) e a **auditoria do
 conjunto** (portão G5).
@@ -129,7 +129,7 @@ afirma o comportamento errado.
 
 ### AUD-016 — Rodar a Definition of Done antes de submeter **[OBRIGATÓRIA]**
 
-Ver CON-043 e [checklists/pre-merge.md](../checklists/pre-merge.md).
+Ver CON-043 e [checklists/pre-merge.md](checklists/pre-merge.md).
 
 ### AUD-017 — Descrição de PR completa **[OBRIGATÓRIA]**
 
@@ -322,7 +322,7 @@ modificadores de contexto · agrupar itens do mesmo módulo · recalcular o scor
 
 ## Verificação obrigatória de saída
 
-Use [templates/relatorio-de-auditoria.md](../templates/relatorio-de-auditoria.md).
+Use [templates/relatorio-de-auditoria.md](templates/relatorio-de-auditoria.md).
 
 ```
 # Veredito: APPROVED | APPROVED WITH CONDITIONS | REJECTED

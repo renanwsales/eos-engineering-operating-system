@@ -4,7 +4,7 @@ Revise nesta ordem e **pare no primeiro nível que reprova**. Comentar nomes de 
 escopo está errado é desperdício e ruído.
 
 Prefixos obrigatórios de comentário: `MUST` · `SHOULD` · `CONSIDER` · `QUESTION` · `PRAISE` · `NIT`
-(máximo 3). Ver [processo de revisão](../volumes/vol-11-auditoria.md).
+(máximo 3). Ver [processo de revisão](../12-auditoria.md).
 
 ---
 

@@ -2,7 +2,7 @@
 
 Inherits: [`_shared/core-contract.md`](_shared/core-contract.md) ·
 [`_shared/output-schemas.md`](_shared/output-schemas.md)
-Volumes: [12 — Orquestrador](../volumes/vol-12-orquestrador.md) `ORC` · [1 — Constituição](../volumes/vol-01-constituicao.md) `CON`
+Volumes: [12 — Orquestrador](../01-orquestrador.md) `ORC` · [1 — Constituição](../00-constituicao-da-engenharia.md) `CON`
 
 ---
 
@@ -25,11 +25,11 @@ stopped orchestrating.
    p95 under 300 ms" is.
 3. **Run G0 discovery yourself.** You need the map before you can distribute work. Do not delegate
    discovery — delegating it means you cannot judge the reports you receive.
-4. **Scope and sequence.** Decide which layers of `CON-023` (`volumes/vol-01-constituicao.md`) this round
+4. **Scope and sequence.** Decide which layers of `CON-023` (`../00-constituicao-da-engenharia.md`) this round
    covers, and say which are out of scope and why.
 5. **Dispatch** using the `HANDOFF` schema, one specific question per role.
 6. **Integrate.** Deduplicate findings, resolve contradictions, apply
-   `CON-039` (`volumes/vol-01-constituicao.md`), compose the round.
+   `CON-039` (`../00-constituicao-da-engenharia.md`), compose the round.
 7. **Approve or reject** each `CHANGE PROPOSAL` before implementation starts.
 8. **Hand to the auditor** (role 10) for G5. You never audit your own round.
 
@@ -60,7 +60,7 @@ stopped orchestrating.
   assigned and the strongest evidence attached.
 - **Resolve conflicts explicitly.** Frontend wants a denormalized response; Database says it breaks
   a single source of truth. Apply the tie-break order in
-  `CON-021` (`volumes/vol-01-constituicao.md`), and record the resolution — never average the opinions.
+  `CON-021` (`../00-constituicao-da-engenharia.md`), and record the resolution — never average the opinions.
 - **Reject inflated severity.** If a role marks a style preference as `S2`, downgrade it and say so.
   Severity inflation destroys the whole classification.
 - **Reject findings without evidence.** Send them back as hypotheses.
@@ -78,7 +78,7 @@ Approve a `CHANGE PROPOSAL` only when all of these hold:
 - [ ] Blast radius is inside the change budget, or the excess is justified.
 - [ ] Verification plan is concrete and executable.
 - [ ] Rollback exists and is stated.
-- [ ] Risk band mitigation from `CON-041` (`volumes/vol-01-constituicao.md`) is satisfied.
+- [ ] Risk band mitigation from `CON-041` (`../00-constituicao-da-engenharia.md`) is satisfied.
 - [ ] `R4` items have human approval **before** implementation. You cannot grant it yourself.
 - [ ] It is not cosmetic.
 

@@ -57,7 +57,7 @@ Escopo não aprovado é código não revisado entrando sob a cobertura de códig
 
 ## 6. Camadas cobertas
 
-- [ ] Está declarado quais camadas de [análise](../volumes/vol-01-constituicao.md) foram cobertas e
+- [ ] Está declarado quais camadas de [análise](../00-constituicao-da-engenharia.md) foram cobertas e
       quais não foram.
 - [ ] Camada não analisada está registrada como risco conhecido, não omitida.
 
@@ -80,7 +80,7 @@ Escopo não aprovado é código não revisado entrando sob a cobertura de códig
 ## 9. Notas
 
 Atribuir 0–10 por dimensão, com os pesos de
-[métricas](../volumes/vol-01-constituicao.md):
+[métricas](../00-constituicao-da-engenharia.md):
 
 | Dimensão | Peso | Nota | Justificativa |
 | --- | --- | --- | --- |
@@ -96,7 +96,7 @@ Atribuir 0–10 por dimensão, com os pesos de
 
 Lembretes de calibragem:
 
-- Nota 10 exige [Definition of Excellence](../volumes/vol-01-constituicao.md) na dimensão.
+- Nota 10 exige [Definition of Excellence](../00-constituicao-da-engenharia.md) na dimensão.
 - **Ausência de problemas não é excelência.** Módulo sem achados, sem testes, sem observabilidade e
   sem decisões registradas fica em torno de 5 — não se sabe se funciona.
 - Travas: qualquer `S0` ou `S1` não corrigido limita o total a 4 e força `REJECTED`. Segurança abaixo

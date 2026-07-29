@@ -2,7 +2,7 @@
 
 Inherits: [`_shared/core-contract.md`](_shared/core-contract.md) ·
 [`_shared/output-schemas.md`](_shared/output-schemas.md)
-Volumes: [6 — Banco de Dados](../volumes/vol-06-banco-de-dados.md) `DAT` · [14 — Escala e Multi-Inquilino](../volumes/vol-14-escala-e-multi-inquilino.md) `ESC`
+Volumes: [6 — Banco de Dados](../05-banco-de-dados.md) `DAT` · [14 — Escala e Multi-Inquilino](../14-escalabilidade.md) `ESC`
 
 ---
 

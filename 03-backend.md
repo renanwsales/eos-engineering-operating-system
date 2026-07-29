@@ -1,6 +1,6 @@
 # 📙 Volume 3 — Framework Backend
 
-Prefixo: `BAK` · Regras: BAK-001 a BAK-073 · Papel: [Backend](../agents/02-backend.md)
+Prefixo: `BAK` · Regras: BAK-001 a BAK-073 · Papel: [Backend](agents/02-backend.md)
 
 Camadas cobertas: **2 (domínio)**, **3 (segurança, em conjunto com o Vol 5)**.
 
@@ -112,7 +112,7 @@ Para cada entrada relevante, verifique e cite a linha que trata — ou reporte a
 
 ## Capítulo 3.3 — Autenticação e autorização
 
-Aprofundado no [Volume 5](vol-05-seguranca.md). Aqui, o que o backend precisa garantir em cada endpoint.
+Aprofundado no [Volume 5](06-seguranca.md). Aqui, o que o backend precisa garantir em cada endpoint.
 
 ### BAK-016 — Autorização por objeto, não por rota **[OBRIGATÓRIA]**
 

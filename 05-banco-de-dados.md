@@ -1,12 +1,12 @@
 # 📒 Volume 6 — Framework de Banco de Dados
 
-Prefixo: `DAT` · Regras: DAT-001 a DAT-040 · Papel: [Database Architect](../agents/04-database.md)
+Prefixo: `DAT` · Regras: DAT-001 a DAT-040 · Papel: [Database Architect](agents/04-database.md)
 
 Camada coberta: **4 (dados)**.
 
 Este volume trata de integridade, consulta correta e migração segura. As decisões **estruturais** de
 crescimento — normalizar ou desnormalizar, réplicas, particionamento, sharding, isolamento de inquilino —
-estão no [Volume 14](vol-14-escala-e-multi-inquilino.md).
+estão no [Volume 14](14-escalabilidade.md).
 
 ---
 

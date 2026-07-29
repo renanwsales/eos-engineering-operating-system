@@ -1,7 +1,7 @@
 # 📘 Volume 8 — UX/UI Premium
 
 Prefixo: `UXI` · Regras: UXI-001 a UXI-055 · Papéis:
-[Product/UX](../agents/09-product-ux.md) e [Frontend](../agents/03-frontend.md)
+[Product/UX](agents/09-product-ux.md) e [Frontend](agents/03-frontend.md)
 
 Camada coberta: **6 (UX/A11y)**.
 
@@ -21,7 +21,7 @@ volume. Isso é CON-013 aplicado à interface.
 ### UXI-002 — Os oito estados são projetados **[OBRIGATÓRIA]**
 
 Inicial/primeira vez · carregando · vazio · parcial · erro · sucesso · sem permissão · offline.
-Detalhamento e severidades em [FRT-001](vol-04-frontend.md).
+Detalhamento e severidades em [FRT-001](04-frontend.md).
 
 Ausência de estado de erro ou de vazio é `S2` — é a lacuna mais comum e a que mais gera suporte.
 

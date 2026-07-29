@@ -5,7 +5,7 @@ Prefixo: `PLB` · Regras: PLB-001 a PLB-058 · Papel: qualquer, conforme a taref
 Os outros volumes dizem o que é certo. Este diz **em que ordem fazer**, para as tarefas que se repetem toda
 semana. É a camada que transforma 500 regras em trabalho executável.
 
-A diferença em relação a [`runbooks/`](../runbooks/): runbook coordena **papéis** numa rodada de revisão;
+A diferença em relação a [`runbooks/`](runbooks/): runbook coordena **papéis** numa rodada de revisão;
 playbook executa **uma tarefa** de construção, normalmente por um papel só.
 
 ---
@@ -34,7 +34,7 @@ esquecido se torna indistinguível de um passo dispensado.
 ### PLB-004 — Playbook divergente da realidade é achado **[OBRIGATÓRIA]**
 
 Se o passo não se aplica ao projeto por causa de uma convenção local, o achado é a lacuna no
-[perfil do projeto](../templates/perfil-do-projeto.md), não uma exceção informal.
+[perfil do projeto](templates/perfil-do-projeto.md), não uma exceção informal.
 
 ---
 
