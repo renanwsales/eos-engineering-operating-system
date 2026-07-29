@@ -134,13 +134,19 @@ Um papel por chamada, com o orquestrador integrando. É o modo de maior qualidad
 
 ## Primeiro passo obrigatório
 
-Preencher [`templates/perfil-do-projeto.md`](templates/perfil-do-projeto.md).
+Preencher [`templates/perfil-do-projeto.md`](templates/perfil-do-projeto.md) **no repositório do produto**,
+não neste repositório.
 
-O núcleo do EOS é **agnóstico de stack**. O perfil é onde vivem os comandos reais, as convenções, o glossário
-do domínio, a classificação de criticidade por módulo, os limiares de métrica e a tolerância a risco. Sem ele,
-o agente aplica limiares padrão que podem não fazer sentido no seu contexto — e recomenda o que já existe.
+O núcleo do EOS é **agnóstico de stack** e pode (e deve) ser público: é o manual. O perfil é onde vivem
+stack, comandos, glossário, módulos críticos, limiares e tolerância a risco — informação do **produto**.
+Esse arquivo fica no repo privado da aplicação (sugestão: `.eos/perfil.md` ou `docs/perfil.md`), fora do
+GitHub público do EOS. Nunca commite segredos, URLs internas ou detalhes comerciais no repositório do
+manual.
 
-Está registrado como [`EOS-001`](backlog/BACKLOG.md), severidade `S1`.
+Sem o perfil no repo alvo, o agente aplica limiares padrão que podem não fazer sentido — e não consegue
+validar mudança de verdade (`CON-061`).
+
+A lacuna de “perfil ainda não preenchido” é por produto (`EOS-001`), não uma pendência deste livro.
 
 ---
 
