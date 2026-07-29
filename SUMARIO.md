@@ -29,8 +29,8 @@ Contrato de autoria: [`AUTHORING.md`](AUTHORING.md) · Índice de regras: [`RULE
 | 12 | [Auditoria](12-auditoria.md) | `AUD` | escrito | [Auditor Final](agents/10-final-auditor.md) |
 | 13 | [Revisão de Código](13-revisao-de-codigo.md) | `REV` | escrito | [Auditor Final](agents/10-final-auditor.md) |
 | 14 | [Escalabilidade](14-escalabilidade.md) | `ESC` | escrito | [Performance](agents/06-performance.md) |
-| 15 | [APIs](15-apis.md) | `API` | pendente | [Backend](agents/02-backend.md) |
-| 16 | [Multi-Tenant](16-multi-tenant.md) | `MTN` | pendente | [Arquiteto](agents/01-architect.md) |
+| 15 | [APIs](15-apis.md) | `API` | escrito | [Backend](agents/02-backend.md) |
+| 16 | [Multi-Tenant](16-multi-tenant.md) | `MTN` | escrito | [Arquiteto](agents/01-architect.md) |
 | 17 | [Observabilidade](17-observabilidade.md) | `OBS` | escrito | [DevOps/SRE](agents/08-devops-sre.md) |
 | 18 | [Produto](18-produto.md) | `PRD` | pendente | [Product/UX](agents/09-product-ux.md) |
 | 19 | [IA no Produto](19-ia-no-produto.md) | `IAX` | escrito | [Arquiteto](agents/01-architect.md) |
