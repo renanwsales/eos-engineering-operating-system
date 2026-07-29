@@ -1,7 +1,7 @@
 # EOS — Agent Entry Point
 
-You are operating under the **Engineering Operating System (EOS)**: 735 numbered rules across 15 volumes,
-plus a chain of 11 specialised roles.
+You are operating under the **Engineering Operating System (EOS)**: a versioned technical book of **25
+volumes** with numbered, citable rules, plus a chain of 11 specialised roles.
 
 This file is the **router**. It tells you what to load, in what order, and what is never negotiable. Read it
 completely before your first tool call.
@@ -51,31 +51,47 @@ Then load by task type:
 | Task | Also load |
 | --- | --- |
 | Any code change | [`checklists/pre-merge.md`](checklists/pre-merge.md) |
-| Review / audit of existing code | [`vol-11`](12-auditoria.md), [`checklists/code-review.md`](checklists/code-review.md) |
-| Architecture or boundary change | [`agents/01-architect.md`](agents/01-architect.md), [`vol-02`](02-arquitetura.md), [`templates/adr.md`](templates/adr.md) |
-| API / business rules / concurrency | [`agents/02-backend.md`](agents/02-backend.md), [`vol-03`](03-backend.md) |
-| UI work | [`agents/03-frontend.md`](agents/03-frontend.md), [`vol-04`](04-frontend.md), [`vol-08`](08-ux-premium.md) |
-| Schema / query work | [`agents/04-database.md`](agents/04-database.md), [`vol-06`](05-banco-de-dados.md) |
-| Security work | [`agents/05-security.md`](agents/05-security.md), [`vol-05`](06-seguranca.md), [`checklists/seguranca-owasp.md`](checklists/seguranca-owasp.md) |
-| Performance work | [`agents/06-performance.md`](agents/06-performance.md), [`vol-07`](07-performance.md), [`checklists/performance.md`](checklists/performance.md) |
-| Tests | [`agents/07-qa.md`](agents/07-qa.md), [`vol-09`](11-qa.md) |
-| CI/CD, deploy, monitoring, backups | [`agents/08-devops-sre.md`](agents/08-devops-sre.md), [`vol-10`](10-devops.md) |
-| Product / flow / accessibility | [`agents/09-product-ux.md`](agents/09-product-ux.md), [`vol-08`](08-ux-premium.md), [`checklists/acessibilidade.md`](checklists/acessibilidade.md) |
-| Final sign-off | [`agents/10-final-auditor.md`](agents/10-final-auditor.md), [`checklists/modulo-concluido.md`](checklists/modulo-concluido.md) |
-| Multi-area module review | [`vol-12`](01-orquestrador.md), [`runbooks/revisao-completa-de-modulo.md`](runbooks/revisao-completa-de-modulo.md) |
-| Choosing between architectural approaches | [`vol-13`](02-arquitetura.md), [`templates/adr.md`](templates/adr.md) |
-| Rendering strategy (SSR/CSR/RSC/static) | [`vol-13`](02-arquitetura.md) ch. 13.6 |
-| Growth, replicas, partitioning, sharding | [`vol-14`](14-escalabilidade.md) |
-| Multi-tenant work of any kind | [`vol-14`](14-escalabilidade.md) ch. 14.7, [`vol-05`](06-seguranca.md) |
-| **Building** a CRUD, endpoint, screen, migration, integration, or bug fix | [`vol-15`](21-playbooks.md) — find the playbook and follow its step order |
+| Review / audit of an existing module | [`12`](12-auditoria.md), [`checklists/code-review.md`](checklists/code-review.md) |
+| Review of a specific pull request | [`13`](13-revisao-de-codigo.md), [`checklists/code-review.md`](checklists/code-review.md) |
+| Architecture or boundary change | [`agents/01-architect.md`](agents/01-architect.md), [`02`](02-arquitetura.md), [`templates/adr.md`](templates/adr.md) |
+| **Choosing** an architectural approach | [`02` Part II](02-arquitetura.md) — `SEL` rules, [`templates/adr.md`](templates/adr.md) |
+| Business rules, concurrency, queues, workers, webhooks | [`agents/02-backend.md`](agents/02-backend.md), [`03`](03-backend.md) |
+| Designing or evolving a **published** API contract | [`15`](15-apis.md), [`03`](03-backend.md) |
+| UI work | [`agents/03-frontend.md`](agents/03-frontend.md), [`04`](04-frontend.md), [`09`](09-design-system.md) |
+| Tokens, components, motion, theming | [`09`](09-design-system.md) |
+| Rendering strategy (SSR/CSR/RSC/static/streaming) | [`02` Part II](02-arquitetura.md), ch. 2.6 |
+| Schema / query work | [`agents/04-database.md`](agents/04-database.md), [`05`](05-banco-de-dados.md) |
+| Security work | [`agents/05-security.md`](agents/05-security.md), [`06`](06-seguranca.md), [`checklists/seguranca-owasp.md`](checklists/seguranca-owasp.md) |
+| Performance work | [`agents/06-performance.md`](agents/06-performance.md), [`07`](07-performance.md), [`checklists/performance.md`](checklists/performance.md) |
+| Growth, replicas, partitioning, sharding, backpressure | [`14`](14-escalabilidade.md) |
+| Multi-tenant work of any kind | [`16`](16-multi-tenant.md), [`06`](06-seguranca.md) |
+| Tests | [`agents/07-qa.md`](agents/07-qa.md), [`11`](11-qa.md) |
+| CI/CD, deploy, rollback, backups | [`agents/08-devops-sre.md`](agents/08-devops-sre.md), [`10`](10-devops.md) |
+| Logging, tracing, metrics, alerts, SLOs | [`17`](17-observabilidade.md) |
+| Product / flow / accessibility | [`agents/09-product-ux.md`](agents/09-product-ux.md), [`08`](08-ux-premium.md), [`checklists/acessibilidade.md`](checklists/acessibilidade.md) |
+| Deciding **whether** something should be built | [`18`](18-produto.md) |
+| Building an AI feature in the product | [`19`](19-ia-no-produto.md) |
+| Writing or revising a prompt | [`20`](20-prompt-engineering.md) |
+| **Building** a CRUD, endpoint, screen, migration, integration, or bug fix | [`21`](21-playbooks.md) — find the playbook and follow its step order |
+| Writing or shortening a checklist | [`22`](22-checklists.md) |
+| Measuring quality, defining a threshold, scoring a module | [`23`](23-metricas.md) |
+| Final sign-off | [`agents/10-final-auditor.md`](agents/10-final-auditor.md), [`24`](24-auditoria-final.md), [`checklists/modulo-concluido.md`](checklists/modulo-concluido.md) |
+| Multi-area module review | [`01`](01-orquestrador.md), [`runbooks/revisao-completa-de-modulo.md`](runbooks/revisao-completa-de-modulo.md) |
+| Writing or revising a volume of this book | [`AUTHORING.md`](AUTHORING.md), [`SUMARIO.md`](SUMARIO.md) |
 
-Load what the task requires (`ORC-005`). Do not load all fifteen volumes for a one-line bug fix — context waste
-degrades judgement.
+Load what the task requires (`ORC-005`). Do not load all twenty-five volumes for a one-line bug fix — context
+waste degrades judgement. [`SUMARIO.md`](SUMARIO.md) has the boundary of every volume if you are unsure which
+one owns a topic.
 
-**Two shortcuts worth knowing.** If the task is *building* something routine, `vol-15` gives you the step order
-and cites the rules you need, so you load less. If the task involves *choosing* an approach rather than
-applying a known one, `vol-13` is the volume — `vol-02` will tell you how to do a choice correctly but not
-which one to make.
+**Three shortcuts worth knowing.**
+
+1. If the task is *building* something routine, [`21`](21-playbooks.md) gives you the step order and cites the
+   rules you need, so you load less.
+2. If the task is *choosing* an approach rather than applying a known one, Part II of
+   [`02`](02-arquitetura.md) is the volume. Part I tells you how to execute a choice correctly, not which one
+   to make.
+3. Implementation lives in the domain volume; the **published contract** lives in [`15`](15-apis.md). If you
+   are changing what consumers see, you need both.
 
 ---
 
@@ -87,19 +103,19 @@ starting, so the user can correct you cheaply.
 If the task spans three or more areas, adopt [`agents/00-orchestrator.md`](agents/00-orchestrator.md) and
 decompose before doing any deep work yourself.
 
-| # | Role | Volume | Dispatch when |
+| # | Role | Volumes | Dispatch when |
 | --- | --- | --- | --- |
-| 00 | [Orchestrator](agents/00-orchestrator.md) | 12 | ≥3 areas, or a full round |
-| 01 | [Architect](agents/01-architect.md) | 2 | Boundaries, coupling, domain modelling |
-| 02 | [Backend](agents/02-backend.md) | 3 | APIs, rules, authorization, concurrency |
-| 03 | [Frontend](agents/03-frontend.md) | 4 | Components, state, design system |
-| 04 | [Database](agents/04-database.md) | 6 | Schema, indexes, migrations |
-| 05 | [Security](agents/05-security.md) | 5 | **Always**, when auth, personal data, money or upload is touched (`ORC-012`) |
-| 06 | [Performance](agents/06-performance.md) | 7 | Only when measurement is possible (`ORC-013`) |
-| 07 | [QA](agents/07-qa.md) | 9 | Coverage of business cases, regression risk |
-| 08 | [DevOps/SRE](agents/08-devops-sre.md) | 10 | Rollback, detection, pipeline, recovery |
-| 09 | [Product/UX](agents/09-product-ux.md) | 8 | Flows, consistency, accessibility |
-| 10 | [Final Auditor](agents/10-final-auditor.md) | 11 | Before any sign-off. Never the same agent that implemented |
+| 00 | [Orchestrator](agents/00-orchestrator.md) | 01, 00 | ≥3 areas, or a full round |
+| 01 | [Architect](agents/01-architect.md) | 02, 16 | Boundaries, coupling, domain modelling |
+| 02 | [Backend](agents/02-backend.md) | 03, 15 | APIs, rules, authorization, concurrency |
+| 03 | [Frontend](agents/03-frontend.md) | 04, 09 | Components, state, design system |
+| 04 | [Database](agents/04-database.md) | 05, 14 | Schema, indexes, migrations |
+| 05 | [Security](agents/05-security.md) | 06, 16 | **Always**, when auth, personal data, money or upload is touched (`ORC-012`) |
+| 06 | [Performance](agents/06-performance.md) | 07, 14 | Only when measurement is possible (`ORC-013`) |
+| 07 | [QA](agents/07-qa.md) | 11 | Coverage of business cases, regression risk |
+| 08 | [DevOps/SRE](agents/08-devops-sre.md) | 10, 17 | Rollback, detection, pipeline, recovery |
+| 09 | [Product/UX](agents/09-product-ux.md) | 08, 18 | Flows, consistency, accessibility |
+| 10 | [Final Auditor](agents/10-final-auditor.md) | 12, 13, 24 | Before any sign-off. Never the same agent that implemented |
 
 ---
 
@@ -114,7 +130,7 @@ G4 Validation      → prove it works and that nothing else broke
 G5 Audit           → regressions, residual risk, backlog update
 ```
 
-Full definition in [`vol-01`, chapter 1.4](00-constituicao-da-engenharia.md) (`CON-056` to `CON-064`).
+Full definition in [`00`, chapter 1.4](00-constituicao-da-engenharia.md) (`CON-056` to `CON-064`).
 
 You may compress G0–G2 for trivial, obviously-correct fixes — a typo in a string, an off-by-one with a test
 that already fails — but you must say you compressed them and why. **G4 is never compressed** (`CON-061`,
