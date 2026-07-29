@@ -1,6 +1,6 @@
 # RULES-INDEX — índice de regras do EOS
 
-**735 regras** em 14 volumes. Este arquivo é **gerado** por
+**943 regras** em 17 volumes. Este arquivo é **gerado** por
 `scripts/build-rules-index.py`; não edite à mão. Se um volume e este índice divergirem,
 **o volume** é a fonte de verdade.
 
@@ -21,7 +21,7 @@ deixa o número aposentado, nunca reaproveitado, para que relatórios antigos co
 | `[RECOMENDADA]` | Padrão esperado; exceção é normal | Justificativa no momento, sem ADR |
 | `[REVOGADA]` | Não vale mais; o número fica aposentado | — |
 
-Distribuição: **69 imutáveis** · **531 obrigatórias** · **135 recomendadas**.
+Distribuição: **77 imutáveis** · **704 obrigatórias** · **162 recomendadas**.
 
 ## Volumes
 
@@ -36,12 +36,15 @@ Distribuição: **69 imutáveis** · **531 obrigatórias** · **135 recomendadas
 | 06 | [Segurança e DevSecOps](06-seguranca.md) | `SEC` | 66 |
 | 07 | [Framework de Performance](07-performance.md) | `PRF` | 38 |
 | 08 | [UX/UI Premium](08-ux-premium.md) | `UXI` | 55 |
+| 09 | [Design System](09-design-system.md) | `DSY` | 69 |
 | 10 | [DevOps e SRE](10-devops.md) | `OPS` | 48 |
 | 11 | [QA e Testes](11-qa.md) | `QAT` | 40 |
 | 12 | [Auditoria Técnica](12-auditoria.md) | `AUD` | 42 |
 | 14 | [Escala e Multi-Inquilino](14-escalabilidade.md) | `ESC` | 42 |
+| 17 | [Observabilidade](17-observabilidade.md) | `OBS` | 70 |
+| 19 | [IA no Produto](19-ia-no-produto.md) | `IAX` | 69 |
 | 21 | [Playbooks](21-playbooks.md) | `PLB` | 58 |
-| | **Total** | | **735** |
+| | **Total** | | **943** |
 
 ---
 
@@ -613,6 +616,82 @@ Arquivo: [`08-ux-premium.md`](08-ux-premium.md) · 55 regras
 | `UXI-054` | Zoom 200% e viewport estreita sem perda | OBRIG | — | Acessibilidade (WCAG 2.2 AA) |
 | `UXI-055` | Alvo de toque adequado | RECOM | — | Acessibilidade (WCAG 2.2 AA) |
 
+## 📗 Volume 09 — Design System
+
+Arquivo: [`09-design-system.md`](09-design-system.md) · 69 regras
+
+| ID | Regra | Nível | Sev. | Capítulo |
+| --- | --- | --- | --- | --- |
+| `DSY-001` | Um design system existe para eliminar decisão repetida, não para padronizar gosto | IMUT | — | O sistema, seu dono e sua fronteira |
+| `DSY-002` | Uma biblioteca de componentes sem tokens, documentação e governança não é o sistema | OBRIG | — | O sistema, seu dono e sua fronteira |
+| `DSY-003` | O sistema tem dono nomeado e uma fonte única | OBRIG | — | O sistema, seu dono e sua fronteira |
+| `DSY-004` | A promoção de uma peça ao sistema tem limiar declarado | OBRIG | — | O sistema, seu dono e sua fronteira |
+| `DSY-005` | O sistema é consumido como artefato versionado, nunca copiado | OBRIG | — | O sistema, seu dono e sua fronteira |
+| `DSY-006` | Três níveis de token, com o consumidor declarado por nível | OBRIG | — | Tokens |
+| `DSY-007` | Componente e tela consomem token semântico, nunca primitivo | OBRIG | — | Tokens |
+| `DSY-008` | O nome do token semântico descreve papel, nunca aparência | OBRIG | — | Tokens |
+| `DSY-009` | Token de componente existe só quando o semântico não basta | RECOM | — | Tokens |
+| `DSY-010` | Nenhum valor bruto atravessa a camada semântica | OBRIG | — | Tokens |
+| `DSY-011` | Os tokens têm uma fonte única, e cada plataforma é gerada dela | OBRIG | — | Tokens |
+| `DSY-012` | Todo token semântico tem valor em todos os temas declarados | OBRIG | — | Tokens |
+| `DSY-013` | Nenhum valor tem dois nomes semânticos | OBRIG | — | Tokens |
+| `DSY-014` | Token removido ou renomeado passa por depreciação, nunca por substituição direta | OBRIG | — | Tokens |
+| `DSY-015` | Cor vive em escala com passos fixos | OBRIG | — | Cor |
+| `DSY-016` | O contraste é garantido pela construção da escala, não verificado depois | OBRIG | — | Cor |
+| `DSY-017` | Os pares de cor permitidos são declarados; combinação livre é proibida | OBRIG | — | Cor |
+| `DSY-018` | O conjunto de cores de estado é fechado e semântico | OBRIG | — | Cor |
+| `DSY-019` | Cada cor de estado é entregue com um portador não cromático | OBRIG | — | Cor |
+| `DSY-020` | Tema é a troca da camada semântica, nunca a inversão do primitivo | OBRIG | — | Cor |
+| `DSY-021` | Tema escuro não é o tema claro invertido | OBRIG | — | Cor |
+| `DSY-022` | Superfície e elevação formam uma escala única de profundidade | OBRIG | — | Cor |
+| `DSY-023` | O tema inicial respeita a preferência do sistema, e a escolha do usuário persiste | OBRIG | — | Cor |
+| `DSY-024` | A escala de espaçamento tem base única e passos nomeados | OBRIG | — | Espaçamento e densidade |
+| `DSY-025` | Proximidade codifica relação, e é por isso que espaço arbitrário destrói a leitura | OBRIG | — | Espaçamento e densidade |
+| `DSY-026` | O espaçamento externo é responsabilidade do contêiner | RECOM | — | Espaçamento e densidade |
+| `DSY-027` | Densidade é variante declarada do sistema | OBRIG | — | Espaçamento e densidade |
+| `DSY-028` | A variante densa preserva o alvo de toque | OBRIG | — | Espaçamento e densidade |
+| `DSY-029` | A escala tipográfica é fechada, com papel declarado por passo | OBRIG | — | Tipografia |
+| `DSY-030` | Papel tipográfico e nível de cabeçalho são independentes | OBRIG | — | Tipografia |
+| `DSY-031` | Altura de linha é proporcional ao tamanho, não fixa | OBRIG | — | Tipografia |
+| `DSY-032` | A medida de linha é limitada | RECOM | — | Tipografia |
+| `DSY-033` | O conjunto de pesos é fechado e efetivamente carregado | OBRIG | — | Tipografia |
+| `DSY-034` | O texto escala com a preferência do usuário | OBRIG | — | Tipografia |
+| `DSY-035` | Tamanho responsivo é interpolação declarada, não salto por ponto de quebra | RECOM | — | Tipografia |
+| `DSY-036` | A fonte tem orçamento, e o texto é legível antes de ela chegar | OBRIG | — | Tipografia |
+| `DSY-037` | O layout vem de grade declarada, não de posição arbitrária | OBRIG | — | Grade, contêiner e pontos de quebra |
+| `DSY-038` | O ponto de quebra nomeia a necessidade do conteúdo, não o dispositivo | OBRIG | — | Grade, contêiner e pontos de quebra |
+| `DSY-039` | O componente reage ao espaço que recebeu, não à largura da janela | RECOM | — | Grade, contêiner e pontos de quebra |
+| `DSY-040` | Nenhuma primitiva de layout reordena o visual sem reordenar o documento | OBRIG | — | Grade, contêiner e pontos de quebra |
+| `DSY-041` | Conjunto único, com grade e traço únicos | OBRIG | — | Ícones |
+| `DSY-042` | O tamanho de ícone vem de uma escala alinhada à tipografia | OBRIG | — | Ícones |
+| `DSY-043` | Ícone sozinho não identifica ação fora do conjunto convencional | OBRIG | — | Ícones |
+| `DSY-044` | Um significado, um ícone, em todo o produto | OBRIG | — | Ícones |
+| `DSY-045` | O raio é escala, e o passo carrega hierarquia | RECOM | — | Raio, borda e elevação |
+| `DSY-046` | Sombra codifica distância do plano, e o separador tem mecanismo único por superfície | OBRIG | — | Raio, borda e elevação |
+| `DSY-047` | Elevação e ordem de empilhamento saem da mesma tabela | OBRIG | — | Raio, borda e elevação |
+| `DSY-048` | Duração e curva são tokens, com papel declarado | OBRIG | — | Movimento |
+| `DSY-049` | A lista do que anima é fechada | OBRIG | — | Movimento |
+| `DSY-050` | Nada anima entre a ação e a primeira evidência de resposta | OBRIG | — | Movimento |
+| `DSY-051` | Movimento reduzido é uma variante completa do sistema, não a ausência de animação | OBRIG | — | Movimento |
+| `DSY-052` | O esqueleto reproduz a forma real do conteúdo | RECOM | — | Movimento |
+| `DSY-053` | Cada mecanismo de feedback tem critério de uso declarado | OBRIG | — | Feedback: a hierarquia dos mecanismos |
+| `DSY-054` | Erro de campo é inline e permanente | OBRIG | `S2` | Feedback: a hierarquia dos mecanismos |
+| `DSY-055` | Notificação transitória não carrega o que precisa ser relido | OBRIG | — | Feedback: a hierarquia dos mecanismos |
+| `DSY-056` | Modal só para o que impede prosseguir | OBRIG | — | Feedback: a hierarquia dos mecanismos |
+| `DSY-057` | Um mecanismo por evento, e a fila é limitada | RECOM | — | Feedback: a hierarquia dos mecanismos |
+| `DSY-058` | Todo componente do catálogo tem anatomia declarada | OBRIG | — | Catálogo de componentes |
+| `DSY-059` | A matriz variante × estado é enumerada e verificada | OBRIG | — | Catálogo de componentes |
+| `DSY-060` | Nenhuma variante nasce sem regra de quando usar | OBRIG | — | Catálogo de componentes |
+| `DSY-061` | Composição por padrão; configuração para o que é fechado | RECOM | — | Catálogo de componentes |
+| `DSY-062` | Propriedade de escape é nomeada, rara e medida | OBRIG | — | Catálogo de componentes |
+| `DSY-063` | Componente que envolve elemento nativo repassa propriedades e referência | OBRIG | — | Catálogo de componentes |
+| `DSY-064` | Um caminho único de contribuição, com revisor nomeado | OBRIG | — | Governança |
+| `DSY-065` | O que o produto precisa e o sistema não tem nasce local, com dono e prazo | OBRIG | — | Governança |
+| `DSY-066` | Mudança de aparência é mudança incompatível | OBRIG | — | Governança |
+| `DSY-067` | Depreciação tem substituto, prazo e uso medido | OBRIG | — | Governança |
+| `DSY-068` | A divergência entre o sistema e a produção é medida, não presumida | OBRIG | — | Governança |
+| `DSY-069` | O catálogo é executável e é a fonte de verdade da documentação | RECOM | — | Governança |
+
 ## 📙 Volume 10 — DevOps e SRE
 
 Arquivo: [`10-devops.md`](10-devops.md) · 48 regras
@@ -812,6 +891,159 @@ Arquivo: [`14-escalabilidade.md`](14-escalabilidade.md) · 42 regras
 | `ESC-040` | Toda chave de cache e de busca inclui o inquilino | OBRIG | `S0` | Multi-inquilino |
 | `ESC-041` | Vizinho ruidoso é contido por cota | OBRIG | — | Multi-inquilino |
 | `ESC-042` | Operações por inquilino precisam existir desde cedo | RECOM | — | Multi-inquilino |
+
+## 📓 Volume 17 — Observabilidade
+
+Arquivo: [`17-observabilidade.md`](17-observabilidade.md) · 70 regras
+
+| ID | Regra | Nível | Sev. | Capítulo |
+| --- | --- | --- | --- | --- |
+| `OBS-001` | Observabilidade é a capacidade de responder à pergunta que ninguém previu | IMUT | — | Monitorar e observar |
+| `OBS-002` | Toda instrumentação nasce de uma pergunta escrita | OBRIG | — | Monitorar e observar |
+| `OBS-003` | Contexto de alta cardinalidade é o que separa observar de monitorar | OBRIG | — | Monitorar e observar |
+| `OBS-004` | Telemetria nunca está no caminho crítico da requisição | OBRIG | — | Monitorar e observar |
+| `OBS-005` | Instrumentação entra na mesma mudança, não em uma rodada posterior | OBRIG | — | Monitorar e observar |
+| `OBS-006` | Cada sinal responde bem a uma pergunta e mal às outras | OBRIG | — | Os três sinais |
+| `OBS-007` | A ordem de consulta em incidente é métrica, trace, log | RECOM | — | Os três sinais |
+| `OBS-008` | Os três sinais compartilham um vocabulário de campo único | OBRIG | — | Os três sinais |
+| `OBS-009` | O schema de log é declarado e verificado, não emergente | OBRIG | — | Log estruturado em profundidade |
+| `OBS-010` | Nome de evento é fato no passado, de conjunto enumerável | OBRIG | — | Log estruturado em profundidade |
+| `OBS-011` | Uma linha canônica por unidade de trabalho | RECOM | — | Log estruturado em profundidade |
+| `OBS-012` | O que nunca entra no log | OBRIG | — | Log estruturado em profundidade |
+| `OBS-013` | Nome e tipo de campo são estáveis para sempre | OBRIG | — | Log estruturado em profundidade |
+| `OBS-014` | Amostragem é declarada por classe de evento | OBRIG | — | Log estruturado em profundidade |
+| `OBS-015` | Todo tipo de registro tem consumidor nomeado | RECOM | — | Log estruturado em profundidade |
+| `OBS-016` | Volume de log é medido por serviço e por evento, e o crescimento é achado | OBRIG | — | Log estruturado em profundidade |
+| `OBS-017` | Nível não é controle de custo | OBRIG | — | Log estruturado em profundidade |
+| `OBS-018` | A propagação atravessa a fila pelo envelope, nunca pelo corpo | OBRIG | — | Correlação além da requisição |
+| `OBS-019` | Trabalho agendado abre a própria correlação e a expõe | OBRIG | — | Correlação além da requisição |
+| `OBS-020` | Retentativa preserva a correlação de origem e numera a tentativa | OBRIG | — | Correlação além da requisição |
+| `OBS-021` | Chamada a fornecedor registra o identificador dele | OBRIG | — | Correlação além da requisição |
+| `OBS-022` | Falha de sistema devolve ao usuário um identificador de suporte | RECOM | — | Correlação além da requisição |
+| `OBS-023` | Span é unidade de trabalho com início, fim e resultado declarado | OBRIG | — | Tracing distribuído |
+| `OBS-024` | Atributo de span carrega o que muda a interpretação da duração | OBRIG | — | Tracing distribuído |
+| `OBS-025` | Erro é marcado no span, não descrito em texto | OBRIG | — | Tracing distribuído |
+| `OBS-026` | Amostragem de trace preserva o anômalo | OBRIG | — | Tracing distribuído |
+| `OBS-027` | Tracing paga onde há fronteira e é caro onde não há | RECOM | — | Tracing distribuído |
+| `OBS-028` | Instrumentação manual só na fronteira que a automática não vê | RECOM | — | Tracing distribuído |
+| `OBS-029` | Trace não é fonte de alerta | OBRIG | — | Tracing distribuído |
+| `OBS-030` | O tipo da métrica sai da pergunta | OBRIG | — | Métricas |
+| `OBS-031` | Contador é monotônico, e a consulta é sobre a taxa | OBRIG | — | Métricas |
+| `OBS-032` | Latência e tamanho são histograma, com faixas escolhidas | OBRIG | — | Métricas |
+| `OBS-033` | Percentil não se agrega por média | OBRIG | — | Métricas |
+| `OBS-034` | Cardinalidade de rótulo é orçada por métrica | OBRIG | — | Métricas |
+| `OBS-035` | Nenhum identificador de entidade como rótulo de métrica | OBRIG | — | Métricas |
+| `OBS-036` | Nome, unidade e sufixo seguem convenção declarada | RECOM | — | Métricas |
+| `OBS-037` | Erro é contado por classe, com o total derivável | OBRIG | — | Métricas |
+| `OBS-038` | Métrica nova declara o painel ou o alerta que a consome | OBRIG | — | Métricas |
+| `OBS-039` | Cada tipo de componente tem um conjunto mínimo próprio | OBRIG | — | As métricas mínimas por tipo de componente |
+| `OBS-040` | Em fila, a idade da mensagem mais antiga é a métrica que revela atraso | OBRIG | — | As métricas mínimas por tipo de componente |
+| `OBS-041` | Em job, a última conclusão com sucesso é a métrica que revela ausência | OBRIG | — | As métricas mínimas por tipo de componente |
+| `OBS-042` | Em integração externa, quem mede é você | OBRIG | — | As métricas mínimas por tipo de componente |
+| `OBS-043` | Em banco, meça contenção e atraso, não só latência de consulta | OBRIG | — | As métricas mínimas por tipo de componente |
+| `OBS-044` | Destino final de mensagens tem contagem alertada em zero | OBRIG | — | As métricas mínimas por tipo de componente |
+| `OBS-045` | Painel responde a uma pergunta declarada no próprio título | OBRIG | — | Painéis |
+| `OBS-046` | Todo gráfico tem unidade, escala e a linha do objetivo | OBRIG | — | Painéis |
+| `OBS-047` | Um painel por público e por pergunta, não um painel para todos | RECOM | — | Painéis |
+| `OBS-048` | SLI mede um evento do usuário, não a saúde de um processo | OBRIG | — | SLI, SLO e orçamento de erro |
+| `OBS-049` | SLO é número, janela e público, os três | OBRIG | — | SLI, SLO e orçamento de erro |
+| `OBS-050` | Cem por cento não é objetivo | IMUT | — | SLI, SLO e orçamento de erro |
+| `OBS-051` | O orçamento de erro é a unidade de decisão de lançamento | OBRIG | — | SLI, SLO e orçamento de erro |
+| `OBS-052` | Velocidade de consumo alerta antes do esgotamento | OBRIG | — | SLI, SLO e orçamento de erro |
+| `OBS-053` | SLO sem consequência declarada não existe | OBRIG | — | SLI, SLO e orçamento de erro |
+| `OBS-054` | Escolha os fluxos com SLO pela consequência da falha | RECOM | — | SLI, SLO e orçamento de erro |
+| `OBS-055` | Todo alerta declara a consequência de ser ignorado | OBRIG | — | Alerta acionável |
+| `OBS-056` | Interromper uma pessoa exige ação humana imediata e útil | OBRIG | — | Alerta acionável |
+| `OBS-057` | O limiar do alerta vem do objetivo, não do palpite | OBRIG | — | Alerta acionável |
+| `OBS-058` | Alerta tem duração mínima e histerese | RECOM | — | Alerta acionável |
+| `OBS-059` | O que nunca deve alertar | OBRIG | — | Alerta acionável |
+| `OBS-060` | Fadiga de alerta é medida, e o número é responsabilidade da engenharia | OBRIG | — | Alerta acionável |
+| `OBS-061` | Erro de cliente carrega versão do artefato e contexto de sessão | OBRIG | — | Observabilidade de frontend |
+| `OBS-062` | Métrica de usuário real, não apenas sintética | OBRIG | — | Observabilidade de frontend |
+| `OBS-063` | Telemetria vinda do cliente é entrada não confiável | OBRIG | — | Observabilidade de frontend |
+| `OBS-064` | Falha de rede do cliente é sinal de produto, não ruído | RECOM | — | Observabilidade de frontend |
+| `OBS-065` | Aumentar verbosidade é operação com escopo, prazo e reversão | OBRIG | — | Depuração em produção |
+| `OBS-066` | Nenhuma coleta que altere o comportamento observado | OBRIG | — | Depuração em produção |
+| `OBS-067` | Consulta de investigação repetida vira painel ou campo | RECOM | — | Depuração em produção |
+| `OBS-068` | Telemetria tem orçamento declarado por serviço, e ele é medido | OBRIG | — | Custo e retenção |
+| `OBS-069` | Retenção é declarada por sinal e por camada | OBRIG | — | Custo e retenção |
+| `OBS-070` | Corte de custo é por pergunta, nunca por percentual | OBRIG | — | Custo e retenção |
+
+## 📓 Volume 19 — IA no Produto
+
+Arquivo: [`19-ia-no-produto.md`](19-ia-no-produto.md) · 69 regras
+
+| ID | Regra | Nível | Sev. | Capítulo |
+| --- | --- | --- | --- | --- |
+| `IAX-001` | Se uma regra determinística resolve, o modelo está proibido | IMUT | — | - |
+| `IAX-002` | A saída do modelo é entrada não confiável | IMUT | `S0` | - |
+| `IAX-003` | Ordem de análise dentro de uma funcionalidade com IA | OBRIG | — | - |
+| `IAX-004` | O critério de sucesso é declarado antes da escolha do modelo | OBRIG | — | Quando IA é a solução correta, e quando é a errada |
+| `IAX-005` | Declare a taxa de erro aceitável e quem paga por ela | OBRIG | — | Quando IA é a solução correta, e quando é a errada |
+| `IAX-006` | Efeito irreversível não é executado por saída de modelo | IMUT | — | Quando IA é a solução correta, e quando é a errada |
+| `IAX-007` | A linha de base sem modelo é medida, não estimada | OBRIG | — | Quando IA é a solução correta, e quando é a errada |
+| `IAX-008` | Toda funcionalidade com IA tem dono humano nomeado | OBRIG | — | Quando IA é a solução correta, e quando é a errada |
+| `IAX-009` | Não determinismo é característica do produto, não detalhe de implementação | OBRIG | — | O que muda quando a funcionalidade é não determinística |
+| `IAX-010` | Fixe tudo que pode ser fixado, e declare o que não pode | OBRIG | — | O que muda quando a funcionalidade é não determinística |
+| `IAX-011` | Teste determinístico em tudo que envolve o modelo | OBRIG | — | O que muda quando a funcionalidade é não determinística |
+| `IAX-012` | Registre o suficiente para reproduzir a investigação | OBRIG | — | O que muda quando a funcionalidade é não determinística |
+| `IAX-013` | Troca de versão de modelo é mudança de comportamento | OBRIG | — | O que muda quando a funcionalidade é não determinística |
+| `IAX-014` | "Qual é o melhor modelo" é a pergunta errada | OBRIG | — | Escolha de modelo |
+| `IAX-015` | Decomponha a funcionalidade em tarefas e escolha por tarefa | OBRIG | — | Escolha de modelo |
+| `IAX-016` | Escolha por avaliação no seu conjunto, nunca por ranking público | OBRIG | — | Escolha de modelo |
+| `IAX-017` | O modelo entra pela borda, atrás de uma interface própria | OBRIG | — | Escolha de modelo |
+| `IAX-018` | Três camadas separadas: montagem, invocação, validação | OBRIG | — | Arquitetura de uma funcionalidade com IA |
+| `IAX-019` | O prompt é artefato versionado, fora do código de orquestração | OBRIG | — | Arquitetura de uma funcionalidade com IA |
+| `IAX-020` | Nenhuma chamada de modelo dentro de transação | OBRIG | — | Arquitetura de uma funcionalidade com IA |
+| `IAX-021` | Timeout, retry e comportamento em falha declarados por chamada | OBRIG | — | Arquitetura de uma funcionalidade com IA |
+| `IAX-022` | Streaming não dispensa validação; o efeito espera | OBRIG | — | Arquitetura de uma funcionalidade com IA |
+| `IAX-023` | Toda saída consumida por código é estruturada e validada por schema | OBRIG | — | Saída estruturada e a fronteira de confiança |
+| `IAX-024` | Validação de schema não é validação de negócio | OBRIG | — | Saída estruturada e a fronteira de confiança |
+| `IAX-025` | Todo identificador vindo do modelo é reconsultado e reautorizado | OBRIG | `S0` | Saída estruturada e a fronteira de confiança |
+| `IAX-026` | Falha de validação tem caminho definido, e ele não é o retry infinito | OBRIG | — | Saída estruturada e a fronteira de confiança |
+| `IAX-027` | Nunca conserte silenciosamente uma saída inválida | OBRIG | — | Saída estruturada e a fronteira de confiança |
+| `IAX-028` | Alucinação não se corrige; se contém | IMUT | — | Alucinação como requisito de projeto |
+| `IAX-029` | Afirmação verificável é ancorada em fonte do sistema | OBRIG | — | Alucinação como requisito de projeto |
+| `IAX-030` | Abstenção é resultado válido, e precisa ser possível | OBRIG | — | Alucinação como requisito de projeto |
+| `IAX-031` | A taxa de invenção é medida, não estimada | OBRIG | — | Alucinação como requisito de projeto |
+| `IAX-032` | A permissão do usuário é aplicada na recuperação | OBRIG | `S0` | Recuperação (RAG) |
+| `IAX-033` | Documento removido ou revogado sai do índice no mesmo fluxo | OBRIG | — | Recuperação (RAG) |
+| `IAX-034` | Recuperação e geração são avaliadas separadamente | OBRIG | — | Recuperação (RAG) |
+| `IAX-035` | Recuperação errada com confiança alta é o modo de falha dominante | OBRIG | — | Recuperação (RAG) |
+| `IAX-036` | Fragmentação é decisão declarada e medida | OBRIG | — | Recuperação (RAG) |
+| `IAX-037` | Existe limiar de relevância, e um comportamento quando nada o atinge | OBRIG | — | Recuperação (RAG) |
+| `IAX-038` | Toda resposta cita a fonte, e a citação é verificável pelo usuário | OBRIG | — | Recuperação (RAG) |
+| `IAX-039` | Contexto crescente é custo e latência crescentes, com teto declarado | OBRIG | — | Memória e estado de conversa |
+| `IAX-040` | Truncar ou resumir é perda de informação declarada | OBRIG | — | Memória e estado de conversa |
+| `IAX-041` | Memória entre sessões é dado pessoal | OBRIG | — | Memória e estado de conversa |
+| `IAX-042` | O usuário vê e apaga o que o sistema lembra dele | RECOM | — | Memória e estado de conversa |
+| `IAX-043` | A ferramenta roda com a autoridade do usuário, nunca com a do sistema | OBRIG | `S0` | Ferramentas e chamada de função |
+| `IAX-044` | Argumento de ferramenta é entrada não confiável | OBRIG | — | Ferramentas e chamada de função |
+| `IAX-045` | Ferramenta com efeito irreversível exige confirmação humana explícita | OBRIG | — | Ferramentas e chamada de função |
+| `IAX-046` | Ferramenta é idempotente ou protegida por chave de idempotência | OBRIG | — | Ferramentas e chamada de função |
+| `IAX-047` | O catálogo de ferramentas é mínimo por tarefa | RECOM | — | Ferramentas e chamada de função |
+| `IAX-048` | Todo laço tem teto de passos, de tempo e de custo | OBRIG | — | Agentes e seus limites |
+| `IAX-049` | "Não convergiu" é um resultado, com tratamento definido | OBRIG | — | Agentes e seus limites |
+| `IAX-050` | O agente não amplia o próprio escopo de permissão | IMUT | — | Agentes e seus limites |
+| `IAX-051` | Tarefa longa tem estado durável e retomável | RECOM | — | Agentes e seus limites |
+| `IAX-052` | O conjunto de casos existe antes da primeira linha de prompt | OBRIG | — | Avaliação sistemática |
+| `IAX-053` | A avaliação roda no pipeline e bloqueia | OBRIG | — | Avaliação sistemática |
+| `IAX-054` | Regressão de qualidade é queda medida no conjunto, com margem declarada | OBRIG | — | Avaliação sistemática |
+| `IAX-055` | Modelo usado como avaliador é calibrado contra rótulo humano | RECOM | — | Avaliação sistemática |
+| `IAX-056` | Caso real que falhou entra no conjunto no mesmo ciclo | OBRIG | — | Avaliação sistemática |
+| `IAX-057` | Custo por interação é requisito de primeira classe, com teto | OBRIG | — | Custo, latência e degradação |
+| `IAX-058` | Limite de gasto por usuário e por inquilino | OBRIG | — | Custo, latência e degradação |
+| `IAX-059` | Latência é orçada em p95 e inclui a cadeia inteira | OBRIG | — | Custo, latência e degradação |
+| `IAX-060` | O comportamento sem o modelo é projetado, não improvisado | OBRIG | — | Custo, latência e degradação |
+| `IAX-061` | Conteúdo não confiável no contexto é dado, nunca instrução | OBRIG | `S0` | Segurança específica de funcionalidades com IA |
+| `IAX-062` | A saída é um canal de exfiltração | OBRIG | — | Segurança específica de funcionalidades com IA |
+| `IAX-063` | Dado enviado a modelo de terceiro é compartilhamento com terceiro | OBRIG | — | Segurança específica de funcionalidades com IA |
+| `IAX-064` | Envie o mínimo necessário ao contexto | OBRIG | — | Segurança específica de funcionalidades com IA |
+| `IAX-065` | Registro da conversa segue as regras de dado sensível | OBRIG | `S0` | Segurança específica de funcionalidades com IA |
+| `IAX-066` | A interface distingue o que é gerado do que é dado do sistema | OBRIG | — | Experiência de uma resposta não determinística |
+| `IAX-067` | Comunique incerteza sem simulá-la | OBRIG | — | Experiência de uma resposta não determinística |
+| `IAX-068` | O usuário corrige, edita e rejeita a saída | OBRIG | — | Experiência de uma resposta não determinística |
+| `IAX-069` | A correção do usuário alimenta a avaliação | RECOM | — | Experiência de uma resposta não determinística |
 
 ## 📕 Volume 15 — Playbooks
 
