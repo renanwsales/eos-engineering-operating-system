@@ -12,6 +12,10 @@ de [`checklists/`](checklists/) e nos volumes de domínio. Aqui mora o mecanismo
 funcionar, quando a lista deve encolher, quem assina cada caixa, e quando a verificação sai do checklist
 e entra no pipeline.
 
+Quem pede "checklist completo do EOS" está pedindo o inverso do que funciona: o inventário citável já
+existe ([`RULES-INDEX.md`](RULES-INDEX.md)); o que falta sob pressão é a lista **curta do momento**.
+Este volume ensina a construir e a recusar a lista errada.
+
 **Fronteira.** Doutrina de verificação por checklist: leitura vs confirmação, limite de tamanho, redação
 de item, estados `OK` / `N/A` / `PENDENTE`, assinatura, automação e índice canônico em
 [`checklists/`](checklists/). Não é: o conteúdo das listas de domínio (fica no volume dono e nos arquivos
@@ -451,24 +455,42 @@ economia de `AUD-015`.
 
 ## Capítulo 22.10 — Ciclo de vida e higiene
 
+Checklist envelhece. Item que era crítico vira ruído; item que faltava nunca nasce se ninguém revisa
+o instrumento. Higiene do checklist é higiene do portão: lista morta ensina o time a não ler nenhuma
+lista.
+
 ### CHK-045 — Item obsoleto é removido ou marcado com data e substituto **[OBRIGATÓRIA]**
 
 Checklist que acumula itens mortos ensina a ignorar a lista inteira. Higiene alinhada a `AUD-040`.
+
+Sinais de obsolescência: gate de CI cobre o mesmo fato; a regra citada foi revogada; o caminho de
+código sumiu; ninguém consegue explicar a consequência do item em uma frase (`A-004` falhou na
+prática).
 
 ### CHK-046 — Mudança de checklist canônico é mudança de processo — com dono **[OBRIGATÓRIA]**
 
 Quem altera [`modulo-concluido.md`](checklists/modulo-concluido.md) altera o portão G5. Diff revisado;
 motivo no commit; se altera critério de passagem, mencione no relatório da rodada.
 
+Não é "docs". É mudança no critério de `APPROVED`. Trate com o mesmo cuidado de uma regra
+`[OBRIGATÓRIA]` nova.
+
 ### CHK-047 — Meça aderência pela evidência, não pela taxa de caixas marcadas **[OBRIGATÓRIA]**
 
 100% de `OK` com zero anexos é sinal de falha (`CHK-012`), não de maturidade. Métrica útil: amostragem
 de itens `OK` confrontados com artefato; divergência é achado de processo.
 
+KPI perverso clássico: "100% dos checklists preenchidos antes do merge". Incentiva carimbo. KPI
+útil: "% da amostra G5 com artefato reconstruível" e "nº de PENDENTE honestos por rodada" (PENDENTE
+não é vergonha; OK mentiroso é).
+
 ### CHK-048 — Em dúvida entre item novo e regra nova, prefira a regra no volume dono **[RECOMENDADA]**
 
 Checklist não é lugar para nascer norma (`A-001`). Se a verificação não tem lar, abra regra no volume
 correto e só então aponte o item para o ID.
+
+Exceção aparente: limiar `[perfil]` local (p95, cobertura). Isso vive no
+[perfil do projeto](templates/perfil-do-projeto.md), não como norma órfã no checklist.
 
 ---
 
@@ -508,6 +530,33 @@ Tabela no README do CI: item removido → job → desde quando. Satisfaz `CHK-03
 
 Em G5, o auditor escolhe 3 itens `OK` ao acaso e exige o artefato (`FIN` aplica; doutrina nasce aqui).
 
+### Padrão C6 — Redução emergencial com rastro
+
+Quando `CON-044` autoriza DoD reduzida em `S0` de produção, o checklist executado declara no
+cabeçalho: seções cumpridas · seções adiadas · ID do item de backlog criado **na mesma hora** ·
+prazo = rodada seguinte. Sem o ID, a redução é ilegítima mesmo sob incidente.
+
+### Padrão C7 — Bifurcação por superfície tocada
+
+No pré-merge, um bloco opcional no perfil do projeto:
+
+```
+Se o diff toca payments|invoices|charges → anexar bloco SEC acesso + contagem de tenant
+Se o diff toca *.tsx de fluxo alterado → anexar teclado de acessibilidade.md
+Se o diff toca query em caminho de listagem → anexar método de performance.md seção 0–1
+Caso contrário → N/A justificado por path
+```
+
+Isso evita um mega-checklist e mantém o custo proporcional ao risco real do diff (`CHK-014`).
+
+### Padrão C8 — Recusa educada de mega-lista
+
+Resposta padrão a pedido de checklist de 500+ itens:
+
+> Recusado (`EOS-005`, `CHK-011`). As regras citáveis estão no índice. Para o momento X use o
+> arquivo canônico Y (≤ seções com parada). Se faltar verificação, proponha **um** item novo com
+> ID de regra — não uma segunda cópia do livro.
+
 ---
 
 ## Matrizes de decisão
@@ -524,6 +573,8 @@ Em G5, o auditor escolhe 3 itens `OK` ao acaso e exige o artefato (`FIN` aplica;
 | Autor quer assinar G5 | Recusar (`CHK-032`, `AUD-003`) |
 | Item sem ID nem comando | Reescrever ou excluir (`CHK-022`) |
 | Proposta de checklist de 500 itens | Recusar (`EOS-005`, `CHK-011`) |
+| Item eterno "não esquecer bug X" | Virar teste nomeado (`CHK-040`) |
+| Time quer fork do OWASP checklist | Extensão no perfil, não cópia (`CHK-042`) |
 
 ---
 
@@ -539,6 +590,14 @@ Em G5, o auditor escolhe 3 itens `OK` ao acaso e exige o artefato (`FIN` aplica;
 8. Em G5, o auditor confronta amostragem de `OK` com artefato (→ [24](24-auditoria-final.md)).
 
 Playbooks de construção citam checklists; não os reescrevem ([21](21-playbooks.md)).
+
+**Anti-padrão de fluxo:** abrir os sete arquivos de uma vez "para garantir". Isso recria a mega-lista
+por outro caminho. O momento escolhe **um** arquivo principal; domínio (SEC/PRF/UXI) só entra se a
+superfície do diff exigir (`CHK-044`, padrão C7).
+
+**Quando criar arquivo novo em `checklists/`:** só se nenhum dos sete cobre o momento e o momento é
+recorrente (≥1× por sprint). Caso contrário, use item no perfil ou regra no volume dono (`CHK-048`).
+Arquivo novo sem cabeçalho de tipo (`CHK-006`) é rejeitado na revisão de processo.
 
 ---
 
@@ -575,6 +634,25 @@ Playbooks de construção citam checklists; não os reescrevem ([21](21-playbook
 - [x] Migração: N/A — este PR não altera schema (diff sem /migrations)
 ```
 
+```
+# Ruim — CHK-011 / EOS-005: mega-lista
+Checklist de release (847 itens): [x] … (marcados em lote)
+
+# Bom — momento + parada
+code-review.md Nível 1 Escopo: MUST — formatação misturada com comportamento no mesmo commit.
+Pare. Não comentar Nível 7.
+```
+
+```
+# Migrar item eterno para teste — CHK-040
+Antes (pré-merge eterno):
+- [ ] Lembrar: cancelamento após pagamento parcial
+
+Depois:
+it("does not leave inconsistent balance after partial refund", …)
+# item removido do checklist; regressão trava no CI
+```
+
 ---
 
 ## Antipadrões
@@ -593,6 +671,10 @@ Playbooks de construção citam checklists; não os reescrevem ([21](21-playbook
 | Fork silencioso por time | Divergência (`CHK-042`) |
 | Taxa de caixas como KPI | Incentiva mentira (`CHK-047`) |
 | Norma nascendo só no checklist | Viola `A-001` / `CHK-048` |
+| Abrir os sete arquivos em todo PR | Mega-lista disfarçada (`CHK-044`) |
+
+O mecanismo comum: o custo de verificar supera o custo de marcar, e o sistema social recompensa o
+verde. Doutrina inverte o incentivo — evidência, assinatura, limite e amostragem.
 
 ---
 
@@ -653,6 +735,9 @@ Uma execução de checklist só conta sob este volume quando:
 5. Não há `DONE` com `PENDENTE` (`CHK-029`).
 6. Assinatura separa papéis (`CHK-032`).
 7. Nenhum carimbo em bloco (`CHK-033`).
+
+Critério adicional de autoria: se alguém propôs lista de centenas de itens para "completar" o EOS,
+a proposta foi recusada com citação a `EOS-005` / `CHK-011` e substituída por divisão por momento.
 
 ---
 

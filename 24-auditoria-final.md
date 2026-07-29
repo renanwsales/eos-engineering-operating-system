@@ -11,6 +11,11 @@ quando o veredito não é aprovação limpa.
 O erro caro que este volume previne: relatório convincente, checklist todo verde, merge autorizado —
 e o defeito que ninguém confrontou com evidência. É `AUD-002` no instante em que ainda dá para parar.
 
+Em cadeias assistidas por IA o risco sobe: a plausibilidade do texto aumenta enquanto a taxa de
+verificação tende a cair. O portão final existe para inverter essa economia — custo alto para afirmar
+sem artefato, custo baixo para amostrar e rejeitar. Sem esse inversor, o framework acelera o merge
+do defeito bem escrito — o pior tipo de regressão para detectar depois do merge em produção.
+
 **Fronteira.** Portão final (G5 ampliado a veredito de nota, cobertura de volumes, anti-teatro,
 discordância com o orquestrador, aprovação parcial com dívida nomeada, auditoria da auditoria). Não
 é: como conduzir a investigação do zero (`AUD`, → [12](12-auditoria.md)); revisão de um PR
@@ -176,6 +181,10 @@ pendência em trabalho acionável.
 
 ## Capítulo 24.3 — Ordem de leitura do portão final
 
+Ordem errada produz auditoria teatral mesmo com boa intenção: o auditor ancora na nota desejada ou
+no resumo persuasivo e só depois procura evidência que confirme o viés. A sequência abaixo força
+**mundo primeiro, narrativa depois**.
+
 ### FIN-013 — Ordem fixa; não comece pelas notas **[OBRIGATÓRIA]**
 
 ```
@@ -194,6 +203,9 @@ pendência em trabalho acionável.
 Começar pelas notas ancora o auditor no número que deseja justificar. A ordem acima ancora na
 evidência.
 
+Se o tempo da sessão for curto, **corte do fim**: nunca corte evidência e escopo para "dar tempo às
+notas". Notas sem evidência são decoração (`CON-050`).
+
 ### FIN-014 — Leia o diff do conjunto antes dos relatórios parciais **[OBRIGATÓRIA]**
 
 `AUD-018`. Relatórios por mudança escondem contradição entre mudanças. O portão final existe para
@@ -209,9 +221,16 @@ não gaste páginas em nomenclatura. Economia simétrica a `AUD-006`.
 [`checklists/modulo-concluido.md`](checklists/modulo-concluido.md), executado sob doutrina `CHK`,
 não carimbado. Este volume interpreta o veredito; o arquivo lista as caixas.
 
+Execução: item a item, estados `OK`/`N/A`/`PENDENTE` (`CHK-026`). Assinatura do auditor final
+(`CHK-032`). A amostra anti-teatro (`FIN-006`) escolhe itens já marcados `OK` nesse arquivo — se o
+arquivo foi carimbado em bloco, a amostra falha cedo e barato.
+
 ---
 
 ## Capítulo 24.4 — Cobertura de volumes
+
+"Aplicamos o EOS" é frase vazia até virar tabela. Cobertura de volumes é a prova de que as camadas
+obrigatórias da rodada foram confrontadas — ou conscientemente adiadas com risco nomeado.
 
 ### FIN-017 — Declare quais volumes eram aplicáveis e quais foram de fato aplicados **[OBRIGATÓRIA]**
 
@@ -220,6 +239,9 @@ Tabela obrigatória:
 | Volume | Aplicável? | Aplicado? | Evidência | Risco se não |
 
 "Não olhamos segurança porque o PR era pequeno" em caminho que toca auth é falha, não N/A.
+
+Evidência de "aplicado" não é "li o markdown do volume". É checklist de domínio percorrido, achado
+com `path:line`, medição, ou N/A de escopo justificado ("diff só altera copy em `emails/`").
 
 ### FIN-018 — Camadas de análise omitidas são risco nomeado, não silêncio **[OBRIGATÓRIA]**
 
@@ -246,9 +268,22 @@ Máximo: `APPROVED WITH CONDITIONS` se a lacuna é trivial e verificável; senã
 `CHANGES REQUESTED` conforme `AUD-031`. Lacuna de DoE em módulo não crítico pode ser `OPPORTUNITY`
 registrada — lacuna de DoD não.
 
+Matriz rápida:
+
+| Lacuna | Módulo crítico | Módulo periférico |
+| --- | --- | --- |
+| DoD / SEC obrigatória | Bloqueia | Bloqueia |
+| DoE | OPPORTUNITY com plano | OPPORTUNITY opcional |
+| PRF sem caminho quente | N/A justificado | N/A justificado |
+| UXI sem UI no diff | N/A | N/A |
+
 ---
 
 ## Capítulo 24.5 — Bloqueantes
+
+Bloqueante não é "o auditor não gostou". É condição sob a qual **qualquer** aprovação limpa mentiria
+sobre o estado do sistema. A tabela abaixo é fechada: pressão, demos e roadmap não adicionam
+exceções.
 
 ### FIN-023 — Bloqueantes sem negociação **[IMUTÁVEL]**
 
@@ -264,17 +299,27 @@ registrada — lacuna de DoD não.
 
 Travas alinhadas a `AUD-030` e `CON-052`; este volume as aplica no fechamento.
 
+Leitura operacional: se duas linhas da tabela dispararam, não enumere as dez melhorias menores no
+mesmo relatório como se fossem o tema. O tema é o bloqueante. O resto espera a próxima passagem
+(`AUD-006` aplicado ao portão).
+
 ### FIN-024 — Teste afrouxado sem justificativa de correção do comportamento antigo é `S1` **[OBRIGATÓRIA]**
 
 `AUD-020`, `QAT-008`. Inspeção obrigatória de **cada** teste modificado no diff do conjunto.
 
+Pergunta única por teste: a expectativa mudou porque o comportamento antigo estava **errado**, ou
+porque o novo não casava? Só o primeiro autoriza afrouxar/alterar. O segundo é o bug entrando no
+suite como especificação.
+
 ### FIN-025 — Dependência nova não prevista na proposta é bloqueante de escopo **[OBRIGATÓRIA]**
 
-`AUD-025`. Não é nit de estilo.
+`AUD-025`. Não é nit de estilo. Cadeia de suprimentos e superfície de ataque mudaram sem o rito de
+decisão.
 
 ### FIN-026 — Remoção de código sem justificativa é mudança de comportamento não proposta **[OBRIGATÓRIA]**
 
-`AUD-024`. Trate como escopo infiltrado.
+`AUD-024`. Trate como escopo infiltrado. "Estava morto" exige prova (coverage, referência zero) ou
+volta como proposta explícita.
 
 ### FIN-027 — Segurança < 6 → no máximo `APPROVED WITH CONDITIONS` **[IMUTÁVEL]**
 
@@ -332,6 +377,9 @@ universal como condição de `APPROVED` em módulo padrão.
 
 ## Capítulo 24.7 — Pronto versus excelente
 
+Times misturam os dois e sofrem nos dois extremos: ou nada mergeia porque "ainda não é 10", ou tudo
+mergeia porque "está pronto o suficiente" sem DoD. Este capítulo separa os instrumentos.
+
 ### FIN-034 — `APPROVED` exige DoD completa no escopo da rodada, não DoE **[OBRIGATÓRIA]**
 
 Pronto = DoD (`CON-043`) + travas de `FIN-023`. Excelente = DoE (`CON-047`) nas dimensões do módulo
@@ -355,6 +403,10 @@ pessoa**. Sem nome, não há dívida: há defeito omitido.
 Resposta negativa obriga nomear a lacuna no backlog antes de `APPROVED` limpo — alinhado a
 `CON-055`.
 
+Respostas que falham o teste na prática: "está no Notion do Fulano"; "a IA da rodada sabe"; "o
+runbook é o código". Se o conhecimento não está no repositório operacional (teste, ADR, runbook,
+alerta), não está pronto para ausência do autor.
+
 ---
 
 ## Capítulo 24.8 — Discordar do orquestrador
@@ -362,6 +414,10 @@ Resposta negativa obriga nomear a lacuna no backlog antes de `APPROVED` limpo �
 O orquestrador maximiza progresso da rodada. O auditor maximiza verdade do portão. O conflito é
 estrutural e saudável — desde que resolvido por evidência, não por hierarquia informal de "quem
 falou por último".
+
+Sem este capítulo, G5 vira carimbo do desejo de fechar. Com ele, o veto do
+[Auditor Final](agents/10-final-auditor.md) tem regras citáveis: evidência, registro e dono humano
+de risco — não debate de tom.
 
 ### FIN-038 — Veredito do auditor final prevalece na rodada sobre o desejo de fechar do orquestrador **[IMUTÁVEL]**
 
@@ -379,6 +435,9 @@ evidência é `AUD-034` invertido (opinião do auditor) e também é inválida.
 Caminhos legítimos: voltar portão (`CON-064`), decompor escopo, produzir evidência faltante. Caminho
 ilegítimo: negociar o significado de `S1`.
 
+Pedido legítimo: "reabrir G2 — migração e comportamento no mesmo PR estourou `AUD-004`". Pedido
+ilegítimo: "é só log, aprova que a gente cria o item depois" sem item e sem aceitante.
+
 ### FIN-041 — Empate entre papéis especialistas resolve-se por evidência e `CON-021`, não por média de notas **[OBRIGATÓRIA]**
 
 Média entre "seguro" e "inseguro" é absurdo. O auditor escolhe o lado com prova; o outro vira
@@ -392,9 +451,20 @@ Exemplo: Performance alega N+1; Backend alega que o batch resolve. O auditor con
 Seção `Disagreement`: posição do orquestrador · posição do auditor · evidência · decisão · se risco
 foi aceito, por quem. Sem registro, a próxima rodada repete o conflito às cegas.
 
+Se o mesmo tema reaparece na terceira rodada, aplique a regra das três postergações (`AUD-038`):
+promova ou marque `não faremos` — não reabra o debate com prosa nova.
+
 ---
 
 ## Capítulo 24.9 — Aprovação parcial com dívida nomeada
+
+Parcial honesto é instrumento. Parcial preguiçoso é `APPROVED` com culpa diluída. A linha entre os
+dois é fechabilidade: alguém de fora consegue dizer, em uma semana, se a condição foi cumprida sem
+reinterpretar a prosa.
+
+Parcial também é **temporário**. Condição que sobrevive a duas rodadas sem fechamento deixou de ser
+condição — virou dívida crônica ou bloqueante adiado. `FIN-047` existe para impedir essa metamorfose
+silenciosa.
 
 ### FIN-043 — `APPROVED WITH CONDITIONS` só para itens triviais e verificáveis **[OBRIGATÓRIA]**
 
@@ -411,6 +481,9 @@ Exemplo válido: "1. Anexar log de `pnpm test -- billing` nesta PR; 2. Registrar
 Se era `S1` ou item DoD `PENDENTE` obrigatório, o veredito correto não é parcial elegante: é
 `REJECTED` / `CHANGES REQUESTED`.
 
+Teste: se a condição falhar e ninguém perceber em produção, ela não era condição — era bloqueante
+disfarçado.
+
 ### FIN-046 — Risco residual declara monitoramento e aceitante humano **[OBRIGATÓRIA]**
 
 Tabela: risco · severidade · como detecta · aceito por. Aceite "o time" é inválido (`AUD-037`).
@@ -420,9 +493,19 @@ Tabela: risco · severidade · como detecta · aceito por. Aceite "o time" é in
 Promessa quebrada corrói o instrumento. Terceira postergação: promover ou `não faremos`
 (`AUD-038`) — nunca quarta.
 
+Sem essa promoção, `APPROVED WITH CONDITIONS` vira fábrica de dívida invisível: cada rodada empurra
+a anterior, e o portão final perde o medo de mentir.
+
 ---
 
 ## Capítulo 24.10 — Auditoria da auditoria
+
+O último defeito do portão é o auditor cansado que acredita no próprio rascunho. Esta seção é o
+checklist curto **sobre o relatório**, não sobre o produto — meta-verificação obrigatória antes de
+publicar.
+
+Sem ela, G5 reproduz o mesmo bug que combate: afirmação fluente sem confronto. A meta-auditoria é
+barata (minutos) e evita republicar teatro com capa oficial.
 
 ### FIN-048 — Ao fechar, audite o próprio relatório contra esta lista **[OBRIGATÓRIA]**
 
@@ -442,10 +525,16 @@ Promessa quebrada corrói o instrumento. Terceira postergação: promover ou `n�
 É `REJECTED` ou reabertura: o processo de evidência da rodada falhou. Corrigir três links e manter
 quarenta `OK` não verificados reproduz o defeito.
 
+Analogia: se três soldas aleatórias em um lote falham o teste, não se "consertam as três" e se
+envia o lote — se inspeciona o processo de solda.
+
 ### FIN-050 — Achado novo fora do escopo: registre para a próxima rodada, não expanda esta **[OBRIGATÓRIA]**
 
 `AUD-034`. Exceção: bloqueante de segurança ou regressão causada pela rodada atual — aí entra no
 veredito agora (`FIN-023`).
+
+Expandir escopo no fechamento é como misturar formatação e lógica no mesmo commit: impossibilita
+saber o que a rodada de fato entregou.
 
 ### FIN-051 — Guarde o artefato do portão onde a próxima pessoa o encontra sem perguntar **[OBRIGATÓRIA]**
 
@@ -456,6 +545,11 @@ Chat não é arquivo (`CON-019`).
 
 Se a próxima pessoa não consegue operar e mudar o módulo com segurança sem perguntar a quem auditou,
 o portão aprovou cedo demais — nomeie o que falta antes do próximo `APPROVED`.
+
+Perguntas práticas: o rollback está no runbook? O alerta novo tem dono? O estado inválido ainda é
+representável? O teste de regressão do incidente passado ainda existe e falha se removido? Se a
+resposta a qualquer uma for "perguntar ao Fulano", Fulano ainda é single point of failure — e a
+nota de excelência miente.
 
 ---
 
@@ -495,6 +589,32 @@ Norma: <ID>
 Decisão: <prevalece auditor | risco aceito por <humano>>
 ```
 
+### Padrão F6 — Calibração de nota em uma página
+
+Antes de fechar as notas, preencha uma linha por dimensão com **uma** evidência positiva e **uma**
+lacuna. Se não há evidência positiva, a dimensão não passa de 5. Se há lacuna sem ID de backlog, a
+dimensão não passa de 7. Se ambas faltam, a dimensão é 4 ou menos — "não olhei" não é 8.
+
+### Padrão F7 — Pacote mínimo publicado
+
+Arquivos que o portão deixa no repositório (nomes ilustrativos; ajuste ao perfil):
+
+| Artefato | Conteúdo |
+| --- | --- |
+| `AUDIT REPORT` | Veredito + seções de `FIN` |
+| Diff da rodada (link) | Conjunto, não só o último PR |
+| Amostra anti-teatro | 3 artefatos brutos |
+| Backlog delta | IDs criados/atualizados nesta rodada |
+| Condições (se houver) | COND-* fecháveis |
+
+Sem o pacote, a próxima pessoa pergunta ao auditor — falha `CON-055` / `FIN-052`.
+
+### Padrão F8 — Reauditoria só de condições
+
+Quando o veredito foi `APPROVED WITH CONDITIONS`, a passagem seguinte **não** reabre G0–G3 por
+padrão. Percorre apenas COND-*; se todas `verified`, promove a `APPROVED` com adendo datado. Se
+uma falhou, aplica `FIN-047`.
+
 ---
 
 ## Matrizes de decisão
@@ -511,6 +631,8 @@ Decisão: <prevalece auditor | risco aceito por <humano>>
 | Amostra anti-teatro falha | `REJECTED` / reabrir (`FIN-049`) |
 | DoE incompleta em módulo periférico | `APPROVED` + `OPPORTUNITY` |
 | DoE incompleta exigida como se fosse DoD | erro de enquadramento (`FIN-034`) |
+| Mesmo agente implementou e auditou | abortar portão (`FIN-003`) |
+| Volume SEC aplicável não aplicado | bloqueia limpo (`FIN-022`) |
 
 ---
 
@@ -528,6 +650,18 @@ Decisão: <prevalece auditor | risco aceito por <humano>>
 10. Publique o artefato fora do chat (`FIN-051`).
 
 Papel: [`agents/10-final-auditor.md`](agents/10-final-auditor.md).
+
+**Duração típica.** Rodada pequena (1–2 mudanças, sem auth): dezenas de minutos se as evidências
+já estão anexadas. Rodada com auth/dinheiro ou muitas interações: orçamento em horas, não em
+"skimming". Se o orçamento não cabe, decomponha a rodada — não comprima G5.
+
+**Saída intermediária legítima:** ao encontrar bloqueante em `FIN-015`, publique `REJECTED` curto
+com evidência do bloqueante e pare. Relatório completo de notas é opcional nessa passagem; forçar
+nota 3 em oito dimensões enquanto o escopo está infiltrado é teatro de completude.
+
+**O que não fazer no fluxo:** não peça ao implementador para "só completar o relatório de auditoria";
+não aprove verbalmente no chat e prometa escrever depois (`FIN-051`); não misture correção de código
+com o papel de auditor (`FIN-003`, `AUD-003`).
 
 ---
 
@@ -573,6 +707,24 @@ Evidência: workers/charge.ts:88 — erro engolido sem request_id.
 Decisão: REJECTED até S1 corrigido ou aceito por <nome do dono de risco>.
 ```
 
+```
+# Ruim — FIN-017 cobertura teatral
+| 06 Segurança | sim | sim | "li o volume" | — |
+
+# Bom
+| 06 Segurança | sim | sim | seguranca-owasp.md seções 1–2; IDOR fechado em
+  GET /invoices/:id (CI job exploit-invoices #991) | — |
+| 07 Performance | não | N/A | diff só altera copy de e-mail; sem caminho quente | — |
+```
+
+```
+# Cenário — interação entre mudanças (FIN-014, AUD-018)
+Mudança A: worker grava Invoice.status = 'paid' após charge.
+Mudança B: API deixa de aceitar transição paid → cancelled.
+Isoladas: corretas. Conjunto: estorno manual via admin ainda chama cancel em paid e quebra.
+Veredito: REJECTED — regressão de interação; volta a G1 com o caso admin.
+```
+
 ---
 
 ## Antipadrões
@@ -591,6 +743,13 @@ Decisão: REJECTED até S1 corrigido ou aceito por <nome do dono de risco>.
 | Aceite de risco "pelo time" | Sem dono (`FIN-046`) |
 | Expandir rodada com preferências | Viola `AUD-034` / `FIN-050` |
 | Artefato só no chat | Viola `CON-019` / `FIN-051` |
+| Exigir DoE como se fosse DoD em periférico | Atrasa sem retorno (`FIN-034`) |
+| Skimming de G5 sob prazo | Mesmo que teatro (`FIN-004`) |
+| Média de notas entre especialistas | Absurdo (`FIN-041`) |
+
+O antipadrão mais caro em sistemas assistidos por IA: **relatório completo, fluente e errado**. A
+correção não é pedir "mais detalhe" — detalhe aumenta a persuasão. A correção é `FIN-001` +
+`FIN-006`: artefato bruto e amostra hostil. Detalhe sem artefato é só teatro mais longo.
 
 ---
 
@@ -661,6 +820,12 @@ O portão final só emite `APPROVED` quando:
 
 `APPROVED WITH CONDITIONS` exige condições que passam `FIN-043`–`FIN-044`.
 Nota 10 em qualquer dimensão exige DoE (`FIN-028`).
+
+Critério de sanidade do próprio portão: `FIN-048` marcado conscientemente; se a amostra anti-teatro
+falhou, o veredito não é parcial cosmética — é rejeição ou reabertura (`FIN-049`).
+
+Aceite cultural mínimo: o time trata rejeição de processo (`FIN-002`, `AUD-033`) como sinal de
+saúde do sistema, não como afronta pessoal. Sem isso, o portão é cerimônia e o livro é decoração.
 
 ---
 
