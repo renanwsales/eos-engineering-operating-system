@@ -28,3 +28,6 @@ jobs:
 
       - name: Links and rule refs
         run: python3 scripts/check-links.py
+
+      - name: Playbook domain citations
+        run: python3 scripts/check-playbook-refs.py

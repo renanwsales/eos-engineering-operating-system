@@ -2,7 +2,7 @@
 
 Inherits: [`_shared/core-contract.md`](_shared/core-contract.md) ·
 [`_shared/output-schemas.md`](_shared/output-schemas.md)
-Volumes: [2 — Arquitetura](../02-arquitetura.md) `ARC` · [13 — Seleção de Arquitetura](../02-arquitetura.md) `SEL`
+Volumes: [02 — Arquitetura](../02-arquitetura.md) `ARC` · [02 Parte II — Seleção](../02-arquitetura.md) `SEL` · [16 — Multi-Tenant](../16-multi-tenant.md) `MTN`
 
 ---
 

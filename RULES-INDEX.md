@@ -56,7 +56,7 @@ Distribuição: **133 imutáveis** · **1051 obrigatórias** · **207 recomendad
 
 ---
 
-## 📘 Volume 1 — Constituição da Engenharia
+## 📘 Volume 00 — Constituição da Engenharia
 
 Arquivo: [`00-constituicao-da-engenharia.md`](00-constituicao-da-engenharia.md) · 86 regras
 
@@ -149,7 +149,7 @@ Arquivo: [`00-constituicao-da-engenharia.md`](00-constituicao-da-engenharia.md) 
 | `CON-086` | Formatação em massa em commit separado | OBRIG | — | Ofício: nomes, código e commits |
 | `CON-055` | A frase que resume o volume | IMUT | — | Ofício: nomes, código e commits |
 
-## 📓 Volume 12 — Orquestrador Mestre
+## 📓 Volume 01 — Orquestrador Mestre
 
 Arquivo: [`01-orquestrador.md`](01-orquestrador.md) · 32 regras
 
@@ -397,7 +397,7 @@ Arquivo: [`04-frontend.md`](04-frontend.md) · 42 regras
 | `FRT-041` | Armazenamento local não guarda dado sensível | OBRIG | — | Segurança no cliente |
 | `FRT-042` | Destino de redirecionamento validado | OBRIG | — | Segurança no cliente |
 
-## 📒 Volume 6 — Framework de Banco de Dados
+## 📒 Volume 05 — Framework de Banco de Dados
 
 Arquivo: [`05-banco-de-dados.md`](05-banco-de-dados.md) · 40 regras
 
@@ -444,7 +444,7 @@ Arquivo: [`05-banco-de-dados.md`](05-banco-de-dados.md) · 40 regras
 | `DAT-039` | Retenção definida por tabela sensível ou volumosa | RECOM | — | Operação |
 | `DAT-040` | Isolamento de tenant garantido no banco quando possível | OBRIG | — | Operação |
 
-## 📓 Volume 5 — Segurança e DevSecOps
+## 📓 Volume 06 — Segurança e DevSecOps
 
 Arquivo: [`06-seguranca.md`](06-seguranca.md) · 66 regras
 
@@ -755,7 +755,7 @@ Arquivo: [`10-devops.md`](10-devops.md) · 48 regras
 | `OPS-047` | Incidente gera aprendizado registrado | RECOM | — | Recuperação e alta disponibilidade |
 | `OPS-048` | Incidente ativo interrompe a rodada | OBRIG | — | Recuperação e alta disponibilidade |
 
-## 📗 Volume 9 — QA e Testes
+## 📗 Volume 11 — QA e Testes
 
 Arquivo: [`11-qa.md`](11-qa.md) · 40 regras
 
@@ -802,7 +802,7 @@ Arquivo: [`11-qa.md`](11-qa.md) · 40 regras
 | `QAT-039` | Não exija teste de código trivial | OBRIG | — | Limites do papel |
 | `QAT-040` | Não bloqueie por percentual | IMUT | — | Limites do papel |
 
-## 📕 Volume 11 — Auditoria Técnica
+## 📕 Volume 12 — Auditoria Técnica
 
 Arquivo: [`12-auditoria.md`](12-auditoria.md) · 42 regras
 
@@ -1378,7 +1378,7 @@ Arquivo: [`20-prompt-engineering.md`](20-prompt-engineering.md) · 58 regras
 | `PRM-057` | Biblioteca em `prompts/` indexa; não duplica | OBRIG | — | Medição de aderência e custo de contexto |
 | `PRM-058` | Checklist operacional de prompt tem no máximo 25 itens | OBRIG | — | Medição de aderência e custo de contexto |
 
-## 📕 Volume 15 — Playbooks
+## 📕 Volume 21 — Playbooks
 
 Arquivo: [`21-playbooks.md`](21-playbooks.md) · 58 regras
 

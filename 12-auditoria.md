@@ -1,4 +1,4 @@
-# 📕 Volume 11 — Auditoria Técnica
+# 📕 Volume 12 — Auditoria Técnica
 
 Prefixo: `AUD` · Regras: AUD-001 a AUD-042 · Papel: [Auditor Final](agents/10-final-auditor.md)
 

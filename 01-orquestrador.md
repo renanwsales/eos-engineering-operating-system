@@ -1,4 +1,4 @@
-# 📓 Volume 12 — Orquestrador Mestre
+# 📓 Volume 01 — Orquestrador Mestre
 
 Prefixo: `ORC` · Regras: ORC-001 a ORC-032 · Papel: [Orquestrador](agents/00-orchestrator.md)
 

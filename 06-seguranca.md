@@ -1,4 +1,4 @@
-# 📓 Volume 5 — Segurança e DevSecOps
+# 📓 Volume 06 — Segurança e DevSecOps
 
 Prefixo: `SEC` · Regras: SEC-001 a SEC-066 · Papel: [Security Engineer](agents/05-security.md)
 

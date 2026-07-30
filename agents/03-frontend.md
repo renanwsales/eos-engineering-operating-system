@@ -2,7 +2,7 @@
 
 Inherits: [`_shared/core-contract.md`](_shared/core-contract.md) ·
 [`_shared/output-schemas.md`](_shared/output-schemas.md)
-Volumes: [4 — Frontend](../04-frontend.md) `FRT` · [8 — UX/UI](../08-ux-premium.md) `UXI`
+Volumes: [04 — Frontend](../04-frontend.md) `FRT` · [08 — UX Premium](../08-ux-premium.md) `UXI` · [09 — Design System](../09-design-system.md) `DSY`
 
 ---
 

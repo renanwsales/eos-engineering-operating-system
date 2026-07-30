@@ -1,4 +1,4 @@
-# 📕 Volume 15 — Playbooks
+# 📕 Volume 21 — Playbooks
 
 Prefixo: `PLB` · Regras: PLB-001 a PLB-058 · Papel: qualquer, conforme a tarefa
 
@@ -38,7 +38,7 @@ G4 nunca é comprimido (`CON-061`). Fechar o playbook sem Definition of Done é 
 
 ---
 
-## Capítulo 15.1 — Como usar um playbook
+## Capítulo 21.1 — Como usar um playbook
 
 ### PLB-001 — Playbook não substitui os portões **[IMUTÁVEL]**
 
@@ -57,16 +57,18 @@ o modelo anêmico.
 ### PLB-003 — Pule passo declarando que pulou **[OBRIGATÓRIA]**
 
 Passo irrelevante para a tarefa é `N/A` com uma frase de justificativa. Pular em silêncio é como um passo
-esquecido se torna indistinguível de um passo dispensado.
+esquecido se torna indistinguível de um passo dispensado — e viola a regra de evidência (`CON-009`):
+sem justificativa, o “feito” não é verificável.
 
 ### PLB-004 — Playbook divergente da realidade é achado **[OBRIGATÓRIA]**
 
 Se o passo não se aplica ao projeto por causa de uma convenção local, o achado é a lacuna no
-[perfil do projeto](templates/perfil-do-projeto.md), não uma exceção informal.
+[perfil do projeto](templates/perfil-do-projeto.md), não uma exceção informal. Achado não corrigido
+entra no backlog na mesma sessão (`CON-019`).
 
 ---
 
-## Capítulo 15.2 — Playbook: criar um CRUD
+## Capítulo 21.2 — Playbook: criar um CRUD
 
 O caso mais frequente e o mais frequentemente feito ao contrário. "CRUD" sugere quatro operações
 simétricas sobre uma tabela; **é a suposição que produz a maioria dos defeitos** desta tarefa, porque as
@@ -138,7 +140,7 @@ Exclusão e alteração de dado relevante, com quem e o que mudou (`SEC-011`, `D
 
 ---
 
-## Capítulo 15.3 — Playbook: criar um endpoint
+## Capítulo 21.3 — Playbook: criar um endpoint
 
 ### PLB-018 — Comece pelo contrato, e pelo que ele **não** expõe **[OBRIGATÓRIA]**
 
@@ -183,7 +185,7 @@ Adicionar depois é mudança incompatível (`BAK-032`).
 
 ---
 
-## Capítulo 15.4 — Playbook: criar uma tela
+## Capítulo 21.4 — Playbook: criar uma tela
 
 ### PLB-028 — Comece pelo objetivo do usuário e pelo critério de sucesso dele **[OBRIGATÓRIA]**
 
@@ -236,7 +238,7 @@ Com foco visível (`UXI-044`, `UXI-045`). Leva dois minutos e encontra o que a f
 
 ---
 
-## Capítulo 15.5 — Playbook: alterar o schema
+## Capítulo 21.5 — Playbook: alterar o schema
 
 ### PLB-040 — Conte os registros que violam a nova regra, primeiro **[OBRIGATÓRIA]**
 
@@ -273,11 +275,12 @@ Backup com restauração testada, aprovação humana prévia, lotes, retomável,
 ### PLB-047 — Cinco fases, cinco deploys **[OBRIGATÓRIA]**
 
 Adicionar → escrever nos dois → migrar em lotes → ler do novo → remover o antigo. Um deploy por fase, com
-confirmação de que nada mais usa o antigo antes de remover.
+confirmação de que nada mais usa o antigo antes de remover. É a expansão operacional de `DAT-031`;
+fase destrutiva nunca no mesmo deploy que mudança de comportamento (`OPS-007`, `DAT-035`).
 
 ---
 
-## Capítulo 15.6 — Playbook: integrar um serviço externo
+## Capítulo 21.6 — Playbook: integrar um serviço externo
 
 ### PLB-048 — Traduza na borda; o modelo do fornecedor não entra no domínio **[OBRIGATÓRIA]**
 
@@ -309,14 +312,15 @@ Persista a intenção, execute o efeito depois (`BAK-040`).
 
 ---
 
-## Capítulo 15.7 — Playbook: corrigir um bug
+## Capítulo 21.7 — Playbook: corrigir um bug
 
 O playbook mais curto e o mais violado, porque a pressa é maior.
 
 ### PLB-055 — Reproduza antes de corrigir **[IMUTÁVEL]**
 
 Sem reprodução você não sabe se corrigiu — sabe apenas que o sintoma não apareceu na sua tentativa. Se não
-consegue reproduzir, isso é o achado, e o próximo passo é instrumentar, não editar.
+consegue reproduzir, isso é o achado, e o próximo passo é instrumentar, não editar. O teste que falha
+antes da correção (`QAT-004`, `QAT-030`) é a forma verificável dessa reprodução.
 
 ### PLB-056 — Escreva o teste que falha, antes da correção **[OBRIGATÓRIA]**
 

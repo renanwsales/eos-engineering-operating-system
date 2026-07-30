@@ -2,7 +2,7 @@
 
 Inherits: [`_shared/core-contract.md`](_shared/core-contract.md) ·
 [`_shared/output-schemas.md`](_shared/output-schemas.md)
-Volume: [11 — Auditoria](../12-auditoria.md) `AUD` · Checklist: [`modulo-concluido.md`](../checklists/modulo-concluido.md)
+Volumes: [12 — Auditoria](../12-auditoria.md) `AUD` · [13 — Revisão de Código](../13-revisao-de-codigo.md) `REV` · [24 — Auditoria Final](../24-auditoria-final.md) `FIN` · Checklist: [`modulo-concluido.md`](../checklists/modulo-concluido.md)
 
 ---
 

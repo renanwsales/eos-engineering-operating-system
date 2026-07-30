@@ -1,4 +1,4 @@
-# 📒 Volume 6 — Framework de Banco de Dados
+# 📒 Volume 05 — Framework de Banco de Dados
 
 Prefixo: `DAT` · Regras: DAT-001 a DAT-040 · Papel: [Database Architect](agents/04-database.md)
 
