@@ -1,6 +1,6 @@
 # 📓 Volume 06 — Segurança e DevSecOps
 
-Prefixo: `SEC` · Regras: SEC-001 a SEC-093 · Papel: [Security Engineer](agents/05-security.md)
+Prefixo: `SEC` · Regras: SEC-001 a SEC-096 · Papel: [Security Engineer](agents/05-security.md)
 
 Camada coberta: **3 (segurança)**.
 
@@ -476,13 +476,62 @@ Script externo, artefato de build, imagem de contêiner, artefato de deploy. Ass
 
 Quem controla o pipeline controla a produção. Mudança nele tem a mesma revisão do código, ou mais.
 
-### SEC-043 — Cuidado com typosquatting e script de instalação **[RECOMENDADA]**
+### SEC-043 — Pacote novo é decisão verificada; typosquat e slopsquat são bloqueio **[OBRIGATÓRIA]**
 
-Pacote novo é decisão: verifique nome, mantenedor, volume de uso e o que ele executa na instalação.
+Antes de adicionar qualquer dependência ao manifesto ou ao lockfile, prove no registry
+oficial que o nome existe, quem o mantém, há quanto tempo e o que o pacote executa na
+instalação. Pacote sugerido por assistente de código, skill de agente ou tutorial sem essa
+prova é **não confiável** — o nome pode ser alucinação recorrente já registrada por
+atacante (*slopsquatting*).
 
----
+Nome com uma letra a menos, hífen trocado ou escopo `@org` falso (*typosquatting*) segue a
+mesma regra: não entre no tree. Diff de lockfile que introduz pacote novo sem essa
+verificação escrita no PR é `MUST-FIX`.
+
+```
+Ruim:  o modelo sugeriu unused-imports → npm install unused-imports
+Bom:   confirmar no registry o pacote legítimo (ex.: eslint-plugin-unused-imports),
+       histórico e installs; só então alterar manifesto + lockfile no mesmo PR
+```
+
 
 ## Capítulo 5.7 — Autenticação e sessão (OWASP A07)
+
+### SEC-094 — Instalação só a partir do lockfile travado **[OBRIGATÓRIA]**
+
+CI, deploy e o comando padrão de setup local resolvem **apenas** o que o lockfile pinou
+(ex.: `npm ci`, `pnpm install --frozen-lockfile`, `yarn install --immutable`). Instalação
+aberta que regenera o lock (`npm install` sem pin) é o canal pelo qual transitivas novas —
+incluindo nomes inventados — entram sem revisão humana.
+
+Lockfile versionado. Dependência por URL HTTP crua, `git+` ou tarball fora do registry
+oficial do projeto exige ADR e revisão de segurança: é o padrão de *Remote Dynamic
+Dependencies* usado para esconder payload fora do scanner do registry. Ver também
+`OPS-029` e `OPS-049`.
+
+### SEC-095 — Scripts de lifecycle de dependência desligados por padrão **[OBRIGATÓRIA]**
+
+`preinstall` / `install` / `postinstall` de pacotes de terceiros não rodam no install
+padrão do repositório (ex.: `ignore-scripts=true` no gerenciador). Binários nativos
+necessários ao build são recompilados por comando explícito e versionado (allowlist:
+compiladores do toolchain, não "qualquer pacote novo").
+
+Violação: um pacote legítimo comprometido, ou um typosquat, executa stealer/C2 no
+`npm ci` da máquina do desenvolvedor ou do runner — com acesso a tokens de CI, cloud e
+git. Varredura de CVE não impede isso se o advisory ainda não existe.
+
+### SEC-096 — Nome de pacote vindo de modelo é entrada não verificada **[OBRIGATÓRIA]**
+
+Trate sugestão de dependência gerada por LLM, agente ou skill como entrada hostil até
+`SEC-043` ser satisfeita. O agente **não** executa `install` de nome que não estava no
+manifesto/lockfile sem: (1) confirmação no registry, (2) diff revisável de manifesto +
+lockfile, (3) justificativa no PR.
+
+Alucinação de API de produto se contém (`IAX-028`); alucinação de **nome de pacote** se
+bloqueia na borda do install (`SEC-043`, esta regra). Instalar "para ver se resolve" é o
+exploit.
+
+---
 
 ### SEC-044 — Sessão expira, renova com segurança e é invalidada **[OBRIGATÓRIA]**
 
@@ -756,6 +805,8 @@ Nenhuma entrega passa com qualquer um destes:
 | 12 | Default privilege ou RPC `DEFINER` doando superfície ao papel público sem catálogo/prova | SEC-080, SEC-081 |
 | 13 | Rota com JWT desligado sem autenticação no handler | SEC-090 |
 | 14 | Efeito em dinheiro/estado só pelo corpo do webhook | SEC-091 |
+| 15 | Pacote novo no lockfile sem verificação no registry | SEC-043, SEC-096 |
+| 16 | Install aberta / scripts de dependência ligados sem allowlist | SEC-094, SEC-095 |
 
 ---
 
@@ -830,6 +881,10 @@ bucket legado público (`SEC-035`, `SEC-084`).
 efeito (`SEC-091`) → segredo fora da query (`SEC-087`) → GET sem mapa (`SEC-092`) → sink
 fail-closed (`SEC-093`). Playbook `PLB-059`–`PLB-063`.
 
+**Padrão: install travado.** Lockfile commitado + install frozen no CI/local + lifecycle scripts
+off + rebuild só do toolchain (`SEC-094`, `SEC-095`). Pacote novo: prova no registry antes do
+diff (`SEC-043`, `SEC-096`).
+
 ---
 
 ## Matrizes de decisão
@@ -888,7 +943,7 @@ fail-closed (`SEC-093`). Playbook `PLB-059`–`PLB-063`.
 7. Criptografia, TLS, segredos e chave de integração (SEC-012–018, SEC-052, SEC-085–088)
 8. Config, CORS, headers, superfície admin (SEC-031–037)
 8b. Plano de dados público / BaaS: allowlist GRANT, coluna, defaults, DEFINER, regressão, storage legado (SEC-077–084; cite SEC-035)
-9. Dependências e pipeline (SEC-038–043)
+9. Dependências e pipeline (SEC-038–043, SEC-094–096)
 10. Logs e eventos de segurança (SEC-050–051)
 11. Dados pessoais: inventário, retenção, direitos (SEC-053–058)
 12. Correção: prova de exploração fechada (SEC-064–065)
@@ -1047,6 +1102,18 @@ if (!timingSafeEqual(header, webhookAuth) || !verifyHmac(body, sig)) return 401
 
 ---
 
+```
+# Ruim — SEC-096 / SEC-043: instalar nome alucinado
+npm install react-codeshift
+
+# Bom — nome verificado no registry + lockfile no mesmo PR
+# (pacote real: jscodeshift / react-codemod — não inventar híbrido)
+npm ci
+# .npmrc: ignore-scripts=true
+# CI: npm ci && npm run deps:native   # allowlist explícita (SEC-095)
+```
+
+
 ## Antipadrões
 
 | Antipadrão | Consequência |
@@ -1086,6 +1153,9 @@ if (!timingSafeEqual(header, webhookAuth) || !verifyHmac(body, sig)) return 401
 | Confiar no nome do evento de pagamento | Cancelamento/ativo forjado (`SEC-091`) |
 | GET anônimo com mapa OAuth/canais | Reconhecimento barato (`SEC-092`) |
 | Log ingest sem secret obrigatório | Lixeira pública / custo (`SEC-093`) |
+| `npm install` de nome sugerido pelo modelo | Slopsquat / malware no postinstall (`SEC-043`, `SEC-096`) |
+| Lifecycle scripts ligados no install padrão | Stealer no CI/dev sem CVE (`SEC-095`) |
+| Lockfile regenerado sem revisão | Transitiva hostil entra silenciosa (`SEC-094`) |
 
 ---
 
@@ -1109,6 +1179,8 @@ if (!timingSafeEqual(header, webhookAuth) || !verifyHmac(body, sig)) return 401
 - [ ] Sem PII em log; eventos de segurança. (`SEC-050`, `SEC-051`)
 - [ ] Inventário/minimização/retenção de PII. (`SEC-053`–`SEC-055`)
 - [ ] Plano de dados público: allowlist GRANT; coluna; defaults; DEFINER; regressão CI; storage legado. (`SEC-077`–`SEC-084`)
+- [ ] Audit de deps bloqueia alto/crítico; pacote novo verificado no registry. (`SEC-038`, `SEC-043`, `SEC-096`)
+- [ ] Install só do lockfile; scripts de deps off ou allowlist. (`SEC-094`, `SEC-095`)
 - [ ] Correção com prova antes/depois. (`SEC-064`)
 - [ ] Regras de bloqueio da tabela do volume: zero violações abertas.
 
@@ -1183,6 +1255,7 @@ Output: findings with path:line, severity, exploit path, verification level
 11. Nível de verificação declarado (`SEC-060`).
 12. Autenticação em escopo com lockout conforme `SEC-026` (ou N/A justificado se o módulo não autentica).
 13. Correções `S0`/`S1` com prova antes/depois (`SEC-064`).
+14. Cadeia de suprimentos: audit alto/crítico fechado ou com análise (`SEC-038`/`SEC-039`); pacote novo verificado (`SEC-043`/`SEC-096`); install frozen e scripts controlados (`SEC-094`/`SEC-095`).
 
 ---
 

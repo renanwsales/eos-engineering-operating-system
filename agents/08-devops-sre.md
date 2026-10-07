@@ -84,6 +84,9 @@ For the change in scope:
 - [ ] The pipeline **blocks** on: failing tests, type errors, lint errors, critical/high dependency
       vulnerabilities, detected secrets, exceeded bundle budget. Testing without blocking is theatre.
 - [ ] Build is reproducible: exact dependency versions, same commit produces the same artifact.
+- [ ] Install is frozen from the lockfile; dependency lifecycle scripts are off by default; native
+      rebuilds use an explicit allowlist (`OPS-049`, `SEC-094`, `SEC-095`). CVE scan alone does not
+      catch typosquat/slopsquat (`SEC-043`, `SEC-096`).
 - [ ] One artifact promoted across environments, configuration injected from outside.
 - [ ] Pipeline changes are reviewed as code — whoever controls the pipeline controls production.
 - [ ] No secrets in pipeline logs.

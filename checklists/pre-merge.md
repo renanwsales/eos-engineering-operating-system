@@ -12,6 +12,8 @@ Regra que governa este checklist: **você não pode submeter um diff que não le
 - [ ] Li **cada linha** do diff, como se fosse de outra pessoa.
 - [ ] Cada arquivo tocado tem motivo. Nenhum entrou por descuido.
 - [ ] Nenhum arquivo gerado, lockfile ou formatação em massa misturado com lógica.
+- [ ] Se o lockfile mudou: cada pacote novo tem prova no registry (`SEC-043`); install
+      local/CI continua frozen (`SEC-094`); não reabilitei lifecycle scripts.
 - [ ] Nenhum `console.log`, `print`, código comentado ou artefato de debug.
 - [ ] Nenhum `TODO` sem ID de backlog.
 - [ ] Nenhum segredo, token, URL interna ou dado real de pessoa.

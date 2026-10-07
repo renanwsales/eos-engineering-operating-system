@@ -1,6 +1,6 @@
 # 📙 Volume 10 — DevOps e SRE
 
-Prefixo: `OPS` · Regras: OPS-001 a OPS-048 · Papel: [DevOps/SRE](agents/08-devops-sre.md)
+Prefixo: `OPS` · Regras: OPS-001 a OPS-049 · Papel: [DevOps/SRE](agents/08-devops-sre.md)
 
 Camada coberta: **8 (entrega)**.
 
@@ -209,8 +209,9 @@ crítica ou alta · segredo detectado · orçamento de bundle excedido · erro a
 
 ### OPS-029 — Build reproduzível **[OBRIGATÓRIA]**
 
-Dependências travadas por versão exata; o mesmo commit produz o mesmo artefato. Build que depende do que
-estava disponível no dia é impossível de auditar.
+Dependências travadas por versão exata (lockfile versionado); o mesmo commit produz o mesmo
+artefato. Build que depende do que estava disponível no dia é impossível de auditar. Instalação no
+CI e no setup documentado segue `SEC-094` (frozen), não resolve à solta.
 
 ### OPS-030 — Um artefato, vários ambientes **[RECOMENDADA]**
 
@@ -228,7 +229,16 @@ Pipeline lento produz a prática de contorná-lo, que anula todos os portões.
 
 ### OPS-034 — Varredura de dependências e de segredos automatizada **[OBRIGATÓRIA]**
 
-Ver SEC-038 e SEC-052.
+Ver SEC-038 e SEC-052. Varredura de CVE **não** substitui `SEC-043`/`SEC-096`: pacote inventado
+ou typosquat pode não ter advisory.
+
+### OPS-049 — Install do CI desliga lifecycle de deps e rebuilda só o toolchain **[OBRIGATÓRIA]**
+
+Jobs que instalam dependências usam install frozen (`SEC-094`) com scripts de lifecycle
+desligados (`SEC-095`). Se o build precisa de binário nativo (bundler, compilador SWC, etc.),
+o rebuild é um passo explícito com allowlist versionada no repositório — nunca
+`ignore-scripts=false` global "para o CI passar". Diff de workflow ou `.npmrc` que reabre
+scripts sem allowlist é revisão de segurança, não nit de DevOps.
 
 ---
 
@@ -372,7 +382,7 @@ passos; responsável nomeado (`OPS-023`–`OPS-027`). *Não alerte* CPU ou rein�
 2. Compatibilidade       → schema, fila, cache, API, config com versão antiga no ar (OPS-010–012)
 3. Detecção              → falha silenciosa tem sinal; correlação; métrica de negócio (OPS-013–022)
 4. Alertas               → sintoma, runbook, dono; ruído é defeito (OPS-023–027)
-5. Portões do pipeline   → bloqueia de verdade; artefato reproduzível (OPS-028–034)
+5. Portões do pipeline   → bloqueia de verdade; artefato reproduzível; install frozen (OPS-028–034, OPS-049)
 6. Deploy                → health real; gradual se o risco pede (OPS-035–038)
 7. Configuração/segredos → valida no start; divergência documentada; rotação sem deploy (OPS-039–041)
 8. Recuperação           → restauração medida; RPO/RTO; modo degradado; SPOF declarado (OPS-042–046)
@@ -438,6 +448,7 @@ Ação: runbooks/checkout-drop.md · Dono: plantão-pagamentos
 | Alerta sem runbook | Quem é acionado não sabe o que fazer |
 | Alerta por causa, não por sintoma | Ruído alto, detecção baixa |
 | Pipeline que testa mas não bloqueia | Falsa sensação de segurança |
+| Install aberto / lifecycle ligado no CI | Pacote inventado ou postinstall malicioso (`OPS-049`, `SEC-094`) |
 | Rollback nunca testado | Descoberto durante o incidente |
 | Migração destrutiva junto com deploy | Rollback impossível |
 | Verificação de saúde que sempre passa | Instância quebrada recebe tráfego |
@@ -459,6 +470,7 @@ Ação: runbooks/checkout-drop.md · Dono: plantão-pagamentos
 - [ ] Quatro métricas mínimas + métrica de negócio que pega falha silenciosa. (`OPS-018`, `OPS-019`)
 - [ ] Todo alerta tem sintoma, runbook e dono; ruído tratado como defeito. (`OPS-023`–`OPS-027`)
 - [ ] Pipeline bloqueia em teste, type, lint, segredo e CVE crítico. (`OPS-028`, `OPS-034`)
+- [ ] Install do CI é frozen + lifecycle off + rebuild allowlist. (`OPS-049`, `SEC-094`, `SEC-095`)
 - [ ] Health check prova dependência real. (`OPS-035`)
 - [ ] Config válida no start; divergência entre ambientes documentada. (`OPS-039`, `OPS-040`)
 - [ ] Segredos rotacionáveis sem deploy. (`OPS-041`)
@@ -513,7 +525,7 @@ Um módulo ou mudança passa em DevOps quando todos são verdadeiros:
 4. Falha silenciosa do escopo tem detecção; logs correlacionáveis; quatro métricas + métrica de
    negócio (`OPS-013`–`OPS-022`).
 5. Todo alerta do escopo tem runbook e dono (`OPS-025`, `OPS-027`).
-6. Pipeline bloqueia nos portões obrigatórios (`OPS-028`, `OPS-034`).
+6. Pipeline bloqueia nos portões obrigatórios (`OPS-028`, `OPS-034`); install segue `OPS-049`.
 7. Health check real (`OPS-035`); config válida no start (`OPS-039`).
 8. Restauração testada com duração medida e objetivos de recuperação declarados (`OPS-042`,
    `OPS-043`) — ou N/A justificado no perfil para serviço sem estado persistente próprio.

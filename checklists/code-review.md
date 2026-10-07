@@ -107,6 +107,8 @@ Somente divergências de norma registrada nos [volumes](../RULES-INDEX.md). Pref
 ## Específico para código gerado por IA
 
 - [ ] API inventada: função, opção ou pacote que não existe na versão em uso.
+- [ ] **Pacote inventado (*slopsquatting*):** nome sugerido pelo modelo sem prova no
+      registry — bloquear install e o diff de lockfile (`SEC-043`, `SEC-096`).
 - [ ] Padrão correto em geral, errado para esta arquitetura.
 - [ ] Simetria falsa: ramos que parecem iguais e divergem sutilmente.
 - [ ] Teste tautológico, que afirma o que a implementação faz — inclusive o defeito.
