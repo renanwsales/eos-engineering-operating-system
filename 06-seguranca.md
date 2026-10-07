@@ -1,6 +1,6 @@
 # 📓 Volume 06 — Segurança e DevSecOps
 
-Prefixo: `SEC` · Regras: SEC-001 a SEC-066 · Papel: [Security Engineer](agents/05-security.md)
+Prefixo: `SEC` · Regras: SEC-001 a SEC-069 · Papel: [Security Engineer](agents/05-security.md)
 
 Camada coberta: **3 (segurança)**.
 
@@ -230,6 +230,16 @@ Sem endpoint de diagnóstico, console de administração ou porta de gerenciamen
 
 ## Capítulo 5.6 — Dependências e cadeia de suprimentos (OWASP A06 e A08)
 
+O atacante não precisa comprometer o seu código: basta que alguém — humano ou agente —
+instale um nome que *parece* certo. Typosquatting troca uma letra; *slopsquatting*
+(pacote inventado) registra o nome que um modelo de linguagem alucina de forma
+recorrente. Em ambos os casos o `install` baixa malware com a autoridade da máquina
+de desenvolvimento ou do CI.
+
+`npm audit` e equivalentes cobrem CVE conhecidos (`SEC-038`). Não cobrem pacote
+publicado ontem sem advisory. A defesa é **não deixar o nome entrar no tree** e
+**não executar script de instalação sem lista explícita**.
+
 ### SEC-038 — Varredura automatizada que bloqueia **[OBRIGATÓRIA]**
 
 No pipeline, reprovando severidade crítica e alta. Varredura que só reporta é teatro.
@@ -243,14 +253,64 @@ Se não é explorável, isso é uma **conclusão** que precisa estar registrada.
 ### SEC-041 — Integridade verificada em tudo que executa **[OBRIGATÓRIA]**
 
 Script externo, artefato de build, imagem de contêiner, artefato de deploy. Assinatura ou hash.
+No ecossistema de pacotes: lockfile com hash de integridade por artefato; resolved só no
+registry oficial do projeto.
 
 ### SEC-042 — Pipeline é código revisado **[OBRIGATÓRIA]**
 
 Quem controla o pipeline controla a produção. Mudança nele tem a mesma revisão do código, ou mais.
 
-### SEC-043 — Cuidado com typosquatting e script de instalação **[RECOMENDADA]**
+### SEC-043 — Pacote novo é decisão verificada; typosquat e slopsquat são bloqueio **[OBRIGATÓRIA]**
 
-Pacote novo é decisão: verifique nome, mantenedor, volume de uso e o que ele executa na instalação.
+Antes de adicionar qualquer dependência ao manifesto ou ao lockfile, prove no registry
+oficial que o nome existe, quem o mantém, há quanto tempo e o que o pacote executa na
+instalação. Pacote sugerido por assistente de código, skill de agente ou tutorial sem essa
+prova é **não confiável** — o nome pode ser alucinação recorrente já registrada por
+atacante (*slopsquatting*).
+
+Nome com uma letra a menos, hífen trocado ou escopo `@org` falso (*typosquatting*) segue a
+mesma regra: não entre no tree. Diff de lockfile que introduz pacote novo sem essa
+verificação escrita no PR é `MUST-FIX`.
+
+```
+Ruim:  o modelo sugeriu unused-imports → npm install unused-imports
+Bom:   confirmar no registry o pacote legítimo (ex.: eslint-plugin-unused-imports),
+       histórico e installs; só então alterar manifesto + lockfile no mesmo PR
+```
+
+### SEC-067 — Instalação só a partir do lockfile travado **[OBRIGATÓRIA]**
+
+CI, deploy e o comando padrão de setup local resolvem **apenas** o que o lockfile pinou
+(ex.: `npm ci`, `pnpm install --frozen-lockfile`, `yarn install --immutable`). Instalação
+aberta que regenera o lock (`npm install` sem pin) é o canal pelo qual transitivas novas —
+incluindo nomes inventados — entram sem revisão humana.
+
+Lockfile versionado. Dependência por URL HTTP crua, `git+` ou tarball fora do registry
+oficial do projeto exige ADR e revisão de segurança: é o padrão de *Remote Dynamic
+Dependencies* usado para esconder payload fora do scanner do registry. Ver também
+`OPS-029` e `OPS-049`.
+
+### SEC-068 — Scripts de lifecycle de dependência desligados por padrão **[OBRIGATÓRIA]**
+
+`preinstall` / `install` / `postinstall` de pacotes de terceiros não rodam no install
+padrão do repositório (ex.: `ignore-scripts=true` no gerenciador). Binários nativos
+necessários ao build são recompilados por comando explícito e versionado (allowlist:
+compiladores do toolchain, não "qualquer pacote novo").
+
+Violação: um pacote legítimo comprometido, ou um typosquat, executa stealer/C2 no
+`npm ci` da máquina do desenvolvedor ou do runner — com acesso a tokens de CI, cloud e
+git. Varredura de CVE não impede isso se o advisory ainda não existe.
+
+### SEC-069 — Nome de pacote vindo de modelo é entrada não verificada **[OBRIGATÓRIA]**
+
+Trate sugestão de dependência gerada por LLM, agente ou skill como entrada hostil até
+`SEC-043` ser satisfeita. O agente **não** executa `install` de nome que não estava no
+manifesto/lockfile sem: (1) confirmação no registry, (2) diff revisável de manifesto +
+lockfile, (3) justificativa no PR.
+
+Alucinação de API de produto se contém (`IAX-028`); alucinação de **nome de pacote** se
+bloqueia na borda do install (`SEC-043`, esta regra). Instalar "para ver se resolve" é o
+exploit.
 
 ---
 
@@ -410,6 +470,8 @@ Nenhuma entrega passa com qualquer um destes:
 | 8 | CORS permissivo com credencial | SEC-033 |
 | 9 | Dado sensível sem TLS | SEC-013 |
 | 10 | Ausência de limite de tentativas em autenticação | SEC-026 |
+| 11 | Pacote novo no lockfile sem verificação no registry | SEC-043 |
+| 12 | Install aberta / scripts de dependência ligados sem allowlist | SEC-067, SEC-068 |
 
 ---
 
@@ -452,6 +514,10 @@ esquecido (`SEC-007`, `SEC-008`).
 
 **Padrão: prova antes/depois.** Mesma requisição exploratória → 403; legítima → 200 (`SEC-064`).
 
+**Padrão: install travado.** Lockfile commitado + install frozen no CI/local + lifecycle scripts
+off + rebuild só do toolchain (`SEC-067`, `SEC-068`). Pacote novo: prova no registry antes do
+diff (`SEC-043`, `SEC-069`).
+
 ---
 
 ## Matrizes de decisão
@@ -484,7 +550,7 @@ esquecido (`SEC-007`, `SEC-008`).
 4. Entrada: injeção, upload, SSRF (SEC-019–024, SEC-049)
 5. Criptografia, TLS, segredos (SEC-012–018, SEC-052)
 6. Config, CORS, headers, superfície (SEC-031–037)
-7. Dependências e pipeline (SEC-038–043)
+7. Dependências e pipeline (SEC-038–043, SEC-067–069)
 8. Logs e eventos de segurança (SEC-050–051)
 9. Dados pessoais: inventário, retenção, direitos (SEC-053–058)
 10. Correção: prova de exploração fechada (SEC-064–065)
@@ -522,6 +588,17 @@ Depois: GET /orders/A  como user B → 403
 Legítimo: GET /orders/A como user A → 200
 ```
 
+```
+# Ruim — SEC-069 / SEC-043: instalar nome alucinado
+npm install react-codeshift
+
+# Bom — nome verificado no registry + lockfile no mesmo PR
+# (pacote real: jscodeshift / react-codemod — não inventar híbrido)
+npm ci
+# .npmrc: ignore-scripts=true
+# CI: npm ci && npm run deps:native   # allowlist explícita (SEC-068)
+```
+
 ---
 
 ## Antipadrões
@@ -538,6 +615,9 @@ Legítimo: GET /orders/A como user A → 200
 | Suprimir CVE sem análise escrita | Risco invisível (`SEC-039`) |
 | “Testes verdes” como prova de authz | Regressão de exploração (`SEC-064`) |
 | Rebaixar `S0` de segurança por prazo | `SEC-066` |
+| `npm install` de nome sugerido pelo modelo | Slopsquat / malware no postinstall (`SEC-043`, `SEC-069`) |
+| Lifecycle scripts ligados no install padrão | Stealer no CI/dev sem CVE (`SEC-068`) |
+| Lockfile regenerado sem revisão | Transitiva hostil entra silenciosa (`SEC-067`) |
 
 ---
 
@@ -553,6 +633,8 @@ Legítimo: GET /orders/A como user A → 200
 - [ ] SSRF com allowlist. (`SEC-049`)
 - [ ] Sem PII em log; eventos de segurança. (`SEC-050`, `SEC-051`)
 - [ ] Inventário/minimização/retenção de PII. (`SEC-053`–`SEC-055`)
+- [ ] Audit de deps bloqueia alto/crítico; pacote novo verificado no registry. (`SEC-038`, `SEC-043`)
+- [ ] Install só do lockfile; scripts de deps off ou allowlist. (`SEC-067`, `SEC-068`)
 - [ ] Correção com prova antes/depois. (`SEC-064`)
 - [ ] Regras de bloqueio da tabela do volume: zero violações abertas.
 
@@ -577,6 +659,9 @@ Rules of engagement:
 - Object-level authz and tenant isolation are S0 (SEC-004, SEC-006).
 - Fix requires exploit-path closed with before/after (SEC-064).
 - Do not downgrade security S0 (SEC-066). Do not invent new SEC rules.
+- Supply chain: new package needs registry proof (SEC-043); frozen install
+  (SEC-067); lifecycle scripts off by default (SEC-068); LLM-suggested
+  package names are unverified input (SEC-069). Cite OPS-049 for CI install.
 
 Output: findings with path:line, severity, exploit path, verification level
 (V1/V2/V3), blocking-table hits, unverified items.
@@ -591,8 +676,10 @@ Output: findings with path:line, severity, exploit path, verification level
 3. Zero concatenação de entrada em consulta/comando (`SEC-019`, `SEC-020`).
 4. Nenhum segredo no repositório ou no cliente (`SEC-052`).
 5. Sem dado pessoal em log nos caminhos revisados (`SEC-050`).
-6. Nível de verificação declarado (`SEC-060`).
-7. Correções `S0`/`S1` com prova antes/depois (`SEC-064`).
+6. Cadeia de suprimentos: audit alto/crítico fechado ou com análise (`SEC-038`/`SEC-039`);
+   pacote novo verificado (`SEC-043`); install frozen e scripts controlados (`SEC-067`/`SEC-068`).
+7. Nível de verificação declarado (`SEC-060`).
+8. Correções `S0`/`S1` com prova antes/depois (`SEC-064`).
 
 ---
 

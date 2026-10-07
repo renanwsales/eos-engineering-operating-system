@@ -68,13 +68,18 @@ Caminhos que a revisão esquece:
 - [ ] Menor privilégio em toda credencial de serviço.
 - [ ] Nenhum endpoint de diagnóstico ou console de administração exposto.
 
-## 6. Componentes vulneráveis
+## 6. Componentes vulneráveis e cadeia de suprimentos
 
-- [ ] Varredura automatizada no pipeline, bloqueando crítico e alto.
+- [ ] Varredura automatizada no pipeline, bloqueando crítico e alto. (`SEC-038`)
 - [ ] Nenhuma vulnerabilidade crítica ou alta em aberto.
-- [ ] Nenhuma dependência abandonada sem risco registrado.
-- [ ] Toda supressão tem **análise de explorabilidade escrita**.
-- [ ] Nenhum pacote suspeito de typosquatting.
+- [ ] Nenhuma dependência abandonada sem risco registrado. (`SEC-040`)
+- [ ] Toda supressão tem **análise de explorabilidade escrita**. (`SEC-039`)
+- [ ] Nenhum typosquat nem slopsquat (nome inventado por modelo) no tree. (`SEC-043`)
+- [ ] Pacote novo no PR: prova no registry (nome, mantenedor, idade, scripts). (`SEC-043`)
+- [ ] Install padrão é frozen a partir do lockfile (`npm ci` / equivalente). (`SEC-067`)
+- [ ] Lifecycle scripts de deps desligados; rebuild só por allowlist. (`SEC-068`, `OPS-049`)
+- [ ] Lockfile sem URL HTTP crua / `git+` sem ADR. (`SEC-067`)
+- [ ] Agente/LLM não instalou pacote fora do manifesto sem verificação. (`SEC-069`)
 
 ## 7. Autenticação e sessão
 

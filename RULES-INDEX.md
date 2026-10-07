@@ -1,6 +1,6 @@
 # RULES-INDEX — índice de regras do EOS
 
-**1391 regras** em 25 volumes. Este arquivo é **gerado** por
+**1395 regras** em 25 volumes. Este arquivo é **gerado** por
 `scripts/build-rules-index.py`; não edite à mão. Se um volume e este índice divergirem,
 **o volume** é a fonte de verdade.
 
@@ -21,7 +21,7 @@ deixa o número aposentado, nunca reaproveitado, para que relatórios antigos co
 | `[RECOMENDADA]` | Padrão esperado; exceção é normal | Justificativa no momento, sem ADR |
 | `[REVOGADA]` | Não vale mais; o número fica aposentado | — |
 
-Distribuição: **133 imutáveis** · **1051 obrigatórias** · **207 recomendadas**.
+Distribuição: **133 imutáveis** · **1056 obrigatórias** · **206 recomendadas**.
 
 ## Volumes
 
@@ -33,11 +33,11 @@ Distribuição: **133 imutáveis** · **1051 obrigatórias** · **207 recomendad
 | 03 | [Framework Backend](03-backend.md) | `BAK` | 73 |
 | 04 | [Framework Frontend](04-frontend.md) | `FRT` | 42 |
 | 05 | [Framework de Banco de Dados](05-banco-de-dados.md) | `DAT` | 40 |
-| 06 | [Segurança e DevSecOps](06-seguranca.md) | `SEC` | 66 |
+| 06 | [Segurança e DevSecOps](06-seguranca.md) | `SEC` | 69 |
 | 07 | [Framework de Performance](07-performance.md) | `PRF` | 38 |
 | 08 | [UX/UI Premium](08-ux-premium.md) | `UXI` | 55 |
 | 09 | [Design System](09-design-system.md) | `DSY` | 69 |
-| 10 | [DevOps e SRE](10-devops.md) | `OPS` | 48 |
+| 10 | [DevOps e SRE](10-devops.md) | `OPS` | 49 |
 | 11 | [QA e Testes](11-qa.md) | `QAT` | 40 |
 | 12 | [Auditoria Técnica](12-auditoria.md) | `AUD` | 42 |
 | 13 | [Revisão de Código](13-revisao-de-codigo.md) | `REV` | 58 |
@@ -52,7 +52,7 @@ Distribuição: **133 imutáveis** · **1051 obrigatórias** · **207 recomendad
 | 22 | [Checklists](22-checklists.md) | `CHK` | 48 |
 | 23 | [Métricas](23-metricas.md) | `MET` | 58 |
 | 24 | [Auditoria Final](24-auditoria-final.md) | `FIN` | 52 |
-| | **Total** | | **1391** |
+| | **Total** | | **1395** |
 
 ---
 
@@ -446,7 +446,7 @@ Arquivo: [`05-banco-de-dados.md`](05-banco-de-dados.md) · 40 regras
 
 ## 📓 Volume 06 — Segurança e DevSecOps
 
-Arquivo: [`06-seguranca.md`](06-seguranca.md) · 66 regras
+Arquivo: [`06-seguranca.md`](06-seguranca.md) · 69 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -492,7 +492,10 @@ Arquivo: [`06-seguranca.md`](06-seguranca.md) · 66 regras
 | `SEC-040` | Dependência abandonada é risco registrado | RECOM | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
 | `SEC-041` | Integridade verificada em tudo que executa | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
 | `SEC-042` | Pipeline é código revisado | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
-| `SEC-043` | Cuidado com typosquatting e script de instalação | RECOM | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
+| `SEC-043` | Pacote novo é decisão verificada; typosquat e slopsquat são bloqueio | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
+| `SEC-067` | Instalação só a partir do lockfile travado | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
+| `SEC-068` | Scripts de lifecycle de dependência desligados por padrão | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
+| `SEC-069` | Nome de pacote vindo de modelo é entrada não verificada | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
 | `SEC-044` | Sessão expira, renova com segurança e é invalidada | OBRIG | — | Autenticação e sessão (OWASP A07) |
 | `SEC-045` | Identificador de sessão regenerado após autenticar | OBRIG | — | Autenticação e sessão (OWASP A07) |
 | `SEC-046` | Token com escopo, vida curta e revogação possível | OBRIG | — | Autenticação e sessão (OWASP A07) |
@@ -702,7 +705,7 @@ Arquivo: [`09-design-system.md`](09-design-system.md) · 69 regras
 
 ## 📙 Volume 10 — DevOps e SRE
 
-Arquivo: [`10-devops.md`](10-devops.md) · 48 regras
+Arquivo: [`10-devops.md`](10-devops.md) · 49 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -740,6 +743,7 @@ Arquivo: [`10-devops.md`](10-devops.md) · 48 regras
 | `OPS-032` | Nenhum segredo em log de pipeline | OBRIG | — | CI/CD |
 | `OPS-033` | Pipeline rápido o suficiente para não ser contornado | RECOM | — | CI/CD |
 | `OPS-034` | Varredura de dependências e de segredos automatizada | OBRIG | — | CI/CD |
+| `OPS-049` | Install do CI desliga lifecycle de deps e rebuilda só o toolchain | OBRIG | — | CI/CD |
 | `OPS-035` | Verificação de saúde real | OBRIG | — | Deploy |
 | `OPS-036` | Gradual quando o risco justifica | RECOM | — | Deploy |
 | `OPS-037` | Deploy é rotina e frequente | RECOM | — | Deploy |

@@ -37,6 +37,12 @@ could not find the authorization check" is a finding, not an inconclusive result
    configuration.
 6. Then SSRF, integrity, logging.
 
+On dependencies, go beyond CVE scanners: new lockfile entries need registry proof
+(`SEC-043`); install must be frozen (`SEC-067`); lifecycle scripts off by default
+(`SEC-068`); package names from coding agents are unverified until proven (`SEC-069`).
+Typosquat and slopsquat (LLM-invented names) are blocking findings even without an
+advisory.
+
 Start with authorization even if you are asked about something else. A missing authorization check
 outweighs every other class of finding.
 
