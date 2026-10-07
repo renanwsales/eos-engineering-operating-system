@@ -41,13 +41,17 @@ Caminhos que a revisão esquece:
 
 ## 3. Injeção
 
-- [ ] Toda consulta parametrizada. Nenhuma concatenação de entrada. (`S0`)
-- [ ] Vale para NoSQL, comando de sistema, LDAP e template.
-- [ ] Escape na saída por contexto: HTML, atributo, URL, JavaScript.
-- [ ] Nenhuma inserção de HTML não confiável.
-- [ ] Nenhuma execução de entrada como código, comando ou template.
-- [ ] Validação por lista de permitidos, não de proibidos.
-- [ ] Nome de arquivo, cabeçalho e destino de redirecionamento validados.
+- [ ] Toda consulta parametrizada. Nenhuma concatenação de entrada. (`S0`) (`SEC-019`)
+- [ ] Vale para NoSQL, comando de sistema, LDAP e template. (`SEC-019`, `SEC-020`)
+- [ ] SQL dinâmico: coluna/sort/tabela só via allowlist; valores só com bind/`USING`. (`S0`) (`SEC-067`, `SEC-069`)
+- [ ] Filtro montado em string (PostgREST `.or()`, DSL, where serializado): sem texto cru; preferir API tipada; sanitizar gramática se inevitável. (`S0`) (`SEC-068`)
+- [ ] Cliente privilegiado (service role / admin): IDs e termos de integração com formato fechado antes de interpolar. (`S0`) (`SEC-070`)
+- [ ] Helper único de sanitização de filtro onde a DSL exige interpolação. (`SEC-071`)
+- [ ] Escape na saída por contexto: HTML, atributo, URL, JavaScript. (`SEC-021`)
+- [ ] Nenhuma inserção de HTML não confiável. (`SEC-022`)
+- [ ] Nenhuma execução de entrada como código, comando ou template. (`SEC-020`)
+- [ ] Validação por lista de permitidos, não de proibidos. (`SEC-069`)
+- [ ] Nome de arquivo, cabeçalho e destino de redirecionamento validados. (`SEC-024`)
 
 ## 4. Design inseguro
 

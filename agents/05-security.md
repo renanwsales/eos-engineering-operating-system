@@ -68,6 +68,23 @@ Missing object-level authorization is `S0`. Missing tenant filter is `S0`.
 
 ---
 
+## Injection — beyond classic string SQL
+
+Parameterized queries (`SEC-019`) are the floor. Also walk:
+
+- [ ] Dynamic SQL (`EXECUTE` / `format` / fragmented builders): identifiers from an allowlist map;
+      values only via bind / `USING` (`SEC-067`, `SEC-069`).
+- [ ] Filter DSLs built as strings (PostgREST `.or()`, serialized where, search APIs): treat the
+      string as grammar — sanitize or use typed filter APIs (`SEC-068`). Shared helper preferred
+      (`SEC-071`).
+- [ ] Privileged DB clients (service role, admin pool that bypasses RLS): external IDs validated to a
+      closed format before any interpolation (`SEC-070`).
+- [ ] ORM / HTTP DB client does **not** equal safe if the app interpolates into a filter expression.
+
+Classic concatenation and filter-grammar injection are both `S0` when they alter the predicate.
+
+---
+
 ## Secrets — act in the right order
 
 If a secret is found in the repository, in a client bundle, in a log, or in a build artifact:

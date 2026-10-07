@@ -1,6 +1,6 @@
 # RULES-INDEX — índice de regras do EOS
 
-**1391 regras** em 25 volumes. Este arquivo é **gerado** por
+**1396 regras** em 25 volumes. Este arquivo é **gerado** por
 `scripts/build-rules-index.py`; não edite à mão. Se um volume e este índice divergirem,
 **o volume** é a fonte de verdade.
 
@@ -21,7 +21,7 @@ deixa o número aposentado, nunca reaproveitado, para que relatórios antigos co
 | `[RECOMENDADA]` | Padrão esperado; exceção é normal | Justificativa no momento, sem ADR |
 | `[REVOGADA]` | Não vale mais; o número fica aposentado | — |
 
-Distribuição: **133 imutáveis** · **1051 obrigatórias** · **207 recomendadas**.
+Distribuição: **133 imutáveis** · **1055 obrigatórias** · **208 recomendadas**.
 
 ## Volumes
 
@@ -33,7 +33,7 @@ Distribuição: **133 imutáveis** · **1051 obrigatórias** · **207 recomendad
 | 03 | [Framework Backend](03-backend.md) | `BAK` | 73 |
 | 04 | [Framework Frontend](04-frontend.md) | `FRT` | 42 |
 | 05 | [Framework de Banco de Dados](05-banco-de-dados.md) | `DAT` | 40 |
-| 06 | [Segurança e DevSecOps](06-seguranca.md) | `SEC` | 66 |
+| 06 | [Segurança e DevSecOps](06-seguranca.md) | `SEC` | 71 |
 | 07 | [Framework de Performance](07-performance.md) | `PRF` | 38 |
 | 08 | [UX/UI Premium](08-ux-premium.md) | `UXI` | 55 |
 | 09 | [Design System](09-design-system.md) | `DSY` | 69 |
@@ -52,7 +52,7 @@ Distribuição: **133 imutáveis** · **1051 obrigatórias** · **207 recomendad
 | 22 | [Checklists](22-checklists.md) | `CHK` | 48 |
 | 23 | [Métricas](23-metricas.md) | `MET` | 58 |
 | 24 | [Auditoria Final](24-auditoria-final.md) | `FIN` | 52 |
-| | **Total** | | **1391** |
+| | **Total** | | **1396** |
 
 ---
 
@@ -446,7 +446,7 @@ Arquivo: [`05-banco-de-dados.md`](05-banco-de-dados.md) · 40 regras
 
 ## 📓 Volume 06 — Segurança e DevSecOps
 
-Arquivo: [`06-seguranca.md`](06-seguranca.md) · 66 regras
+Arquivo: [`06-seguranca.md`](06-seguranca.md) · 71 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -474,6 +474,11 @@ Arquivo: [`06-seguranca.md`](06-seguranca.md) · 66 regras
 | `SEC-022` | Nenhuma inserção de HTML não confiável | OBRIG | `S1` | Injeção (OWASP A03) |
 | `SEC-023` | Upload de arquivo tratado como hostil | OBRIG | — | Injeção (OWASP A03) |
 | `SEC-024` | Nome de arquivo, cabeçalho e caminho validados | OBRIG | — | Injeção (OWASP A03) |
+| `SEC-067` | SQL dinâmico só com identificador allowlist e valor bound | OBRIG | `S0` | Injeção (OWASP A03) |
+| `SEC-068` | Predicado montado em string é superfície de injeção | OBRIG | `S0` | Injeção (OWASP A03) |
+| `SEC-069` | Identificador e enum de consulta por lista de permitidos | OBRIG | — | Injeção (OWASP A03) |
+| `SEC-070` | Cliente privilegiado exige validação mais rígida do interpolado | OBRIG | `S0` | Injeção (OWASP A03) |
+| `SEC-071` | Helper único de sanitização de filtro compartilhado | RECOM | — | Injeção (OWASP A03) |
 | `SEC-025` | Reautenticação em fluxo sensível | OBRIG | — | Design inseguro (OWASP A04) |
 | `SEC-026` | Limite de tentativas com bloqueio progressivo | OBRIG | — | Design inseguro (OWASP A04) |
 | `SEC-027` | Não revele existência | OBRIG | — | Design inseguro (OWASP A04) |

@@ -36,7 +36,8 @@ Prefixos obrigatórios de comentário: `MUST` · `SHOULD` · `CONSIDER` · `QUES
 - [ ] Autorização verificada **por objeto**, não só por rota.
 - [ ] Filtro de tenant presente em toda consulta multi-inquilino.
 - [ ] Entrada validada no servidor.
-- [ ] Consulta parametrizada; nenhuma concatenação de entrada.
+- [ ] Consulta parametrizada; nenhuma concatenação de entrada. (`SEC-019`)
+- [ ] SQL dinâmico / sort / filtro DSL sem texto cru; service role valida IDs. (`SEC-067`–`SEC-070`)
 - [ ] Nenhum segredo em código, log ou bundle de cliente.
 - [ ] Nenhum dado pessoal novo em log.
 - [ ] Integridade garantida no banco onde é possível.

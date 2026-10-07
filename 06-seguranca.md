@@ -1,6 +1,6 @@
 # 📓 Volume 06 — Segurança e DevSecOps
 
-Prefixo: `SEC` · Regras: SEC-001 a SEC-066 · Papel: [Security Engineer](agents/05-security.md)
+Prefixo: `SEC` · Regras: SEC-001 a SEC-071 · Papel: [Security Engineer](agents/05-security.md)
 
 Camada coberta: **3 (segurança)**.
 
@@ -146,7 +146,8 @@ Base64 não protege nada. Confundir os três é erro conceitual que produz vulne
 ### SEC-019 — Consulta parametrizada, sempre **[OBRIGATÓRIA]** · `S0`
 
 Concatenação de entrada em SQL é `S0`. Vale igualmente para NoSQL, comando de sistema, LDAP, XPath e
-template.
+template. Usar ORM ou cliente HTTP de banco **não** dispensa a regra: se a biblioteca monta o predicado
+a partir de uma string que você interpolou, você concatenou.
 
 ### SEC-020 — Nunca execute entrada **[OBRIGATÓRIA]** · `S0`
 
@@ -169,6 +170,49 @@ servida · nunca executável · limite de tamanho · varredura quando aplicável
 ### SEC-024 — Nome de arquivo, cabeçalho e caminho validados **[OBRIGATÓRIA]**
 
 Travessia de diretório e injeção de cabeçalho vêm de campos que ninguém considera entrada.
+
+### SEC-067 — SQL dinâmico só com identificador allowlist e valor bound **[OBRIGATÓRIA]** · `S0`
+
+Quando a consulta precisa ser montada em runtime (`EXECUTE`, `format`, query builder com fragmentos),
+**identificadores** (tabela, coluna, direção de sort, nome de campo de data) vêm de um mapa fechado no
+código — nunca do texto do usuário. **Valores** (busca, IDs, datas, enums) entram só como parâmetros
+vinculados (`$1`, placeholders do driver). Concatenar o termo de busca na string SQL é a mesma classe
+de falha que `SEC-019`, mesmo dentro de uma função `SECURITY DEFINER` ou de um “fast path”.
+
+Violação típica: `format('… ORDER BY %s …', userSort)` sem CASE/allowlist; ou
+`ilike '%' || userInput` embutido no texto do `format` em vez de `USING`.
+
+### SEC-068 — Predicado montado em string é superfície de injeção **[OBRIGATÓRIA]** · `S0`
+
+APIs de consulta que aceitam filtro como string (PostgREST `.or()` / `.filter()`, GraphQL where
+serializado, query-string de motor de busca interno) tratam essa string como **gramática**, não como
+valor. Caracteres como `,` `()` `.` e operadores da DSL mudam o predicado.
+
+Se a busca precisa ir nessa string: (1) sanitize removendo metacaracteres da gramática; (2) prefira
+APIs tipadas (`.eq(coluna, valor)`, `.ilike(coluna, valor)`) em que o valor não reconstrói a
+expressão; (3) mantenha filtro de inquilino / autorização por objeto no mesmo caminho (`SEC-004`,
+`SEC-006`). Sanitizar não substitui parametrizar SQL (`SEC-019`).
+
+### SEC-069 — Identificador e enum de consulta por lista de permitidos **[OBRIGATÓRIA]**
+
+Sort, campo de data, status, escopo e nomes de coluna aceitos na API pública são allowlist no
+servidor. Lista de proibidos (blocklist) falha: o atacante usa o metacaractere que você esqueceu.
+Enum do schema OpenAPI **não** basta se o runtime ainda interpola `asString(input)` na DSL.
+
+### SEC-070 — Cliente privilegiado exige validação mais rígida do interpolado **[OBRIGATÓRIA]** · `S0`
+
+Service role, conexão admin ou qualquer cliente que **ignora RLS / row policy** não pode interpolar
+IDs ou termos vindos de integração externa (webhook, CRM, gateway) sem validar formato fechado
+(ex.: só dígitos, UUID canônico). O blast radius é o banco inteiro, não o inquilino do JWT.
+Isolamento de tenant na query (`company_id = …`) continua obrigatório (`SEC-006`) e não absolve a
+injeção de gramática.
+
+### SEC-071 — Helper único de sanitização de filtro compartilhado **[RECOMENDADA]**
+
+Onde a DSL exige interpolação (busca multi-campo em `.or()`), existe **uma** função nomeada —
+testada — que remove metacaracteres da gramática, limita comprimento e colapsa espaços. Tools de
+agente, telas admin e webhooks usam a mesma. Sanitização parcial e divergente entre módulos é o
+defeito que reabre `SEC-068` na próxima feature.
 
 ---
 
@@ -447,6 +491,12 @@ esquecido (`SEC-007`, `SEC-008`).
 **Padrão: parametrizar tudo.** SQL/NoSQL/comando/template sem concatenação (`SEC-019`,
 `SEC-020`).
 
+**Padrão: SQL dinâmico seguro.** Allowlist de identificadores + `USING` / placeholders para
+valores (`SEC-067`). Sort e campo de data nunca vêm do texto livre (`SEC-069`).
+
+**Padrão: busca em DSL de filtro.** Preferir API tipada; se interpolar, sanitizar gramática com
+helper único (`SEC-068`, `SEC-071`) e nunca confiar nisso no lugar de RLS/authz.
+
 **Padrão: segredo encontrado.** Rotacionar → revogar → remover do histórico → post-mortem
 (`SEC-052`) — nesta ordem.
 
@@ -471,6 +521,9 @@ esquecido (`SEC-007`, `SEC-008`).
 | Multi-tenant sem isolamento | `SEC-006` |
 | Segredo no repo/cliente | `SEC-052` |
 | Concatenação em consulta | `SEC-019` |
+| SQL dinâmico com sort/coluna do usuário | `SEC-067`, `SEC-069` |
+| Filtro `.or()` / DSL com texto livre | `SEC-068` |
+| Service role interpolando ID externo | `SEC-070` |
 | Hash inadequado | `SEC-012` |
 
 ---
@@ -481,7 +534,7 @@ esquecido (`SEC-007`, `SEC-008`).
 1. Declarar nível V1/V2/V3 do módulo (SEC-059–060)
 2. Autorização por objeto + tenant + caminhos esquecidos (SEC-004–008)
 3. Autenticação/sessão/MFA/CSRF (SEC-044–048, SEC-025–027)
-4. Entrada: injeção, upload, SSRF (SEC-019–024, SEC-049)
+4. Entrada: injeção, SQL dinâmico, DSL de filtro, upload, SSRF (SEC-019–024, SEC-067–071, SEC-049)
 5. Criptografia, TLS, segredos (SEC-012–018, SEC-052)
 6. Config, CORS, headers, superfície (SEC-031–037)
 7. Dependências e pipeline (SEC-038–043)
@@ -515,6 +568,38 @@ db.query('SELECT * FROM users WHERE email = $1', [email])
 ```
 
 ```
+-- Ruim — SEC-067: sort e termo no format
+EXECUTE format('SELECT * FROM orders WHERE company_id = %L AND %s ORDER BY %s',
+  company, 'description ILIKE ''%' || search || '%''', userSort);
+
+-- Bom — allowlist + bind
+v_sort := CASE user_sort WHEN 'due' THEN 'due_date' ELSE 'created_at' END;
+EXECUTE format('SELECT * FROM orders WHERE company_id = $1 AND description ILIKE ''%%'' || $2 || ''%%'' ORDER BY %I',
+  v_sort)
+USING company_id, search;
+```
+
+```
+// Ruim — SEC-068: termo na gramática PostgREST/filtro
+q.or(`name.ilike.%${term}%,email.ilike.%${term}%`)
+
+// Bom — sanitizar gramática (ou .ilike tipado por campo)
+const safe = sanitizeFilterTerm(term) // remove , ( ) . % _ " ' \
+q.or(`name.ilike.%${safe}%,email.ilike.%${safe}%`)
+// ainda melhor: q.ilike('name', `%${safe}%`) quando um campo basta
+```
+
+```
+// Ruim — SEC-070: ID de webhook no .or com service role
+admin.from('leads').or(`external_id.eq.${payload.id}`)
+
+// Bom
+const id = String(payload.id)
+if (!/^\d{1,20}$/.test(id)) throw BadRequest()
+admin.from('leads').eq('external_id', id).eq('company_id', companyId)
+```
+
+```
 # Ruim — SEC-064: "testes passaram"
 # Bom — prova
 Antes:  GET /orders/A  como user B → 200 + corpo
@@ -531,6 +616,10 @@ Legítimo: GET /orders/A como user A → 200
 | Confiar em papel sem objeto | IDOR / `S0` (`SEC-004`) |
 | Isolamento só na disciplina de query | Vazamento multi-tenant (`SEC-006`) |
 | Concatenar entrada em SQL/comando | Injeção (`SEC-019`, `SEC-020`) |
+| `ORDER BY` / coluna a partir do request | SQL dinâmico inseguro (`SEC-067`, `SEC-069`) |
+| Montar `.or()` / filtro DSL com texto cru | Predicado injetável (`SEC-068`) |
+| Service role + ID de terceiro sem validar | Bypass de RLS + injeção (`SEC-070`) |
+| Sanitizar “um pouco” em cada tela | Regressão na próxima feature (`SEC-071`) |
 | Segredo no repositório “por enquanto” | Compromisso permanente até rotacionar (`SEC-052`) |
 | Hash rápido de senha | Credential stuffing trivial (`SEC-012`) |
 | CORS `*` com cookies | CSRF cross-origin (`SEC-033`) |
@@ -548,6 +637,8 @@ Legítimo: GET /orders/A como user A → 200
 - [ ] Isolamento de tenant no dado quando aplicável. (`SEC-006`)
 - [ ] Caminhos esquecidos percorridos. (`SEC-008`)
 - [ ] Consulta parametrizada; sem executar entrada. (`SEC-019`, `SEC-020`)
+- [ ] SQL dinâmico: allowlist de identificadores + valores bound. (`SEC-067`, `SEC-069`)
+- [ ] Filtro/DSL de busca sem texto cru; service role valida IDs. (`SEC-068`, `SEC-070`)
 - [ ] Hash adequado; TLS; sem segredo no cliente/repo. (`SEC-012`, `SEC-013`, `SEC-052`)
 - [ ] Sessão/token com expiração e regeneração. (`SEC-044`, `SEC-045`)
 - [ ] SSRF com allowlist. (`SEC-049`)
@@ -575,6 +666,9 @@ Rules of engagement:
 - Burden of proof inverted on authz/payment/PII (SEC-001).
 - Authenticated attacker threat model (SEC-002).
 - Object-level authz and tenant isolation are S0 (SEC-004, SEC-006).
+- Parameterized queries; dynamic SQL only with allowlisted identifiers + bound
+  values (SEC-019, SEC-067–SEC-069). Filter/DSL strings are injection surface
+  (SEC-068); privileged clients validate external IDs (SEC-070).
 - Fix requires exploit-path closed with before/after (SEC-064).
 - Do not downgrade security S0 (SEC-066). Do not invent new SEC rules.
 
@@ -589,10 +683,11 @@ Output: findings with path:line, severity, exploit path, verification level
 1. Nenhum endpoint em escopo sem autorização por objeto (`SEC-004`).
 2. Multi-tenant em escopo com isolamento no dado (`SEC-006`).
 3. Zero concatenação de entrada em consulta/comando (`SEC-019`, `SEC-020`).
-4. Nenhum segredo no repositório ou no cliente (`SEC-052`).
-5. Sem dado pessoal em log nos caminhos revisados (`SEC-050`).
-6. Nível de verificação declarado (`SEC-060`).
-7. Correções `S0`/`S1` com prova antes/depois (`SEC-064`).
+4. SQL dinâmico e DSL de filtro conformes (`SEC-067`–`SEC-070`).
+5. Nenhum segredo no repositório ou no cliente (`SEC-052`).
+6. Sem dado pessoal em log nos caminhos revisados (`SEC-050`).
+7. Nível de verificação declarado (`SEC-060`).
+8. Correções `S0`/`S1` com prova antes/depois (`SEC-064`).
 
 ---
 
