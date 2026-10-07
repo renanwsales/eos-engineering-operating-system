@@ -293,9 +293,38 @@ até provar o contrário (`SEC-001`).
 
 Recuperação e troca de senha, troca de e-mail, alteração de meio de pagamento, mudança de permissão.
 
-### SEC-026 — Limite de tentativas com bloqueio progressivo **[OBRIGATÓRIA]**
+### SEC-026 — Limite de tentativas com bloqueio progressivo **[OBRIGATÓRIA]** · `S1`
 
-Em autenticação, recuperação de senha e verificação de código. Ausência é `S1`.
+Ataque de força bruta (*brute force*) e *credential stuffing* sem teto esgotam o espaço de
+senhas fracas. Ausência de limite em login, recuperação de senha ou verificação de código
+(OTP, MFA, código de recuperação) é `S1` e cai na regra de bloqueio #10 deste volume.
+
+Exigências verificáveis (todas):
+
+1. **Servidor de identidade, não só a UI.** Contador e rejeição vivem no caminho que a API de
+   autenticação **sempre** executa (hook do provedor Auth, middleware do IdP, ou o próprio
+   verificador de senha). Delay ou `disabled` no formulário, ou uma Edge que o cliente chama
+   *antes* do login e pode omitir — com a chave pública/anon — **não** satisfaz.
+2. **Identidade da conta (ou do fator), não só IP.** Rate limit por endereço IP é complemento
+   (NAT corporativo, botnet distribuída). O bloqueio conta falhas por usuário/conta ou por
+   fator (e-mail + código). IP sozinho não fecha a condição de bloqueio #10.
+3. **Lockout antes de aceitar senha válida na janela cheia.** Se o contador já atingiu o teto,
+   rejeite mesmo quando a tentativa atual traria senha correta. Caso contrário o atacante
+   continua até acertar e o “bloqueio” não impede a invasão.
+4. **Teto e janela explícitos** na implementação ou no perfil (`[perfil]`; default razoável:
+   poucas falhas em minutos — tipicamente da ordem de 5 falhas / 15 min). Atraso crescente ou
+   janela que se estende após limiar conta como bloqueio progressivo; teto infinito não.
+5. **Superfícies cobertas:** autenticação com senha, reset/recovery, OTP/MFA e códigos de
+   recuperação. Troca de senha que revalida a atual pelo mesmo verificador de senha herda o
+   mesmo controle.
+6. **Captcha / prova de humanidade** em login e reset públicos **complementa** o lockout (corta
+   volume automatizado). Não o substitui. Se o provedor Auth exige captcha, o cliente envia o
+   token; ligar só um dos lados (Dashboard sem site key, ou o inverso) quebra o fluxo legítimo.
+7. **Mensagem e telemetria.** A resposta de bloqueio não revela se a senha estava correta nem
+   se a conta existe (`SEC-027`). Limiar atingido gera evento de segurança (`SEC-051`).
+8. **Prova de fechamento** (`SEC-064`): N+1 falhas → rejeição; após expirar a janela (ou
+   desbloqueio por operador) → sucesso legítimo; chamada **direta** à API Auth, sem a UI,
+   ainda bloqueia.
 
 ### SEC-027 — Não revele existência **[OBRIGATÓRIA]**
 
@@ -715,6 +744,10 @@ admin-only (`SEC-085`, `SEC-086`). Webhook com segundo fator (`SEC-087`). Caça 
 
 **Padrão: prova antes/depois.** Mesma requisição exploratória → 403; legítima → 200 (`SEC-064`).
 
+**Padrão: lockout de autenticação.** Contador no servidor de identidade (hook/IdP), por conta;
+teto+janela explícitos; rejeitar com janela cheia mesmo se a senha da tentativa for válida;
+captcha só como complemento; prova com chamada direta à API Auth (`SEC-026`, `SEC-064`).
+
 **Padrão: allowlist do plano de dados público.** Inventário versionado de `GRANT` ao papel
 publishable/`anon`; coluna sensível fora do `SELECT` público; defaults sem doação; RPC `DEFINER`
 catalogada; suite de regressão no CI (`SEC-077`–`SEC-083`). Storage: privado + assinado, sem
@@ -730,6 +763,7 @@ bucket legado público (`SEC-035`, `SEC-084`).
 | Tenant | Filtro/policy no dado (`SEC-006`) | Confiar em cada query |
 | Nível V1/V2/V3 | Por criticidade do módulo (`SEC-059`) | V3 só por agente (`SEC-062`) |
 | Hash de senha | Algoritmo lento dedicado (`SEC-012`) | MD5/SHA “com salt” |
+| Força bruta / stuffing | Lockout por conta no IdP + captcha opcional (`SEC-026`) | Só delay na UI ou só rate limit por IP |
 | CORS | Origens conhecidas (`SEC-033`) | `*` com credencial |
 | Dado pessoal em log | Redact / não logar (`SEC-050`) | “só em staging” |
 | HTML de saída | Escape por contexto / sanitizer (`SEC-021`, `SEC-022`) | `.replace(<>&)` (`SEC-074`) |
@@ -754,6 +788,8 @@ bucket legado público (`SEC-035`, `SEC-084`).
 | `href` / link de usuário | Só `http(s)` (`SEC-073`) |
 | `.replace(<>&)` como “fix” XSS | Ainda aberto (`SEC-074`) |
 | Hash inadequado | `SEC-012` |
+| Login/reset sem teto de tentativas | `SEC-026` (bloqueio #10) |
+| Lockout só no front / só por IP | Ainda aberto (`SEC-026`) |
 | GRANT/`DEFINER` público fora da allowlist | `SEC-078`, `SEC-080`, `SEC-081` |
 | Coluna secreta no `SELECT` do papel público | `SEC-079` |
 
@@ -858,6 +894,25 @@ Legítimo: GET /orders/A como user A → 200
 ```
 
 ```
+# Ruim — SEC-026: “protegemos no front”
+# (atacante chama signInWithPassword /token com a anon key em loop)
+
+# Ruim — SEC-026: senha correta zera o contador mesmo com janela cheia
+if event.valid:
+  clear_failures(); return continue   # força bruta ainda vence
+
+# Bom — lockout no hook/IdP, por user_id, antes de aceitar válido
+if recent_failures >= MAX:
+  return reject("password_attempts_exceeded")
+if event.valid:
+  clear_failures(); return continue
+record_failure()
+if recent_failures + 1 >= MAX:
+  return reject("password_attempts_exceeded")
+return continue
+```
+
+```
 -- Ruim — SEC-079: linha pública, coluna secreta
 GRANT SELECT ON companies TO anon;
 -- policy: true para landing; resposta inclui asaas_api_key, oauth_refresh, …
@@ -916,6 +971,9 @@ if (!timingSafeEqual(header, webhookAuth) || !verifyHmac(body, sig)) return 401
 | Template HTML com variável crua | XSS armazenado (`SEC-075`) |
 | Segredo no repositório “por enquanto” | Compromisso permanente até rotacionar (`SEC-052`) |
 | Hash rápido de senha | Credential stuffing trivial (`SEC-012`) |
+| Login sem teto / lockout só na UI ou só por IP | Força bruta ilimitada (`SEC-026`) |
+| Senha correta contorna janela de lockout | Stuffed password ainda entra (`SEC-026`) |
+| Captcha no Dashboard sem token no cliente (ou o inverso) | Legítimo quebrado; abuso sem cobertura (`SEC-026`) |
 | CORS `*` com cookies | CSRF cross-origin (`SEC-033`) |
 | Dado pessoal em log | Violação e impossível de apagar (`SEC-050`) |
 | Suprimir CVE sem análise escrita | Risco invisível (`SEC-039`) |
@@ -945,6 +1003,7 @@ if (!timingSafeEqual(header, webhookAuth) || !verifyHmac(body, sig)) return 401
 - [ ] Hash adequado; TLS; sem segredo no cliente/repo. (`SEC-012`, `SEC-013`, `SEC-052`)
 - [ ] Chave de integração: fora do bundle; sem eco no JSON; webhook com 2º fator; caça anexada. (`SEC-085`–`SEC-088`)
 - [ ] Sessão/token com expiração e regeneração. (`SEC-044`, `SEC-045`)
+- [ ] Lockout de auth no IdP (por conta, teto+janela); não só UI/IP; prova com API direta. (`SEC-026`)
 - [ ] SSRF com allowlist. (`SEC-049`)
 - [ ] Sem PII em log; eventos de segurança. (`SEC-050`, `SEC-051`)
 - [ ] Inventário/minimização/retenção de PII. (`SEC-053`–`SEC-055`)
@@ -987,6 +1046,10 @@ Rules of engagement:
 - Integration API keys: never in frontend env (SEC-085); no JSON echo of saved
   secrets — admin-only reveal (SEC-086); webhook second factor + fail-closed
   (SEC-087); mechanical hunt before “no exposed key” (SEC-088).
+- Auth brute force: account lockout on the identity path (not UI-only / IP-only);
+  reject when the window is full even if the password is valid; captcha
+  complements, does not replace (SEC-026). Prove with direct Auth API calls
+  (SEC-064).
 - Fix requires exploit-path closed with before/after (SEC-064).
 - Do not downgrade security S0 (SEC-066). Do not invent new SEC rules.
 
@@ -1008,7 +1071,8 @@ Output: findings with path:line, severity, exploit path, verification level
 8. Segredos de integração conforme (`SEC-085`–`SEC-088`), com evidência de caça.
 9. Sem dado pessoal em log nos caminhos revisados (`SEC-050`).
 10. Nível de verificação declarado (`SEC-060`).
-11. Correções `S0`/`S1` com prova antes/depois (`SEC-064`).
+11. Autenticação em escopo com lockout conforme `SEC-026` (ou N/A justificado se o módulo não autentica).
+12. Correções `S0`/`S1` com prova antes/depois (`SEC-064`).
 
 ---
 

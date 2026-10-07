@@ -485,7 +485,7 @@ Arquivo: [`06-seguranca.md`](06-seguranca.md) · 88 regras
 | `SEC-075` | Template em modo HTML escapa toda variável | OBRIG | — | Injeção (OWASP A03) |
 | `SEC-076` | Caça mecânica antes de declarar ausência de XSS | OBRIG | — | Injeção (OWASP A03) |
 | `SEC-025` | Reautenticação em fluxo sensível | OBRIG | — | Design inseguro (OWASP A04) |
-| `SEC-026` | Limite de tentativas com bloqueio progressivo | OBRIG | — | Design inseguro (OWASP A04) |
+| `SEC-026` | Limite de tentativas com bloqueio progressivo | OBRIG | `S1` | Design inseguro (OWASP A04) |
 | `SEC-027` | Não revele existência | OBRIG | — | Design inseguro (OWASP A04) |
 | `SEC-028` | Operação irreversível é confirmada e registrada | OBRIG | — | Design inseguro (OWASP A04) |
 | `SEC-029` | Modele o abuso, não só o uso | OBRIG | — | Design inseguro (OWASP A04) |
