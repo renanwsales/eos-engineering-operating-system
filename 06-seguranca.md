@@ -1,6 +1,6 @@
 # 📓 Volume 06 — Segurança e DevSecOps
 
-Prefixo: `SEC` · Regras: SEC-001 a SEC-071 · Papel: [Security Engineer](agents/05-security.md)
+Prefixo: `SEC` · Regras: SEC-001 a SEC-076 · Papel: [Security Engineer](agents/05-security.md)
 
 Camada coberta: **3 (segurança)**.
 
@@ -89,6 +89,7 @@ disciplina de cada desenvolvedor.
 - [ ] Webhook e callback verificam o remetente?
 - [ ] Job em background roda com a autoridade do solicitante ou com privilégio total?
 - [ ] Endpoint de diagnóstico, métrica ou administração exposto?
+- [ ] E-mail HTML, callback OAuth e template `body_html` escapam saída? (`SEC-072`, `SEC-075`)
 
 ### SEC-009 — Campo privilegiado do cliente é ignorado **[OBRIGATÓRIA]** · `S0`
 
@@ -157,10 +158,26 @@ executável.
 ### SEC-021 — Escape na saída por contexto **[OBRIGATÓRIA]**
 
 HTML, atributo, URL e JavaScript têm regras diferentes. Escapar para o contexto errado não protege.
+Texto de usuário, API ou integração que entra em HTML de resposta, e-mail ou template precisa de
+encoding **no momento da interpolação**, no contexto certo:
+
+| Contexto | Escape mínimo |
+| --- | --- |
+| Texto HTML (`<p>…</p>`) | Entidades: `& < > " '` |
+| Atributo quoted | Idem + nunca quebrar aspas do atributo |
+| URL em `href` / `src` | Esquema permitido (`SEC-073`) **e** escape de atributo |
+| JavaScript inline / handler | Não interpolar; se inevitável, encoding JS dedicado |
+
+Frameworks que escapam por padrão (JSX texto, engines com auto-escape) cobrem o caminho feliz.
+String HTML montada à mão, `innerHTML` e respostas `text/html` no servidor **não** herdam isso —
+trate como superfície explícita (`SEC-072`, `SEC-076`).
 
 ### SEC-022 — Nenhuma inserção de HTML não confiável **[OBRIGATÓRIA]** · `S1`
 
-Se inevitável, sanitize com biblioteca dedicada e documente o motivo.
+Renderizar HTML vindo de usuário, CMS, ticket ou modelo (`dangerouslySetInnerHTML`, `innerHTML`,
+documento HTML gerado no servidor) é `S1`. Se o produto exige rich text: sanitize com biblioteca
+dedicada (allowlist de tags/atributos), documente o motivo, e teste payload com script, evento e
+URL `javascript:`. Filtro caseiro de tags não satisfaz (`SEC-074`).
 
 ### SEC-023 — Upload de arquivo tratado como hostil **[OBRIGATÓRIA]**
 
@@ -213,6 +230,56 @@ Onde a DSL exige interpolação (busca multi-campo em `.or()`), existe **uma** f
 testada — que remove metacaracteres da gramática, limita comprimento e colapsa espaços. Tools de
 agente, telas admin e webhooks usam a mesma. Sanitização parcial e divergente entre módulos é o
 defeito que reabre `SEC-068` na próxima feature.
+
+### SEC-072 — Superfície HTML fora do SPA também escapa **[OBRIGATÓRIA]** · `S1`
+
+XSS não mora só no bundle do front. Toda resposta ou artefato `text/html` (ou corpo HTML embutido)
+escapa saída (`SEC-021`) ou sanitiza (`SEC-022`):
+
+- e-mail transacional e digest com HTML;
+- callback OAuth / página de erro / “feche esta janela”;
+- template de mensageria com `body_html`;
+- PDF/recibo/kit gerado como HTML no servidor;
+- webhook ou Edge que devolve HTML em vez de JSON.
+
+Revisão que só grepou o cliente e declarou “sem XSS” violou a caça (`SEC-076`) e o ônus invertido
+(`SEC-001`).
+
+### SEC-073 — Href e URL de navegação só com esquema permitido **[OBRIGATÓRIA]**
+
+Valor que entra em `href`, `src`, `action`, `formaction` ou equivalente aceita apenas `http:` /
+`https:` (ou caminho relativo documentado no perfil). `javascript:`, `data:` e esquema vazio com
+quebra de atributo executam código no navegador da vítima.
+
+Escape de HTML **não** substitui esta regra: um `href` bem escapado ainda pode ser
+`javascript:alert(1)`. Fetch server-side de URL do usuário continua em `SEC-049` (SSRF); aqui o
+risco é navegação no cliente.
+
+### SEC-074 — Filtro parcial de caracteres não é escape **[OBRIGATÓRIA]** · `S1`
+
+`.replace(/[<>&]/g, "")`, strip de tags, ou allowlist de tags sem política de atributo **parece**
+correção e falha em aspas, handlers (`onerror=`), entidades incompletas e URLs. Em revisão, trate
+como ainda aberto até haver encoding por contexto (`SEC-021`) ou sanitizer dedicado (`SEC-022`).
+
+### SEC-075 — Template em modo HTML escapa toda variável **[OBRIGATÓRIA]**
+
+Motor de template ou `renderTemplate` que gera HTML escapa **cada** variável na interpolação.
+Chaves tipadas como link usam `SEC-073`. Canal só texto (SMS, push plaintext) permanece sem escape
+HTML. Preferir modo explícito (`html: true` ou engine com auto-escape) a “às vezes escapamos no
+handler”. Um campo esquecido (nome, descrição, Pix copia-e-cola) reabre XSS armazenado.
+
+### SEC-076 — Caça mecânica antes de declarar ausência de XSS **[OBRIGATÓRIA]**
+
+Antes de afirmar que não há XSS no escopo, execute busca (ou equivalente no perfil) e anexe o
+resultado:
+
+- `dangerouslySetInnerHTML`, `innerHTML`, `outerHTML`, `document.write`, `insertAdjacentHTML`;
+- respostas / strings com `text/html` ou `Content-Type: text/html`;
+- `body_html`, rich text, e-mail HTML, callback HTML;
+- interpolação `${…}` / `{{…}}` em literais HTML sem helper de escape.
+
+“Não vi nada” sem evidência da busca é inconclusão disfarçada — em saída HTML, trate como achado
+até provar o contrário (`SEC-001`).
 
 ---
 
@@ -497,6 +564,15 @@ valores (`SEC-067`). Sort e campo de data nunca vêm do texto livre (`SEC-069`).
 **Padrão: busca em DSL de filtro.** Preferir API tipada; se interpolar, sanitizar gramática com
 helper único (`SEC-068`, `SEC-071`) e nunca confiar nisso no lugar de RLS/authz.
 
+**Padrão: escape na borda HTML.** Helper único (`escHtml` / `escapeHtml`) + `escHref` só `http(s)`
+para todo HTML de e-mail, callback e template (`SEC-021`, `SEC-072`, `SEC-073`, `SEC-075`).
+
+**Padrão: rich text só com sanitizer.** Allowlist de tags/atributos via biblioteca; documentar o
+motivo (`SEC-022`). Filtro `.replace` parcial é falha (`SEC-074`).
+
+**Padrão: caça XSS antes do veredito.** Grep das APIs de HTML + respostas `text/html`; anexa
+evidência (`SEC-076`).
+
 **Padrão: segredo encontrado.** Rotacionar → revogar → remover do histórico → post-mortem
 (`SEC-052`) — nesta ordem.
 
@@ -514,6 +590,8 @@ helper único (`SEC-068`, `SEC-071`) e nunca confiar nisso no lugar de RLS/authz
 | Hash de senha | Algoritmo lento dedicado (`SEC-012`) | MD5/SHA “com salt” |
 | CORS | Origens conhecidas (`SEC-033`) | `*` com credencial |
 | Dado pessoal em log | Redact / não logar (`SEC-050`) | “só em staging” |
+| HTML de saída | Escape por contexto / sanitizer (`SEC-021`, `SEC-022`) | `.replace(<>&)` (`SEC-074`) |
+| Link em HTML | Só `http(s)` (`SEC-073`) | Qualquer string no `href` |
 
 | Condição de bloqueio | Regra |
 | --- | --- |
@@ -524,6 +602,9 @@ helper único (`SEC-068`, `SEC-071`) e nunca confiar nisso no lugar de RLS/authz
 | SQL dinâmico com sort/coluna do usuário | `SEC-067`, `SEC-069` |
 | Filtro `.or()` / DSL com texto livre | `SEC-068` |
 | Service role interpolando ID externo | `SEC-070` |
+| HTML de e-mail/callback/template | Escape por contexto (`SEC-021`, `SEC-072`, `SEC-075`) |
+| `href` / link de usuário | Só `http(s)` (`SEC-073`) |
+| `.replace(<>&)` como “fix” XSS | Ainda aberto (`SEC-074`) |
 | Hash inadequado | `SEC-012` |
 
 ---
@@ -535,12 +616,13 @@ helper único (`SEC-068`, `SEC-071`) e nunca confiar nisso no lugar de RLS/authz
 2. Autorização por objeto + tenant + caminhos esquecidos (SEC-004–008)
 3. Autenticação/sessão/MFA/CSRF (SEC-044–048, SEC-025–027)
 4. Entrada: injeção, SQL dinâmico, DSL de filtro, upload, SSRF (SEC-019–024, SEC-067–071, SEC-049)
-5. Criptografia, TLS, segredos (SEC-012–018, SEC-052)
-6. Config, CORS, headers, superfície (SEC-031–037)
-7. Dependências e pipeline (SEC-038–043)
-8. Logs e eventos de segurança (SEC-050–051)
-9. Dados pessoais: inventário, retenção, direitos (SEC-053–058)
-10. Correção: prova de exploração fechada (SEC-064–065)
+5. Saída XSS: escape por contexto, HTML fora do SPA, href, caça mecânica (SEC-021–022, SEC-072–076)
+6. Criptografia, TLS, segredos (SEC-012–018, SEC-052)
+7. Config, CORS, headers, superfície (SEC-031–037)
+8. Dependências e pipeline (SEC-038–043)
+9. Logs e eventos de segurança (SEC-050–051)
+10. Dados pessoais: inventário, retenção, direitos (SEC-053–058)
+11. Correção: prova de exploração fechada (SEC-064–065)
 ```
 
 Checklist operacional: [`checklists/seguranca-owasp.md`](checklists/seguranca-owasp.md).
@@ -600,6 +682,23 @@ admin.from('leads').eq('external_id', id).eq('company_id', companyId)
 ```
 
 ```
+// Ruim — SEC-074 / SEC-072: “escape” parcial em callback HTML
+return `<p>Erro: ${message.replace(/[<>&]/g, "")}</p>`
+
+// Bom — SEC-021 + SEC-073
+return `<p>Erro: ${escapeHtml(message)}</p>
+<p><a href="${escapeHref(safeHttpUrl)}">Voltar</a></p>`
+```
+
+```
+// Ruim — SEC-075: variável crua no body_html
+renderTemplate(tpl.body_html, { "cliente.nome": name })
+
+// Bom — modo HTML escapa tudo; link só http(s)
+renderTemplate(tpl.body_html, vars, { html: true })
+```
+
+```
 # Ruim — SEC-064: "testes passaram"
 # Bom — prova
 Antes:  GET /orders/A  como user B → 200 + corpo
@@ -620,6 +719,10 @@ Legítimo: GET /orders/A como user A → 200
 | Montar `.or()` / filtro DSL com texto cru | Predicado injetável (`SEC-068`) |
 | Service role + ID de terceiro sem validar | Bypass de RLS + injeção (`SEC-070`) |
 | Sanitizar “um pouco” em cada tela | Regressão na próxima feature (`SEC-071`) |
+| Só revisar o SPA e ignorar e-mail/callback | XSS fora do bundle (`SEC-072`, `SEC-076`) |
+| `.replace(<>&)` como mitigação XSS | Quebra de atributo / handler (`SEC-074`) |
+| `href="${userUrl}"` sem esquema | `javascript:` / phishing (`SEC-073`) |
+| Template HTML com variável crua | XSS armazenado (`SEC-075`) |
 | Segredo no repositório “por enquanto” | Compromisso permanente até rotacionar (`SEC-052`) |
 | Hash rápido de senha | Credential stuffing trivial (`SEC-012`) |
 | CORS `*` com cookies | CSRF cross-origin (`SEC-033`) |
@@ -639,6 +742,7 @@ Legítimo: GET /orders/A como user A → 200
 - [ ] Consulta parametrizada; sem executar entrada. (`SEC-019`, `SEC-020`)
 - [ ] SQL dinâmico: allowlist de identificadores + valores bound. (`SEC-067`, `SEC-069`)
 - [ ] Filtro/DSL de busca sem texto cru; service role valida IDs. (`SEC-068`, `SEC-070`)
+- [ ] Saída HTML: escape por contexto; e-mail/callback/template; href só http(s); caça anexada. (`SEC-021`, `SEC-022`, `SEC-072`–`SEC-076`)
 - [ ] Hash adequado; TLS; sem segredo no cliente/repo. (`SEC-012`, `SEC-013`, `SEC-052`)
 - [ ] Sessão/token com expiração e regeneração. (`SEC-044`, `SEC-045`)
 - [ ] SSRF com allowlist. (`SEC-049`)
@@ -669,6 +773,10 @@ Rules of engagement:
 - Parameterized queries; dynamic SQL only with allowlisted identifiers + bound
   values (SEC-019, SEC-067–SEC-069). Filter/DSL strings are injection surface
   (SEC-068); privileged clients validate external IDs (SEC-070).
+- XSS: context escape + sanitize untrusted HTML (SEC-021–022). HTML outside the
+  SPA (email, OAuth callback, body_html) (SEC-072). href allowlist http(s)
+  (SEC-073). Partial .replace is not escape (SEC-074). HTML templates escape
+  every variable (SEC-075). Mechanical hunt before “no XSS” (SEC-076).
 - Fix requires exploit-path closed with before/after (SEC-064).
 - Do not downgrade security S0 (SEC-066). Do not invent new SEC rules.
 
@@ -684,10 +792,11 @@ Output: findings with path:line, severity, exploit path, verification level
 2. Multi-tenant em escopo com isolamento no dado (`SEC-006`).
 3. Zero concatenação de entrada em consulta/comando (`SEC-019`, `SEC-020`).
 4. SQL dinâmico e DSL de filtro conformes (`SEC-067`–`SEC-070`).
-5. Nenhum segredo no repositório ou no cliente (`SEC-052`).
-6. Sem dado pessoal em log nos caminhos revisados (`SEC-050`).
-7. Nível de verificação declarado (`SEC-060`).
-8. Correções `S0`/`S1` com prova antes/depois (`SEC-064`).
+5. Saída HTML no escopo conforme (`SEC-021`, `SEC-022`, `SEC-072`–`SEC-076`), com evidência de caça.
+6. Nenhum segredo no repositório ou no cliente (`SEC-052`).
+7. Sem dado pessoal em log nos caminhos revisados (`SEC-050`).
+8. Nível de verificação declarado (`SEC-060`).
+9. Correções `S0`/`S1` com prova antes/depois (`SEC-064`).
 
 ---
 

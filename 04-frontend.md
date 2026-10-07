@@ -258,7 +258,8 @@ reflete.
 ### FRT-040 — Nenhuma inserção de HTML não confiável **[OBRIGATÓRIA]**
 
 Renderização direta de conteúdo vindo do usuário ou da API é `S1`. Se for inevitável, sanitize com
-biblioteca dedicada e documente por quê.
+biblioteca dedicada e documente por quê. Escape por contexto, `href` allowlist, templates HTML e
+caça mecânica vivem em segurança (`SEC-021`, `SEC-022`, `SEC-072`–`SEC-076`) — não reafirme aqui.
 
 ### FRT-041 — Armazenamento local não guarda dado sensível **[OBRIGATÓRIA]**
 

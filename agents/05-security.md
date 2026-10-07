@@ -85,6 +85,23 @@ Classic concatenation and filter-grammar injection are both `S0` when they alter
 
 ---
 
+## XSS — output, not only the SPA
+
+After input injection, walk **output** (`SEC-021`–`SEC-022`, `SEC-072`–`SEC-076`):
+
+- [ ] Context escape for HTML / attribute / URL / JS — wrong context does not protect (`SEC-021`).
+- [ ] No untrusted HTML (`dangerouslySetInnerHTML`, `innerHTML`, server-built HTML) without a
+      dedicated sanitizer and a written reason (`SEC-022`). Partial `.replace(<>&)` is still open
+      (`SEC-074`).
+- [ ] Surfaces outside the SPA: transactional email HTML, OAuth/error callbacks, `body_html`
+      messaging templates, server-rendered HTML receipts (`SEC-072`, `SEC-075`).
+- [ ] `href` / `src` / `action`: only `http:` / `https:` (or documented relative paths) (`SEC-073`).
+      Distinct from SSRF allowlists (`SEC-049`).
+- [ ] Mechanical hunt attached before “no XSS”: the APIs above + `text/html` responses (`SEC-076`).
+      No hunt evidence → treat as unverified under inverted burden (`SEC-001`).
+
+---
+
 ## Secrets — act in the right order
 
 If a secret is found in the repository, in a client bundle, in a log, or in a build artifact:
