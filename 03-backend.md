@@ -369,6 +369,10 @@ webhook costuma carregar confirmação de pagamento.
 
 Verifique também o **carimbo de tempo**, para recusar replay de uma requisição legítima capturada.
 
+Inventário da rota sem sessão, JWT desligado ≠ auth no handler, revalidação de efeito em dinheiro/estado e
+segredo fora da query: `SEC-089`–`SEC-091`, `SEC-087`. Esta regra cobre a verificação de origem no
+processamento; aquelas cobrem a borda HTTP.
+
 ### BAK-050 — Webhook de entrada é idempotente **[OBRIGATÓRIA]**
 
 Todo provedor reentrega. Processar duas vezes a confirmação de pagamento é `S0`. Guarde o identificador do
@@ -518,8 +522,8 @@ lote/export/aninhado cobertos (`BAK-016`–`BAK-020`). Job declara autoridade (`
 (`BAK-039`–`BAK-041`). Efeito externo com chave de idempotência (`BAK-042`).
 
 **Webhook: verificar → ACK rápido → processar idempotente.** Assinatura na entrada; resposta fora
-do ciclo longo; ordem não garantida (`BAK-049`–`BAK-052`). Saída assinada, URL validada, DLQ
-(`BAK-054`–`BAK-056`).
+do ciclo longo; ordem não garantida (`BAK-049`–`BAK-052`). Borda sem sessão inventariada e autenticada
+no handler (`SEC-089`–`SEC-090`). Saída assinada, URL validada, DLQ (`BAK-054`–`BAK-056`).
 
 ---
 

@@ -62,6 +62,7 @@ Then load by task type:
 | Rendering strategy (SSR/CSR/RSC/static/streaming) | [`02` Part II](02-arquitetura.md), ch. 2.6 |
 | Schema / query work | [`agents/04-database.md`](agents/04-database.md), [`05`](05-banco-de-dados.md) |
 | Security work | [`agents/05-security.md`](agents/05-security.md), [`06`](06-seguranca.md), [`checklists/seguranca-owasp.md`](checklists/seguranca-owasp.md) |
+| Exposed API routes / webhooks without user JWT | [`06`](06-seguranca.md) `SEC-089`–`SEC-093` (+ `SEC-087`), [`21`](21-playbooks.md) `PLB-059`–`PLB-063`, [`03`](03-backend.md) `BAK-049`–`BAK-053` |
 | Performance work | [`agents/06-performance.md`](agents/06-performance.md), [`07`](07-performance.md), [`checklists/performance.md`](checklists/performance.md) |
 | Growth, replicas, partitioning, sharding, backpressure | [`14`](14-escalabilidade.md) |
 | Multi-tenant work of any kind | [`16`](16-multi-tenant.md), [`06`](06-seguranca.md) |

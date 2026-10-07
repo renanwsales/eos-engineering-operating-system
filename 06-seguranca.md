@@ -1,16 +1,18 @@
 # 📓 Volume 06 — Segurança e DevSecOps
 
-Prefixo: `SEC` · Regras: SEC-001 a SEC-088 · Papel: [Security Engineer](agents/05-security.md)
+Prefixo: `SEC` · Regras: SEC-001 a SEC-093 · Papel: [Security Engineer](agents/05-security.md)
 
 Camada coberta: **3 (segurança)**.
 
 **Fronteira.** OWASP Top 10 completo, criptografia, autenticação e sessão, segredos e ataque de
-chave de API (bundle/eco/webhook + superfície BaaS), dados pessoais, cadeia de suprimentos, SSRF,
-níveis progressivos de verificação. Não cobre: infraestrutura de deploy e política de acesso
-operacional (→ [10](10-devops.md)); isolamento de inquilino como decisão de arquitetura
-(→ [16](16-multi-tenant.md)), com achados classificados por este volume; modelagem e migração de
-schema (→ [05](05-banco-de-dados.md)) — privilégio mínimo de credencial de app permanece `DAT-038`
-/ `SEC-036`, citados sem reabrir.
+chave de API (bundle/eco/webhook + superfície BaaS), **rotas HTTP alcançáveis sem sessão de
+usuário** (gateway com JWT desligado, webhooks, callbacks, coletores), dados pessoais, cadeia de
+suprimentos, SSRF, níveis progressivos de verificação. Não cobre: infraestrutura de deploy e
+política de acesso operacional (→ [10](10-devops.md)); isolamento de inquilino como decisão de
+arquitetura (→ [16](16-multi-tenant.md)), com achados classificados por este volume; modelagem e
+migração de schema (→ [05](05-banco-de-dados.md)) — privilégio mínimo de credencial de app permanece
+`DAT-038` / `SEC-036`, citados sem reabrir; contrato público de API (→ [15](15-apis.md));
+idempotência e ACK do webhook (→ [03](03-backend.md) `BAK-049`–`BAK-053`).
 
 ---
 
@@ -575,6 +577,12 @@ configurável, ou assinatura Svix-like. Comparação em tempo constante (`SEC-01
 Fail-closed: integração ativa sem o segundo segredo configurado **rejeita** o webhook (não aceita
 “só a URL” em produção). Ativar o provedor no painel exige o secret correspondente.
 
+Identificador de roteamento (`company_id`, `tenant`) pode ficar na query; o **segredo**, não.
+Exigir o **mesmo** valor na query **e** no header não adiciona controle: quem vazou a URL já tem
+o header. O header (ou a assinatura) é a autoridade; token legado na URL, se presente, só pode
+coincidir — nunca autenticar sozinho. Inventário e auth quando o gateway desliga JWT:
+`SEC-089`–`SEC-090`.
+
 ### SEC-088 — Caça mecânica de chave de integração antes do veredito **[OBRIGATÓRIA]**
 
 Antes de declarar “sem chave de integração exposta”, anexe evidência de caça (grep / resposta /
@@ -589,6 +597,62 @@ webhook), no mínimo:
 Caça do plano de dados BaaS (GRANT/coluna/default) permanece `SEC-083` / `SEC-079`. Sem caça
 anexada, “não achei segredo” é **não verificado** sob ônus invertido (`SEC-001`) — mesma lógica
 da caça XSS (`SEC-076`).
+
+---
+
+## Capítulo 5.10b — Rotas de API expostas
+
+Toda plataforma (API Gateway, Edge Function, BFF, reverse proxy) tem rotas que **não** carregam
+JWT de usuário: webhook de provedor, callback OAuth, health check, coletor de log, cron com
+chave de serviço. O defeito recorrente é tratar “JWT desligado no gateway” como “anônimo
+seguro”, ou autenticar com um segredo que já viajou na URL (`SEC-087`).
+
+Este capítulo governa o **inventário e a autenticação na borda**. Segredo só na query:
+`SEC-087`. Processamento idempotente e ACK rápido do webhook: `BAK-049`–`BAK-053`.
+
+### SEC-089 — Inventário de toda rota alcançável sem sessão de usuário **[OBRIGATÓRIA]** · `S1`
+
+Liste cada endpoint HTTP (método + caminho) que o gateway aceita **sem** JWT/sessão de
+usuário final, com: propósito, mecanismo de autenticação real (HMAC, mTLS, token
+compartilhado em header, chave de serviço, nenhum), e efeito colateral (escrita, dinheiro,
+e-mail, mudança de estado).
+
+Ausência no inventário é achado. Rota “só do cron” que responde na internet pública entra na
+lista. Atualize o inventário na mesma mudança que cria a rota (`SEC-008`).
+
+### SEC-090 — JWT desligado no gateway não autentica o chamador **[OBRIGATÓRIA]** · `S0`
+
+Quando a plataforma desliga verificação de JWT (webhook, OAuth callback, ingest), o
+**handler** autentica antes de qualquer efeito. Segredo ou assinatura ausente → recusa
+fail-closed (401/403/503), nunca “segue sem auth”.
+
+Chave anônima/publicável do cliente **não** conta como autenticação de efeito: ela só passa
+pelo gateway (`SEC-077`). Confiar nela para emitir cobrança, gravar status ou processar fila é
+API de escrita sem autenticação (`BAK-049`, `SEC-005`).
+
+### SEC-091 — Efeito em dinheiro ou estado só com revalidação no provedor **[OBRIGATÓRIA]** · `S0`
+
+Webhook ou callback que marca pagamento, cancela cobrança, ativa assinatura ou muda
+autorização de débito **não** confia só no corpo nem no nome do evento. Releia o recurso na
+API do provedor (ou exija prova criptográfica do payload). Se a revalidação falhar, responda
+erro e **não** grave o livro local.
+
+Evento `*.DELETED` / timeout genérico da API sem 404 explícito do recurso **não** basta para
+cancelar título em aberto. Quem só possui o token do webhook forja o nome do evento.
+
+### SEC-092 — GET anônimo não revela configuração operacional **[OBRIGATÓRIA]**
+
+Health/`ok` é aceitável. URL de callback OAuth, lista de canais, padrão de webhook, existência
+de convite por e-mail, ou qualquer mapa que reduza o custo de reconhecimento **não** é.
+Resposta uniforme (vazio ou 404) para recurso inexistente e para não autorizado quando a
+distinção enumeraria (`SEC-027`).
+
+### SEC-093 — Coletor ou sink de escrita sem segredo é fail-closed **[OBRIGATÓRIA]** · `S1`
+
+Endpoint que aceita POST de log, telemetria, debug ou “beacon” com autenticação **opcional**
+vira lixeira pública e vetor de custo quando o secret não está definido. Sem secret
+configurado → 503 (não configurado). Secret errado → 401. Rate limit por IP amortece abuso;
+não substitui o secret (`SEC-029`).
 
 ---
 
@@ -683,6 +747,8 @@ Nenhuma entrega passa com qualquer um destes:
 | 10 | Ausência de limite de tentativas em autenticação | SEC-026 |
 | 11 | Papel público com GRANT fora da allowlist ou coluna secreta na linha pública | SEC-078, SEC-079 |
 | 12 | Default privilege ou RPC `DEFINER` doando superfície ao papel público sem catálogo/prova | SEC-080, SEC-081 |
+| 13 | Rota com JWT desligado sem autenticação no handler | SEC-090 |
+| 14 | Efeito em dinheiro/estado só pelo corpo do webhook | SEC-091 |
 
 ---
 
@@ -753,6 +819,10 @@ publishable/`anon`; coluna sensível fora do `SELECT` público; defaults sem doa
 catalogada; suite de regressão no CI (`SEC-077`–`SEC-083`). Storage: privado + assinado, sem
 bucket legado público (`SEC-035`, `SEC-084`).
 
+**Padrão: rota sem sessão.** Inventário (`SEC-089`) → auth no handler (`SEC-090`) → revalidação de
+efeito (`SEC-091`) → segredo fora da query (`SEC-087`) → GET sem mapa (`SEC-092`) → sink
+fail-closed (`SEC-093`). Playbook `PLB-059`–`PLB-063`.
+
 ---
 
 ## Matrizes de decisão
@@ -773,6 +843,8 @@ bucket legado público (`SEC-035`, `SEC-084`).
 | Função nova no schema | Sem default privilege ao `anon` (`SEC-080`) | `DEFAULT PRIVILEGES … TO anon` |
 | Segredo de provedor no app | Env de servidor + `has_*` + sem eco (`SEC-085`, `SEC-086`) | `VITE_*_SECRET` / JSON com `api_key` |
 | Webhook de provedor | Header ou HMAC + fail-closed (`SEC-087`) | Só `?token=` na URL |
+| Auth de rota sem sessão | Handler autentica (`SEC-090`) | JWT off = “público seguro” |
+| Efeito de pagamento | Revalidar no provedor (`SEC-091`) | Confiar no nome do evento |
 
 | Condição de bloqueio | Regra |
 | --- | --- |
@@ -780,6 +852,8 @@ bucket legado público (`SEC-035`, `SEC-084`).
 | Multi-tenant sem isolamento | `SEC-006` |
 | Segredo no repo/cliente/JSON de config | `SEC-052`, `SEC-085`, `SEC-086` |
 | Webhook só com token na URL | `SEC-087` |
+| JWT off sem auth no handler | `SEC-090` |
+| Mutação financeira só pelo webhook | `SEC-091` |
 | Concatenação em consulta | `SEC-019` |
 | SQL dinâmico com sort/coluna do usuário | `SEC-067`, `SEC-069` |
 | Filtro `.or()` / DSL com texto livre | `SEC-068` |
@@ -800,16 +874,17 @@ bucket legado público (`SEC-035`, `SEC-084`).
 ```
 1. Declarar nível V1/V2/V3 do módulo (SEC-059–060)
 2. Autorização por objeto + tenant + caminhos esquecidos (SEC-004–008)
-3. Autenticação/sessão/MFA/CSRF (SEC-044–048, SEC-025–027)
-4. Entrada: injeção, SQL dinâmico, DSL de filtro, upload, SSRF (SEC-019–024, SEC-067–071, SEC-049)
-5. Saída XSS: escape por contexto, HTML fora do SPA, href, caça mecânica (SEC-021–022, SEC-072–076)
-6. Criptografia, TLS, segredos e chave de integração (SEC-012–018, SEC-052, SEC-085–088)
-7. Config, CORS, headers, superfície admin (SEC-031–037)
-7b. Plano de dados público / BaaS: allowlist GRANT, coluna, defaults, DEFINER, regressão, storage legado (SEC-077–084; cite SEC-035)
-8. Dependências e pipeline (SEC-038–043)
-9. Logs e eventos de segurança (SEC-050–051)
-10. Dados pessoais: inventário, retenção, direitos (SEC-053–058)
-11. Correção: prova de exploração fechada (SEC-064–065)
+3. Rotas sem sessão: inventário e auth na borda (SEC-089–093; cite SEC-087)
+4. Autenticação/sessão/MFA/CSRF (SEC-044–048, SEC-025–027)
+5. Entrada: injeção, SQL dinâmico, DSL de filtro, upload, SSRF (SEC-019–024, SEC-067–071, SEC-049)
+6. Saída XSS: escape por contexto, HTML fora do SPA, href, caça mecânica (SEC-021–022, SEC-072–076)
+7. Criptografia, TLS, segredos e chave de integração (SEC-012–018, SEC-052, SEC-085–088)
+8. Config, CORS, headers, superfície admin (SEC-031–037)
+8b. Plano de dados público / BaaS: allowlist GRANT, coluna, defaults, DEFINER, regressão, storage legado (SEC-077–084; cite SEC-035)
+9. Dependências e pipeline (SEC-038–043)
+10. Logs e eventos de segurança (SEC-050–051)
+11. Dados pessoais: inventário, retenção, direitos (SEC-053–058)
+12. Correção: prova de exploração fechada (SEC-064–065)
 ```
 
 Checklist operacional: [`checklists/seguranca-owasp.md`](checklists/seguranca-owasp.md).
@@ -948,6 +1023,17 @@ if (!timingSafeEqual(header, webhookAuth) || !verifyHmac(body, sig)) return 401
 ```
 
 ```
+# Ruim — SEC-090: JWT off no gateway, handler “confia”
+# Bom — HMAC/header obrigatório; ausente → 401/403
+
+# Ruim — SEC-091: event = PAYMENT_DELETED → cancela local
+# Bom — GET no provedor; 404 confirma; timeout/erro → não muta
+
+# Ruim — SEC-093: log-ingest sobe sem secret configurado
+# Bom — sem secret → 503; secret errado → 401
+```
+
+```
 # Ruim — SEC-077 / SEC-078: esconder anon key
 # Bom — allowlist + suite CI (SEC-083)
 ```
@@ -987,6 +1073,10 @@ if (!timingSafeEqual(header, webhookAuth) || !verifyHmac(body, sig)) return 401
 | `VITE_*_SECRET` / eco de `api_key` no JSON | Chave no browser ou no módulo (`SEC-085`, `SEC-086`) |
 | Webhook só com token na query | Replay via log/proxy (`SEC-087`) |
 | “Não achei chave de integração” sem caça | Não verificado (`SEC-088`) |
+| JWT off = “rota pública segura” | Escrita anônima (`SEC-090`) |
+| Confiar no nome do evento de pagamento | Cancelamento/ativo forjado (`SEC-091`) |
+| GET anônimo com mapa OAuth/canais | Reconhecimento barato (`SEC-092`) |
+| Log ingest sem secret obrigatório | Lixeira pública / custo (`SEC-093`) |
 
 ---
 
@@ -1002,6 +1092,7 @@ if (!timingSafeEqual(header, webhookAuth) || !verifyHmac(body, sig)) return 401
 - [ ] Saída HTML: escape por contexto; e-mail/callback/template; href só http(s); caça anexada. (`SEC-021`, `SEC-022`, `SEC-072`–`SEC-076`)
 - [ ] Hash adequado; TLS; sem segredo no cliente/repo. (`SEC-012`, `SEC-013`, `SEC-052`)
 - [ ] Chave de integração: fora do bundle; sem eco no JSON; webhook com 2º fator; caça anexada. (`SEC-085`–`SEC-088`)
+- [ ] Rotas sem sessão inventariadas; auth no handler; revalidação de efeito. (`SEC-089`–`SEC-093`)
 - [ ] Sessão/token com expiração e regeneração. (`SEC-044`, `SEC-045`)
 - [ ] Lockout de auth no IdP (por conta, teto+janela); não só UI/IP; prova com API direta. (`SEC-026`)
 - [ ] SSRF com allowlist. (`SEC-049`)
@@ -1023,13 +1114,16 @@ checklists/seguranca-owasp.md. Cite 16-multi-tenant.md for tenant product
 decisions; 10-devops.md for deploy/access ops — do not restate OPS norms.
 
 Sequence (SEC-003):
-1. authorization → 2. authentication → 3. input → 4. output → 5. secrets →
-6. dependencies → 7. configuration → 8. SSRF → 9. integrity → 10. logging.
+1. authorization → 2. exposed routes without user session (SEC-089–093; cite SEC-087) →
+3. authentication → 4. input → 5. output → 6. secrets → 7. dependencies →
+8. configuration → 9. SSRF → 10. integrity → 11. logging.
 
 Rules of engagement:
 - Burden of proof inverted on authz/payment/PII (SEC-001).
 - Authenticated attacker threat model (SEC-002).
 - Object-level authz and tenant isolation are S0 (SEC-004, SEC-006).
+- JWT-off gateway without handler auth is S0 (SEC-090); money/state from
+  webhook body alone is S0 (SEC-091). Webhook secret not query-only (SEC-087).
 - Parameterized queries; dynamic SQL only with allowlisted identifiers + bound
   values (SEC-019, SEC-067–SEC-069). Filter/DSL strings are injection surface
   (SEC-068); privileged clients validate external IDs (SEC-070).
@@ -1046,6 +1140,9 @@ Rules of engagement:
 - Integration API keys: never in frontend env (SEC-085); no JSON echo of saved
   secrets — admin-only reveal (SEC-086); webhook second factor + fail-closed
   (SEC-087); mechanical hunt before “no exposed key” (SEC-088).
+- Exposed API routes: inventory (SEC-089); handler auth when JWT off (SEC-090);
+  provider revalidation for money/state (SEC-091); anonymous GET without ops map
+  (SEC-092); write sinks fail-closed (SEC-093). Webhook processing: BAK-049–053.
 - Auth brute force: account lockout on the identity path (not UI-only / IP-only);
   reject when the window is full even if the password is valid; captcha
   complements, does not replace (SEC-026). Prove with direct Auth API calls
@@ -1069,10 +1166,11 @@ Output: findings with path:line, severity, exploit path, verification level
 6. Nenhum segredo no repositório ou no cliente (`SEC-052`); chave publishable tratada como pública (`SEC-077`).
 7. Se há API de dados no cliente: allowlist GRANT + regressão (`SEC-078`–`SEC-083`); storage sem legado público (`SEC-084`).
 8. Segredos de integração conforme (`SEC-085`–`SEC-088`), com evidência de caça.
-9. Sem dado pessoal em log nos caminhos revisados (`SEC-050`).
-10. Nível de verificação declarado (`SEC-060`).
-11. Autenticação em escopo com lockout conforme `SEC-026` (ou N/A justificado se o módulo não autentica).
-12. Correções `S0`/`S1` com prova antes/depois (`SEC-064`).
+9. Rotas sem sessão: inventário + auth no handler + revalidação onde há efeito (`SEC-089`–`SEC-093`).
+10. Sem dado pessoal em log nos caminhos revisados (`SEC-050`).
+11. Nível de verificação declarado (`SEC-060`).
+12. Autenticação em escopo com lockout conforme `SEC-026` (ou N/A justificado se o módulo não autentica).
+13. Correções `S0`/`S1` com prova antes/depois (`SEC-064`).
 
 ---
 

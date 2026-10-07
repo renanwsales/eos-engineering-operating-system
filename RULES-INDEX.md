@@ -1,6 +1,6 @@
 # RULES-INDEX — índice de regras do EOS
 
-**1413 regras** em 25 volumes. Este arquivo é **gerado** por
+**1423 regras** em 25 volumes. Este arquivo é **gerado** por
 `scripts/build-rules-index.py`; não edite à mão. Se um volume e este índice divergirem,
 **o volume** é a fonte de verdade.
 
@@ -21,7 +21,7 @@ deixa o número aposentado, nunca reaproveitado, para que relatórios antigos co
 | `[RECOMENDADA]` | Padrão esperado; exceção é normal | Justificativa no momento, sem ADR |
 | `[REVOGADA]` | Não vale mais; o número fica aposentado | — |
 
-Distribuição: **133 imutáveis** · **1072 obrigatórias** · **208 recomendadas**.
+Distribuição: **133 imutáveis** · **1082 obrigatórias** · **208 recomendadas**.
 
 ## Volumes
 
@@ -33,7 +33,7 @@ Distribuição: **133 imutáveis** · **1072 obrigatórias** · **208 recomendad
 | 03 | [Framework Backend](03-backend.md) | `BAK` | 73 |
 | 04 | [Framework Frontend](04-frontend.md) | `FRT` | 42 |
 | 05 | [Framework de Banco de Dados](05-banco-de-dados.md) | `DAT` | 40 |
-| 06 | [Segurança e DevSecOps](06-seguranca.md) | `SEC` | 88 |
+| 06 | [Segurança e DevSecOps](06-seguranca.md) | `SEC` | 93 |
 | 07 | [Framework de Performance](07-performance.md) | `PRF` | 38 |
 | 08 | [UX/UI Premium](08-ux-premium.md) | `UXI` | 55 |
 | 09 | [Design System](09-design-system.md) | `DSY` | 69 |
@@ -48,11 +48,11 @@ Distribuição: **133 imutáveis** · **1072 obrigatórias** · **208 recomendad
 | 18 | [Produto](18-produto.md) | `PRD` | 58 |
 | 19 | [IA no Produto](19-ia-no-produto.md) | `IAX` | 69 |
 | 20 | [Prompt Engineering](20-prompt-engineering.md) | `PRM` | 58 |
-| 21 | [Playbooks](21-playbooks.md) | `PLB` | 58 |
+| 21 | [Playbooks](21-playbooks.md) | `PLB` | 63 |
 | 22 | [Checklists](22-checklists.md) | `CHK` | 48 |
 | 23 | [Métricas](23-metricas.md) | `MET` | 58 |
 | 24 | [Auditoria Final](24-auditoria-final.md) | `FIN` | 52 |
-| | **Total** | | **1413** |
+| | **Total** | | **1423** |
 
 ---
 
@@ -446,7 +446,7 @@ Arquivo: [`05-banco-de-dados.md`](05-banco-de-dados.md) · 40 regras
 
 ## 📓 Volume 06 — Segurança e DevSecOps
 
-Arquivo: [`06-seguranca.md`](06-seguranca.md) · 88 regras
+Arquivo: [`06-seguranca.md`](06-seguranca.md) · 93 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -524,6 +524,11 @@ Arquivo: [`06-seguranca.md`](06-seguranca.md) · 88 regras
 | `SEC-086` | Resposta de API não devolve o segredo já salvo | OBRIG | `S1` | Segredos e ataque de chave de API de integração |
 | `SEC-087` | Webhook não autentica só com segredo na URL | OBRIG | `S1` | Segredos e ataque de chave de API de integração |
 | `SEC-088` | Caça mecânica de chave de integração antes do veredito | OBRIG | — | Segredos e ataque de chave de API de integração |
+| `SEC-089` | Inventário de toda rota alcançável sem sessão de usuário | OBRIG | `S1` | Segredos e ataque de chave de API de integração |
+| `SEC-090` | JWT desligado no gateway não autentica o chamador | OBRIG | `S0` | Segredos e ataque de chave de API de integração |
+| `SEC-091` | Efeito em dinheiro ou estado só com revalidação no provedor | OBRIG | `S0` | Segredos e ataque de chave de API de integração |
+| `SEC-092` | GET anônimo não revela configuração operacional | OBRIG | — | Segredos e ataque de chave de API de integração |
+| `SEC-093` | Coletor ou sink de escrita sem segredo é fail-closed | OBRIG | `S1` | Segredos e ataque de chave de API de integração |
 | `SEC-053` | Inventário obrigatório | OBRIG | — | Dados pessoais |
 | `SEC-054` | Minimização | OBRIG | — | Dados pessoais |
 | `SEC-055` | Retenção declarada e eliminação automatizada | OBRIG | — | Dados pessoais |
@@ -1402,7 +1407,7 @@ Arquivo: [`20-prompt-engineering.md`](20-prompt-engineering.md) · 58 regras
 
 ## 📕 Volume 21 — Playbooks
 
-Arquivo: [`21-playbooks.md`](21-playbooks.md) · 58 regras
+Arquivo: [`21-playbooks.md`](21-playbooks.md) · 63 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -1464,6 +1469,11 @@ Arquivo: [`21-playbooks.md`](21-playbooks.md) · 58 regras
 | `PLB-056` | Escreva o teste que falha, antes da correção | OBRIG | — | Playbook: corrigir um bug |
 | `PLB-057` | Corrija a classe, não só a instância reportada | OBRIG | — | Playbook: corrigir um bug |
 | `PLB-058` | Nada de "enquanto eu estava lá" | IMUT | — | Playbook: corrigir um bug |
+| `PLB-059` | Inventarie método + caminho sem sessão | OBRIG | — | Playbook: proteger rotas de API expostas |
+| `PLB-060` | Autentique no handler quando o gateway desliga JWT | OBRIG | `S0` | Playbook: proteger rotas de API expostas |
+| `PLB-061` | Revalide no provedor antes de gravar dinheiro ou estado | OBRIG | `S0` | Playbook: proteger rotas de API expostas |
+| `PLB-062` | GET anônimo sem mapa operacional | OBRIG | — | Playbook: proteger rotas de API expostas |
+| `PLB-063` | Sink de escrita sem secret é 503 | OBRIG | `S1` | Playbook: proteger rotas de API expostas |
 
 ## 📙 Volume 22 — Checklists
 

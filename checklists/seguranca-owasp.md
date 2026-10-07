@@ -30,6 +30,19 @@ Caminhos que a revisão esquece:
 
 `S0` se: falta autorização por objeto · falta filtro de tenant.
 
+## 1b. Rotas de API expostas (sem sessão de usuário)
+
+- [ ] Inventário de método + caminho sem JWT/sessão, com auth real e efeito colateral. (`SEC-089`)
+- [ ] JWT desligado no gateway → handler autentica fail-closed; chave anônima não basta. (`SEC-090`)
+- [ ] Efeito em dinheiro/estado: revalidação na API do provedor; falha não grava local. (`SEC-091`)
+- [ ] Segredo de webhook/HMAC só em header ou corpo — não só na query. (`SEC-087`)
+- [ ] GET anônimo não revela callback OAuth, canais nem mapa operacional. (`SEC-092`)
+- [ ] Coletor/sink de escrita sem secret configurado responde 503. (`SEC-093`)
+
+Playbook: `PLB-059`–`PLB-063`. Processamento idempotente do webhook: `BAK-049`–`BAK-053`.
+
+`S0` se: JWT off sem auth no handler · mutação de pagamento só pelo corpo do webhook.
+
 ## 2. Falha criptográfica
 
 - [ ] Senha com hash lento e específico (bcrypt/argon2/scrypt), custo adequado.
@@ -167,6 +180,8 @@ Nenhuma entrega passa com qualquer um destes:
 8. CORS permissivo com credencial
 9. Dado sensível sem TLS
 10. Ausência de limite de tentativas em autenticação (`SEC-026`: lockout no IdP por conta; UI/IP não bastam)
+11. Rota com JWT desligado sem autenticação no handler (`SEC-090`)
+12. Efeito em dinheiro/estado só pelo corpo do webhook, sem revalidação (`SEC-091`)
 
 ---
 

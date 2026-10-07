@@ -31,12 +31,17 @@ could not find the authorization check" is a finding, not an inconclusive result
 1. **Map the attack surface.** Every entry point: routes, GraphQL fields, webhooks, uploads, queue
    consumers, scheduled jobs, admin panels, exports, **public data-API roles** (publishable/`anon`
    PostgREST/BaaS), and anything reachable without authentication.
-2. **Map the assets.** Where personal data, credentials, money and privileged operations live.
-3. **Authorization first**, always. It is the most common and most severe real failure.
-4. Then authentication and session handling.
-5. Then input handling (injection), output handling (XSS, data leakage), secrets, dependencies,
+2. **Inventory exposed API routes** (`SEC-089`–`SEC-093`): every HTTP method+path the gateway accepts
+   **without** end-user JWT/session — webhook, OAuth callback, log ingest, cron-by-service-key,
+   anonymous GET. JWT off at the gateway is not caller auth (`SEC-090`). Money/state effects need
+   provider revalidation (`SEC-091`). Secrets stay out of query strings (`SEC-087`). Playbook:
+   `PLB-059`–`PLB-063`.
+3. **Map the assets.** Where personal data, credentials, money and privileged operations live.
+4. **Authorization first**, always. It is the most common and most severe real failure.
+5. Then authentication and session handling.
+6. Then input handling (injection), output handling (XSS, data leakage), secrets, dependencies,
    configuration.
-6. Then SSRF, integrity, logging.
+7. Then SSRF, integrity, logging.
 
 Start with authorization even if you are asked about something else. A missing authorization check
 outweighs every other class of finding.
@@ -62,10 +67,15 @@ Then check the paths reviews forget:
 - [ ] Client-supplied role, plan, price or permission fields: explicitly ignored?
 - [ ] Sort/filter on a column the caller should not even know exists.
 - [ ] Is "deny by default" the actual default, or does a new route start public?
-- [ ] Webhooks and callbacks: is the sender verified?
+- [ ] Webhooks and callbacks: is the sender verified? (`BAK-049`, `SEC-090`, `SEC-087`)
+- [ ] Routes with JWT verification off: does the **handler** authenticate fail-closed? (`SEC-090`)
+- [ ] Payment/state webhooks: revalidated against the provider API, not body-only? (`SEC-091`)
+- [ ] Anonymous GET: no OAuth callback URL, channel map, or invite enumeration? (`SEC-092`)
+- [ ] Write sinks (log ingest, debug beacon): secret required or 503? (`SEC-093`)
 - [ ] Do background jobs run with the requester's authority or with full privilege?
 
-Missing object-level authorization is `S0`. Missing tenant filter is `S0`.
+Missing object-level authorization is `S0`. Missing tenant filter is `S0`. JWT-off gateway without
+handler auth is `S0` (`SEC-090`).
 
 ---
 
@@ -188,6 +198,9 @@ Standard `FINDING` list, plus:
 ```
 ## Attack surface
 | Entry point | Auth required? | Operation authz | Object authz | Tenant filter | Verdict |
+
+## Exposed API routes (no user session)
+| Method + path | Gateway JWT? | Real auth mechanism | Side effect | Revalidation? | Secret in query? | Verdict |
 
 ## Assets
 | Asset | Location | Protection | Exposure if breached |

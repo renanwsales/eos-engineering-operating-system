@@ -1,6 +1,6 @@
 # 📕 Volume 21 — Playbooks
 
-Prefixo: `PLB` · Regras: PLB-001 a PLB-058 · Papel: qualquer, conforme a tarefa
+Prefixo: `PLB` · Regras: PLB-001 a PLB-063 · Papel: qualquer, conforme a tarefa
 
 Os outros volumes dizem o que é certo. Este diz **em que ordem fazer**, para as tarefas que se repetem toda
 semana. É a camada que transforma 500 regras em trabalho executável.
@@ -12,9 +12,9 @@ playbook executa **uma tarefa** de construção, normalmente por um papel só.
 deste volume; não duplica os passos.
 
 **Fronteira.** É deste volume: a **ordem** de execução das tarefas recorrentes (CRUD, endpoint, tela,
-schema, integração externa, correção de bug) e as regras `PLB` que tornam essa ordem citável. O
-índice em [`playbooks/README.md`](playbooks/README.md) lista as tarefas e o passo que mais se erra;
-a substância mora aqui.
+schema, integração externa, correção de bug, rotas de API expostas) e as regras `PLB` que tornam essa
+ordem citável. O índice em [`playbooks/README.md`](playbooks/README.md) lista as tarefas e o passo que
+mais se erra; a substância mora aqui.
 
 **Não é deste volume:** as **normas** que os passos aplicam. Autorização, schema, contrato, UX,
 teste, deploy — ficam nos volumes de domínio (`SEC`, `DAT`, `API`, `UXI`, `QAT`, `OPS`, …). Playbook
@@ -304,7 +304,9 @@ Persista a intenção, execute o efeito depois (`BAK-040`).
 
 ### PLB-053 — Webhook de entrada: verifique origem, seja idempotente, responda rápido **[OBRIGATÓRIA]**
 
-`BAK-049`, `BAK-050`. Aceite, enfileire, processe fora do ciclo da requisição.
+`BAK-049`, `BAK-050`. Aceite, enfileire, processe fora do ciclo da requisição. Antes disso, a rota
+sem sessão cumpre `SEC-089`–`SEC-091` e `SEC-087` (inventário, auth no handler, revalidação,
+segredo fora da query). Playbook dedicado: `PLB-059`–`PLB-063`.
 
 ### PLB-054 — Registre a chamada com correlação e monitore a taxa de falha **[OBRIGATÓRIA]**
 
@@ -341,6 +343,34 @@ Se a reincidência for de um bug já corrigido antes, **o achado é o teste de r
 
 ---
 
+## Capítulo 21.8 — Playbook: proteger rotas de API expostas
+
+Toda vez que o gateway aceita HTTP **sem** JWT/sessão de usuário (webhook, OAuth callback, ingest,
+cron por chave, health). Normas: `SEC-089`–`SEC-093`, `SEC-087`. Processamento: `BAK-049`–`BAK-053`.
+
+### PLB-059 — Inventarie método + caminho sem sessão **[OBRIGATÓRIA]**
+
+`SEC-089`. Propósito, mecanismo de auth real, efeito colateral. Rota ausente do inventário é achado.
+
+### PLB-060 — Autentique no handler quando o gateway desliga JWT **[OBRIGATÓRIA]** · `S0`
+
+`SEC-090`. Segredo/assinatura ausente → fail-closed. Chave anônima/publicável do cliente não autentica
+efeito. Segredo fora da query (`SEC-087`).
+
+### PLB-061 — Revalide no provedor antes de gravar dinheiro ou estado **[OBRIGATÓRIA]** · `S0`
+
+`SEC-091`. Corpo ou nome do evento sozinho não basta. Revalidação falhou → erro, sem mutar o livro local.
+
+### PLB-062 — GET anônimo sem mapa operacional **[OBRIGATÓRIA]**
+
+`SEC-092`. Health/`ok` ok; callback OAuth, canais, padrões de webhook — não.
+
+### PLB-063 — Sink de escrita sem secret é 503 **[OBRIGATÓRIA]** · `S1`
+
+`SEC-093`. Log/telemetria/debug com auth opcional não sobe. Rate limit não substitui secret.
+
+---
+
 ## Padrões reutilizáveis
 
 **Tabela de passos com status.** Uma linha por passo do playbook: `feito` · evidência path:line · ou
@@ -364,6 +394,9 @@ skeleton — listados (`PLB-029`). *Não deixe* erro "para depois".
 **Reproduzir → teste que falha → corrigir a classe.** Ordem de bug (`PLB-055`–`PLB-057`). Commit só
 com a correção (`PLB-058`).
 
+**Rotas sem sessão: inventário → auth no handler → revalidação → GET limpo → sink fail-closed.**
+Ordem de exposição (`PLB-059`–`PLB-063`; normas `SEC-089`–`SEC-093`, `SEC-087`).
+
 ---
 
 ## Matrizes de decisão
@@ -372,12 +405,13 @@ com a correção (`PLB-058`).
 
 | Tarefa | Capítulo | Faixa |
 | --- | --- | --- |
-| CRUD de entidade | 15.2 | `PLB-005`–`017` |
-| Endpoint / rota | 15.3 | `PLB-018`–`027` |
-| Tela | 15.4 | `PLB-028`–`039` |
-| Schema / migração | 15.5 | `PLB-040`–`047` |
-| Integração externa | 15.6 | `PLB-048`–`054` |
-| Bug | 15.7 | `PLB-055`–`058` |
+| CRUD de entidade | 21.2 | `PLB-005`–`017` |
+| Endpoint / rota | 21.3 | `PLB-018`–`027` |
+| Tela | 21.4 | `PLB-028`–`039` |
+| Schema / migração | 21.5 | `PLB-040`–`047` |
+| Integração externa | 21.6 | `PLB-048`–`054` |
+| Bug | 21.7 | `PLB-055`–`058` |
+| Rotas de API expostas | 21.8 | `PLB-059`–`063` |
 
 Índice: [`playbooks/README.md`](playbooks/README.md).
 
@@ -472,6 +506,7 @@ backlog: renomear módulo (CON-019)
 | Chamada externa dentro de transação | Lock longo; falha parcial (`PLB-052`) |
 | Corrigir sem reproduzir | Correção cosmética (`PLB-055`) |
 | Commit de bug com melhoria adjacente | Diff impossível de bisectar (`PLB-058`) |
+| JWT off no gateway sem auth no handler | API de escrita anônima (`PLB-060`, `SEC-090`) |
 | Reafirmar `SEC`/`DAT` no playbook | Segunda fonte de verdade (`A-001`) |
 
 ---
@@ -488,6 +523,7 @@ backlog: renomear módulo (CON-019)
 - [ ] Schema: contagem de violadores, aditivo, reversa executada. (`PLB-040`–`043`)
 - [ ] Integração: timeout/retry/idempotência; sem call em transação. (`PLB-049`, `PLB-052`)
 - [ ] Bug: reproduzido, teste que falha, classe corrigida, commit limpo. (`PLB-055`–`058`)
+- [ ] Rotas sem sessão: inventário, auth no handler, revalidação. (`PLB-059`–`063`)
 - [ ] DoD (`CON-043`) e G4 executados. (`PLB-001`, `CON-061`)
 
 ---
@@ -506,7 +542,8 @@ playbooks/README.md, templates/perfil-do-projeto.md, and the domain volumes cite
 playbook's steps.
 
 Mandatory sequence:
-1. Pick the playbook from playbooks/README.md (CRUD, endpoint, screen, schema, integration, bug).
+1. Pick the playbook from playbooks/README.md (CRUD, endpoint, screen, schema, integration, bug,
+   exposed API routes).
 2. Confirm G0–G2 are done or explicitly compressed as trivial (PLB-001). Never skip G4 (CON-061).
 3. Walk every PLB step in order. For each: done with path:line evidence, or N/A with one sentence
    (PLB-003).

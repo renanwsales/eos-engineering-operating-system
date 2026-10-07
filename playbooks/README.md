@@ -14,12 +14,13 @@ validação, nunca é comprimido (`CON-061`).
 
 | Tarefa | Onde | Regras | Passo que mais se erra |
 | --- | --- | --- | --- |
-| **Criar um CRUD** | [Volume 21, cap. 15.2](../21-playbooks.md) | `PLB-005` a `PLB-017` | Tratar as quatro operações como simétricas. Elas têm regras, autorizações e invariantes diferentes (`PLB-009`) |
-| **Criar um endpoint** | [Volume 21, cap. 15.3](../21-playbooks.md) | `PLB-018` a `PLB-027` | Serializar a entidade em vez de construir a saída campo por campo (`PLB-018`) |
-| **Criar uma tela** | [Volume 21, cap. 15.4](../21-playbooks.md) | `PLB-028` a `PLB-039` | Deixar o estado de erro para depois — é assim que ele deixa de existir (`PLB-029`) |
-| **Alterar o schema** | [Volume 21, cap. 15.5](../21-playbooks.md) | `PLB-040` a `PLB-047` | Escrever a migração antes de contar quantos registros violam a nova regra (`PLB-040`) |
-| **Integrar serviço externo** | [Volume 21, cap. 15.6](../21-playbooks.md) | `PLB-048` a `PLB-054` | Chamar sem declarar timeout, retry, idempotência e comportamento em falha (`PLB-049`) |
-| **Corrigir um bug** | [Volume 21, cap. 15.7](../21-playbooks.md) | `PLB-055` a `PLB-058` | "Enquanto eu estava lá" — melhoria adjacente no commit de correção (`PLB-058`) |
+| **Criar um CRUD** | [Volume 21, cap. 21.2](../21-playbooks.md) | `PLB-005` a `PLB-017` | Tratar as quatro operações como simétricas. Elas têm regras, autorizações e invariantes diferentes (`PLB-009`) |
+| **Criar um endpoint** | [Volume 21, cap. 21.3](../21-playbooks.md) | `PLB-018` a `PLB-027` | Serializar a entidade em vez de construir a saída campo por campo (`PLB-018`) |
+| **Criar uma tela** | [Volume 21, cap. 21.4](../21-playbooks.md) | `PLB-028` a `PLB-039` | Deixar o estado de erro para depois — é assim que ele deixa de existir (`PLB-029`) |
+| **Alterar o schema** | [Volume 21, cap. 21.5](../21-playbooks.md) | `PLB-040` a `PLB-047` | Escrever a migração antes de contar quantos registros violam a nova regra (`PLB-040`) |
+| **Integrar serviço externo** | [Volume 21, cap. 21.6](../21-playbooks.md) | `PLB-048` a `PLB-054` | Chamar sem declarar timeout, retry, idempotência e comportamento em falha (`PLB-049`) |
+| **Corrigir um bug** | [Volume 21, cap. 21.7](../21-playbooks.md) | `PLB-055` a `PLB-058` | "Enquanto eu estava lá" — melhoria adjacente no commit de correção (`PLB-058`) |
+| **Proteger rotas de API expostas** | [Volume 21, cap. 21.8](../21-playbooks.md) | `PLB-059` a `PLB-063` | Tratar "JWT desligado no gateway" como anônimo seguro — auth falta no handler (`PLB-060`, `SEC-090`) |
 
 ---
 

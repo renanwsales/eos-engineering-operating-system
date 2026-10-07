@@ -50,7 +50,7 @@ framework inteiro. IDs nunca são renumerados nem reciclados (`A-007`).
 | 03 | [Backend](03-backend.md) | `BAK` | Casos de uso, validação, erros, concorrência, idempotência, filas, workers, webhooks, GraphQL |
 | 04 | [Frontend](04-frontend.md) | `FRT` | Oito estados, gerenciamento de estado, cache de cliente, composição, formulários |
 | 05 | [Banco de Dados](05-banco-de-dados.md) | `DAT` | Modelagem, integridade declarativa, índices, transações, migrações |
-| 06 | [Segurança](06-seguranca.md) | `SEC` | OWASP Top 10, criptografia, sessão, segredos, dados pessoais, níveis de verificação |
+| 06 | [Segurança](06-seguranca.md) | `SEC` | OWASP Top 10, criptografia, sessão, segredos, dados pessoais, rotas de API expostas, níveis de verificação |
 | 07 | [Performance](07-performance.md) | `PRF` | Medição, acesso a dados, cache, renderização, limiares |
 | 08 | [UX Premium](08-ux-premium.md) | `UXI` | Usabilidade, microinterações, erros, fluxos, caminhos infelizes, WCAG 2.2 AA |
 | 09 | [Design System](09-design-system.md) | `DSY` | Tokens, cor, espaçamento, tipografia, movimento, catálogo de componentes, governança |
