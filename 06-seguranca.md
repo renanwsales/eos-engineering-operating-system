@@ -161,6 +161,13 @@ a partir de uma string que você interpolou, você concatenou.
 Como código, comando, template ou expressão. Inclui avaliação dinâmica e desserialização em objeto
 executável.
 
+Inclui **injeção de prompt** (*prompt injection*): texto controlado por terceiro (mensagem de
+cliente, ticket, extrato, PDF/XML, comentário, trecho RAG enviado pelo cliente) que o modelo trata
+como instrução. Não existe parser que separe dado de comando no contexto do LLM — a mitigação
+eficaz não é um filtro de frases, é limitar o que a saída pode causar (`IAX-002`, `IAX-006`,
+`IAX-061`, `IAX-070` a `IAX-074`). Classifique o vetor aqui; a arquitetura da funcionalidade com
+IA vive no [Volume 19](19-ia-no-produto.md).
+
 ### SEC-021 — Escape na saída por contexto **[OBRIGATÓRIA]**
 
 HTML, atributo, URL e JavaScript têm regras diferentes. Escapar para o contexto errado não protege.
@@ -876,7 +883,7 @@ fail-closed (`SEC-093`). Playbook `PLB-059`–`PLB-063`.
 2. Autorização por objeto + tenant + caminhos esquecidos (SEC-004–008)
 3. Rotas sem sessão: inventário e auth na borda (SEC-089–093; cite SEC-087)
 4. Autenticação/sessão/MFA/CSRF (SEC-044–048, SEC-025–027)
-5. Entrada: injeção, SQL dinâmico, DSL de filtro, upload, SSRF (SEC-019–024, SEC-067–071, SEC-049)
+5. Entrada: injeção (SQL/DSL/comando e prompt), SQL dinâmico, upload, SSRF (SEC-019–024, SEC-067–071, SEC-049; IAX-061, IAX-070–074)
 6. Saída XSS: escape por contexto, HTML fora do SPA, href, caça mecânica (SEC-021–022, SEC-072–076)
 7. Criptografia, TLS, segredos e chave de integração (SEC-012–018, SEC-052, SEC-085–088)
 8. Config, CORS, headers, superfície admin (SEC-031–037)
@@ -1055,6 +1062,8 @@ if (!timingSafeEqual(header, webhookAuth) || !verifyHmac(body, sig)) return 401
 | `.replace(<>&)` como mitigação XSS | Quebra de atributo / handler (`SEC-074`) |
 | `href="${userUrl}"` sem esquema | `javascript:` / phishing (`SEC-073`) |
 | Template HTML com variável crua | XSS armazenado (`SEC-075`) |
+| Tratar texto de LLM/terceiro como instrução | Prompt injection (`SEC-020`, `IAX-061`) |
+| Confirmar write de agente sem ver o payload | Executa args injetados (`IAX-072`) |
 | Segredo no repositório “por enquanto” | Compromisso permanente até rotacionar (`SEC-052`) |
 | Hash rápido de senha | Credential stuffing trivial (`SEC-012`) |
 | Login sem teto / lockout só na UI ou só por IP | Força bruta ilimitada (`SEC-026`) |
@@ -1086,10 +1095,11 @@ if (!timingSafeEqual(header, webhookAuth) || !verifyHmac(body, sig)) return 401
 - [ ] Autorização por objeto; negar por omissão. (`SEC-004`, `SEC-005`)
 - [ ] Isolamento de tenant no dado quando aplicável. (`SEC-006`)
 - [ ] Caminhos esquecidos percorridos. (`SEC-008`)
-- [ ] Consulta parametrizada; sem executar entrada. (`SEC-019`, `SEC-020`)
+- [ ] Consulta parametrizada; sem executar entrada (incl. prompt injection). (`SEC-019`, `SEC-020`)
 - [ ] SQL dinâmico: allowlist de identificadores + valores bound. (`SEC-067`, `SEC-069`)
 - [ ] Filtro/DSL de busca sem texto cru; service role valida IDs. (`SEC-068`, `SEC-070`)
 - [ ] Saída HTML: escape por contexto; e-mail/callback/template; href só http(s); caça anexada. (`SEC-021`, `SEC-022`, `SEC-072`–`SEC-076`)
+- [ ] Se houver agente/RAG: cerca de dados, ticket de confirmação, system fixo. (`IAX-070`–`IAX-074`)
 - [ ] Hash adequado; TLS; sem segredo no cliente/repo. (`SEC-012`, `SEC-013`, `SEC-052`)
 - [ ] Chave de integração: fora do bundle; sem eco no JSON; webhook com 2º fator; caça anexada. (`SEC-085`–`SEC-088`)
 - [ ] Rotas sem sessão inventariadas; auth no handler; revalidação de efeito. (`SEC-089`–`SEC-093`)
@@ -1147,6 +1157,8 @@ Rules of engagement:
   reject when the window is full even if the password is valid; captcha
   complements, does not replace (SEC-026). Prove with direct Auth API calls
   (SEC-064).
+- Never execute input — including prompt injection via third-party text in LLM
+  context (SEC-020). For agents/RAG cite IAX-061 and IAX-070–074.
 - Fix requires exploit-path closed with before/after (SEC-064).
 - Do not downgrade security S0 (SEC-066). Do not invent new SEC rules.
 

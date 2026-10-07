@@ -66,9 +66,15 @@ Playbook: `PLB-059`–`PLB-063`. Processamento idempotente do webhook: `BAK-049`
 - [ ] `href`/`src`/`action`: só `http(s)` (ou relativo documentado). (`SEC-073`)
 - [ ] Filtro parcial (`.replace(<>&)`, strip de tags) não conta como escape. (`S1`) (`SEC-074`)
 - [ ] Caça mecânica anexada antes de “sem XSS” (`dangerouslySetInnerHTML`, `innerHTML`, `text/html`). (`SEC-076`)
-- [ ] Nenhuma execução de entrada como código, comando ou template. (`SEC-020`)
+- [ ] Nenhuma execução de entrada como código, comando ou template. Inclui injeção de prompt
+      (texto de terceiro no contexto do LLM). (`SEC-020`, `IAX-061`)
 - [ ] Validação por lista de permitidos, não de proibidos. (`SEC-069`)
 - [ ] Nome de arquivo, cabeçalho e destino de redirecionamento validados. (`SEC-024`)
+- [ ] Agente com tools: resultado reapresentado ao modelo cercado como dado. (`IAX-070`)
+- [ ] Write do agente: ticket assinado com args exatos; UI mostra payload integral.
+      (`IAX-071`, `IAX-072`)
+- [ ] System/policy sem interpolar excerpt, rota ou documento do cliente. (`IAX-073`)
+- [ ] Extração por modelo que grava: sem upsert privilegiado automático. (`IAX-074`)
 
 ## 4. Design inseguro
 

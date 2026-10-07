@@ -39,8 +39,9 @@ could not find the authorization check" is a finding, not an inconclusive result
 3. **Map the assets.** Where personal data, credentials, money and privileged operations live.
 4. **Authorization first**, always. It is the most common and most severe real failure.
 5. Then authentication and session handling.
-6. Then input handling (injection), output handling (XSS, data leakage), secrets, dependencies,
-   configuration.
+6. Then input handling (injection — including **prompt injection** on LLM surfaces: chat, RAG,
+   tool-result loops, AI document extract; cite `SEC-020`, `IAX-061`, `IAX-070`–`IAX-074`),
+   output handling (XSS, data leakage), secrets, dependencies, configuration.
 7. Then SSRF, integrity, logging.
 
 Start with authorization even if you are asked about something else. A missing authorization check
