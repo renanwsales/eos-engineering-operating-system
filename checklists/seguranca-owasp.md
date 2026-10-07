@@ -136,7 +136,11 @@ Caminhos que a revisão esquece:
 - [ ] Nenhum no repositório, no histórico, no cliente, no log ou no artefato de build.
 - [ ] Gerenciador de segredos, injeção em execução, rotação sem deploy.
 - [ ] Varredura automática no pipeline e em pre-commit.
-- [ ] **Se encontrado: rotacionar primeiro, remover depois.** Nunca o inverso.
+- [ ] **Se encontrado: rotacionar primeiro, remover depois.** Nunca o inverso. (`SEC-052`)
+- [ ] Segredo de provedor fora de `VITE_` / `NEXT_PUBLIC_` / equivalente. (`S0`) (`SEC-085`)
+- [ ] Resposta de configuração não ecoa `api_key` / `*_token` / `*_secret`; revelação admin-only. (`S1`) (`SEC-086`)
+- [ ] Webhook com segundo fator (header ou HMAC) + fail-closed; comparação em tempo constante. (`S1`) (`SEC-087`, `SEC-017`)
+- [ ] Caça mecânica anexada antes de “sem chave de integração exposta”. (`SEC-088`)
 
 ## Dados pessoais
 

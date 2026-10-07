@@ -1,6 +1,6 @@
 # RULES-INDEX — índice de regras do EOS
 
-**1401 regras** em 25 volumes. Este arquivo é **gerado** por
+**1413 regras** em 25 volumes. Este arquivo é **gerado** por
 `scripts/build-rules-index.py`; não edite à mão. Se um volume e este índice divergirem,
 **o volume** é a fonte de verdade.
 
@@ -21,7 +21,7 @@ deixa o número aposentado, nunca reaproveitado, para que relatórios antigos co
 | `[RECOMENDADA]` | Padrão esperado; exceção é normal | Justificativa no momento, sem ADR |
 | `[REVOGADA]` | Não vale mais; o número fica aposentado | — |
 
-Distribuição: **133 imutáveis** · **1060 obrigatórias** · **208 recomendadas**.
+Distribuição: **133 imutáveis** · **1072 obrigatórias** · **208 recomendadas**.
 
 ## Volumes
 
@@ -33,7 +33,7 @@ Distribuição: **133 imutáveis** · **1060 obrigatórias** · **208 recomendad
 | 03 | [Framework Backend](03-backend.md) | `BAK` | 73 |
 | 04 | [Framework Frontend](04-frontend.md) | `FRT` | 42 |
 | 05 | [Framework de Banco de Dados](05-banco-de-dados.md) | `DAT` | 40 |
-| 06 | [Segurança e DevSecOps](06-seguranca.md) | `SEC` | 76 |
+| 06 | [Segurança e DevSecOps](06-seguranca.md) | `SEC` | 88 |
 | 07 | [Framework de Performance](07-performance.md) | `PRF` | 38 |
 | 08 | [UX/UI Premium](08-ux-premium.md) | `UXI` | 55 |
 | 09 | [Design System](09-design-system.md) | `DSY` | 69 |
@@ -52,7 +52,7 @@ Distribuição: **133 imutáveis** · **1060 obrigatórias** · **208 recomendad
 | 22 | [Checklists](22-checklists.md) | `CHK` | 48 |
 | 23 | [Métricas](23-metricas.md) | `MET` | 58 |
 | 24 | [Auditoria Final](24-auditoria-final.md) | `FIN` | 52 |
-| | **Total** | | **1401** |
+| | **Total** | | **1413** |
 
 ---
 
@@ -446,7 +446,7 @@ Arquivo: [`05-banco-de-dados.md`](05-banco-de-dados.md) · 40 regras
 
 ## 📓 Volume 06 — Segurança e DevSecOps
 
-Arquivo: [`06-seguranca.md`](06-seguranca.md) · 84 regras
+Arquivo: [`06-seguranca.md`](06-seguranca.md) · 88 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -485,7 +485,7 @@ Arquivo: [`06-seguranca.md`](06-seguranca.md) · 84 regras
 | `SEC-075` | Template em modo HTML escapa toda variável | OBRIG | — | Injeção (OWASP A03) |
 | `SEC-076` | Caça mecânica antes de declarar ausência de XSS | OBRIG | — | Injeção (OWASP A03) |
 | `SEC-025` | Reautenticação em fluxo sensível | OBRIG | — | Design inseguro (OWASP A04) |
-| `SEC-026` | Limite de tentativas com bloqueio progressivo | OBRIG | `S1` | Design inseguro (OWASP A04) |
+| `SEC-026` | Limite de tentativas com bloqueio progressivo | OBRIG | — | Design inseguro (OWASP A04) |
 | `SEC-027` | Não revele existência | OBRIG | — | Design inseguro (OWASP A04) |
 | `SEC-028` | Operação irreversível é confirmada e registrada | OBRIG | — | Design inseguro (OWASP A04) |
 | `SEC-029` | Modele o abuso, não só o uso | OBRIG | — | Design inseguro (OWASP A04) |
@@ -497,14 +497,14 @@ Arquivo: [`06-seguranca.md`](06-seguranca.md) · 84 regras
 | `SEC-035` | Armazenamento privado por padrão | OBRIG | — | Configuração (OWASP A05) |
 | `SEC-036` | Menor privilégio em toda credencial de serviço | OBRIG | — | Configuração (OWASP A05) |
 | `SEC-037` | Superfície mínima | OBRIG | — | Configuração (OWASP A05) |
-| `SEC-077` | Chave publishable é atacante no plano de dados | OBRIG | `S0` | Superfície de dados pública (BaaS) |
-| `SEC-078` | Allowlist explícita de GRANT ao papel público | OBRIG | `S0` | Superfície de dados pública (BaaS) |
-| `SEC-079` | Privilégio de coluna quando a linha pública carrega segredo | OBRIG | `S0` | Superfície de dados pública (BaaS) |
-| `SEC-080` | Default privileges não doam ao papel público | OBRIG | `S0` | Superfície de dados pública (BaaS) |
-| `SEC-081` | RPC SECURITY DEFINER no papel público é allowlist com prova | OBRIG | `S0` | Superfície de dados pública (BaaS) |
-| `SEC-082` | Revogar superfície pública só com o cliente alinhado | OBRIG | — | Superfície de dados pública (BaaS) |
-| `SEC-083` | Regressão automatizada da superfície pública | OBRIG | — | Superfície de dados pública (BaaS) |
-| `SEC-084` | Bucket legado público após migração é superfície aberta | OBRIG | `S1` | Superfície de dados pública (BaaS) |
+| `SEC-077` | Chave publishable é atacante no plano de dados | OBRIG | `S0` | Configuração (OWASP A05) |
+| `SEC-078` | Allowlist explícita de GRANT ao papel público | OBRIG | `S0` | Configuração (OWASP A05) |
+| `SEC-079` | Privilégio de coluna quando a linha pública carrega segredo | OBRIG | `S0` | Configuração (OWASP A05) |
+| `SEC-080` | Default privileges não doam ao papel público | OBRIG | `S0` | Configuração (OWASP A05) |
+| `SEC-081` | RPC `SECURITY DEFINER` no papel público é allowlist com prova | OBRIG | `S0` | Configuração (OWASP A05) |
+| `SEC-082` | Revogar superfície pública só com o cliente alinhado | OBRIG | — | Configuração (OWASP A05) |
+| `SEC-083` | Regressão automatizada da superfície pública | OBRIG | — | Configuração (OWASP A05) |
+| `SEC-084` | Bucket legado público após migração é superfície aberta | OBRIG | `S1` | Configuração (OWASP A05) |
 | `SEC-038` | Varredura automatizada que bloqueia | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
 | `SEC-039` | Supressão exige análise de explorabilidade escrita | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
 | `SEC-040` | Dependência abandonada é risco registrado | RECOM | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
@@ -519,7 +519,11 @@ Arquivo: [`06-seguranca.md`](06-seguranca.md) · 84 regras
 | `SEC-049` | URL fornecida pelo usuário passa por lista de permitidos | OBRIG | — | SSRF (OWASP A10) |
 | `SEC-050` | Nenhum dado sensível em log | OBRIG | `S0` | Registro e monitoramento (OWASP A09) |
 | `SEC-051` | Eventos de segurança registrados e alertados | OBRIG | — | Registro e monitoramento (OWASP A09) |
-| `SEC-052` | Ordem correta ao encontrar segredo exposto | IMUT | — | Segredos |
+| `SEC-052` | Ordem correta ao encontrar segredo exposto | IMUT | — | Segredos e ataque de chave de API de integração |
+| `SEC-085` | Segredo de integração nunca no bundle do cliente | OBRIG | `S0` | Segredos e ataque de chave de API de integração |
+| `SEC-086` | Resposta de API não devolve o segredo já salvo | OBRIG | `S1` | Segredos e ataque de chave de API de integração |
+| `SEC-087` | Webhook não autentica só com segredo na URL | OBRIG | `S1` | Segredos e ataque de chave de API de integração |
+| `SEC-088` | Caça mecânica de chave de integração antes do veredito | OBRIG | — | Segredos e ataque de chave de API de integração |
 | `SEC-053` | Inventário obrigatório | OBRIG | — | Dados pessoais |
 | `SEC-054` | Minimização | OBRIG | — | Dados pessoais |
 | `SEC-055` | Retenção declarada e eliminação automatizada | OBRIG | — | Dados pessoais |

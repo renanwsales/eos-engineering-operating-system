@@ -138,6 +138,19 @@ If a secret is found in the repository, in a client bundle, in a log, or in a bu
 Removing from the repository without rotating resolves nothing. State this order explicitly in your
 report, because it is routinely done backwards.
 
+### Integration API keys (beyond BaaS publishable)
+
+After the public data plane pass (`SEC-077`–`SEC-084`), walk **provider** secrets (`SEC-085`–`SEC-088`):
+
+- [ ] No provider API key / OAuth client secret / `service_role` in frontend env prefixes
+      (`VITE_`, `NEXT_PUBLIC_`, …) (`SEC-085`).
+- [ ] Config `GET`/`save` responses expose `has_*` (or equivalent), never the saved secret; operational
+      reveal is admin-only (`SEC-086`). Align DB column grants with `SEC-079`.
+- [ ] Inbound webhooks require a second factor (shared header or HMAC), compared in constant time
+      (`SEC-087`, `SEC-017`); fail-closed if the second secret is missing.
+- [ ] Mechanical hunt attached before “no exposed integration key” (`SEC-088`). No hunt evidence →
+      unverified under inverted burden (`SEC-001`).
+
 ---
 
 ## Personal data

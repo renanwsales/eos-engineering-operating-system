@@ -39,7 +39,8 @@ Prefixos obrigatórios de comentário: `MUST` · `SHOULD` · `CONSIDER` · `QUES
 - [ ] Consulta parametrizada; nenhuma concatenação de entrada. (`SEC-019`)
 - [ ] SQL dinâmico / sort / filtro DSL sem texto cru; service role valida IDs. (`SEC-067`–`SEC-070`)
 - [ ] Saída HTML escapada (SPA, e-mail, callback, template); `href` só http(s). (`SEC-021`, `SEC-072`–`SEC-075`)
-- [ ] Nenhum segredo em código, log ou bundle de cliente.
+- [ ] Nenhum segredo em código, log ou bundle de cliente. (`SEC-052`, `SEC-085`)
+- [ ] Config/JSON sem eco de segredo salvo; webhook com 2º fator se no escopo. (`SEC-086`, `SEC-087`)
 - [ ] Nenhum dado pessoal novo em log.
 - [ ] Integridade garantida no banco onde é possível.
 - [ ] Migração reversível, com reversa testada.

@@ -1,13 +1,13 @@
 # 📓 Volume 06 — Segurança e DevSecOps
 
-Prefixo: `SEC` · Regras: SEC-001 a SEC-084 · Papel: [Security Engineer](agents/05-security.md)
+Prefixo: `SEC` · Regras: SEC-001 a SEC-088 · Papel: [Security Engineer](agents/05-security.md)
 
 Camada coberta: **3 (segurança)**.
 
-**Fronteira.** OWASP Top 10 completo, criptografia, autenticação e sessão, segredos, dados
-pessoais, cadeia de suprimentos, SSRF, superfície de dados pública em BaaS (ataque de “banco
-aberto”), níveis progressivos de verificação. Não cobre: infraestrutura de deploy e política de
-acesso operacional (→ [10](10-devops.md)); isolamento de inquilino como decisão de arquitetura
+**Fronteira.** OWASP Top 10 completo, criptografia, autenticação e sessão, segredos e ataque de
+chave de API (bundle/eco/webhook + superfície BaaS), dados pessoais, cadeia de suprimentos, SSRF,
+níveis progressivos de verificação. Não cobre: infraestrutura de deploy e política de acesso
+operacional (→ [10](10-devops.md)); isolamento de inquilino como decisão de arquitetura
 (→ [16](16-multi-tenant.md)), com achados classificados por este volume; modelagem e migração de
 schema (→ [05](05-banco-de-dados.md)) — privilégio mínimo de credencial de app permanece `DAT-038`
 / `SEC-036`, citados sem reabrir.
@@ -488,7 +488,13 @@ alerta para pico de falha de autenticação e acesso em volume anômalo.
 
 ---
 
-## Capítulo 5.10 — Segredos
+## Capítulo 5.10 — Segredos e ataque de chave de API de integração
+
+O capítulo 5.5b fecha o plano de dados BaaS (`SEC-077`–`SEC-084`). Este capítulo fecha o outro
+braço do ataque de **chave de API exposta**: segredo de provedor (pagamento, CRM, fiscal, OAuth)
+no bundle, ecoado em JSON para usuário do módulo, ou webhook autenticado só com token na URL.
+`SEC-052` fecha o incidente; `SEC-085`–`SEC-088` fecham a superfície. Coluna secreta no papel
+público do BaaS permanece `SEC-079` — cite, não reabra.
 
 ### SEC-052 — Ordem correta ao encontrar segredo exposto **[IMUTÁVEL]**
 
@@ -505,9 +511,55 @@ forks e máquinas de desenvolvedores. Esta ordem é rotineiramente executada ao 
 
 - Nunca em código, histórico, cliente, log ou artefato de build.
 - Gerenciador de segredos, injeção em execução, rotação **sem deploy**.
-- Varredura no pipeline e em pre-commit.
+- Varredura no pipeline e em pre-commit (`SEC-038`, `SEC-088`).
 - Atenção ao que vaza em: variável de ambiente de frontend, mapa de código-fonte, log de erro, imagem de
-  contêiner, log do próprio pipeline.
+  contêiner, log do próprio pipeline, **eco em resposta JSON**, **token só na query do webhook**
+  (`SEC-085`–`SEC-087`). Plano de dados BaaS: `SEC-077`–`SEC-084`.
+
+### SEC-085 — Segredo de integração nunca no bundle do cliente **[OBRIGATÓRIA]** · `S0`
+
+Chave de API de provedor, `service_role`, client secret OAuth, access/refresh token e signing secret
+**não** entram em variável prefixada para o browser (`VITE_`, `NEXT_PUBLIC_`, `REACT_APP_`,
+equivalente). O que o bundle carrega, o atacante lê.
+
+**Exceção deliberada e estreita:** chave *publishable* / *anon* desenhada para o cliente — controle
+no plano de dados (`SEC-077`–`SEC-079`), nunca um `service_role` “só para bootar o SDK”. Documente
+a exceção no perfil do projeto.
+
+### SEC-086 — Resposta de API não devolve o segredo já salvo **[OBRIGATÓRIA]** · `S1`
+
+`GET` / `save` / upsert de configuração **não** ecoa `api_key`, `access_token`, `client_secret`,
+`webhook_token` nem equivalente no JSON para quem tem só o módulo (financeiro, loja, CRM). O painel
+lê flags `has_api_key` / `has_access_token` (alinhe a `SEC-079` quando o segredo vive no banco).
+Quem configura recebe, no máximo: URL montada pelo servidor e/ou revelação **admin-only** do token
+operacional quando o provedor exige colar o valor num painel externo.
+
+Ecoar o token do webhook para qualquer usuário do módulo é a mesma classe de falha que devolver a
+API key: o receptor autentica o canal de entrada do provedor.
+
+### SEC-087 — Webhook não autentica só com segredo na URL **[OBRIGATÓRIA]** · `S1`
+
+Token na query string aparece em log de proxy, histórico do browser e tickets de suporte. Exija
+**segundo fator** alinhado ao provedor: header compartilhado, HMAC / `x-signature` com secret
+configurável, ou assinatura Svix-like. Comparação em tempo constante (`SEC-017`).
+
+Fail-closed: integração ativa sem o segundo segredo configurado **rejeita** o webhook (não aceita
+“só a URL” em produção). Ativar o provedor no painel exige o secret correspondente.
+
+### SEC-088 — Caça mecânica de chave de integração antes do veredito **[OBRIGATÓRIA]**
+
+Antes de declarar “sem chave de integração exposta”, anexe evidência de caça (grep / resposta /
+webhook), no mínimo:
+
+- prefixos de env de frontend ligados a `KEY`/`SECRET`/`TOKEN`/`PASSWORD` (exceto publishable
+  documentada);
+- literais `sk_live` / `sk_test` / `AKIA` / `whsec_` / JWT `service_role` em repo e artefato;
+- respostas de Edge/RPC que serializam `api_key`, `*_token`, `*_secret`;
+- webhooks autenticados só com `?token=` / `?key=` sem header ou HMAC.
+
+Caça do plano de dados BaaS (GRANT/coluna/default) permanece `SEC-083` / `SEC-079`. Sem caça
+anexada, “não achei segredo” é **não verificado** sob ônus invertido (`SEC-001`) — mesma lógica
+da caça XSS (`SEC-076`).
 
 ---
 
@@ -592,7 +644,7 @@ Nenhuma entrega passa com qualquer um destes:
 | --- | --- | --- |
 | 1 | Endpoint sem autorização por objeto | SEC-004 |
 | 2 | Consulta multi-tenant sem filtro de isolamento | SEC-006 |
-| 3 | Segredo no repositório ou no cliente | SEC-052 |
+| 3 | Segredo no repositório, no cliente ou ecoado em JSON de configuração | SEC-052, SEC-085, SEC-086 |
 | 4 | Concatenação de entrada em consulta ou comando | SEC-019 |
 | 5 | Senha com hash inadequado | SEC-012 |
 | 6 | Dado pessoal em log | SEC-050 |
@@ -657,6 +709,10 @@ evidência (`SEC-076`).
 **Padrão: segredo encontrado.** Rotacionar → revogar → remover do histórico → post-mortem
 (`SEC-052`) — nesta ordem.
 
+**Padrão: segredo de integração.** Fora do bundle; view/`has_*`; resposta sem eco; revelação
+admin-only (`SEC-085`, `SEC-086`). Webhook com segundo fator (`SEC-087`). Caça anexada
+(`SEC-088`).
+
 **Padrão: prova antes/depois.** Mesma requisição exploratória → 403; legítima → 200 (`SEC-064`).
 
 **Padrão: allowlist do plano de dados público.** Inventário versionado de `GRANT` ao papel
@@ -678,15 +734,18 @@ bucket legado público (`SEC-035`, `SEC-084`).
 | Dado pessoal em log | Redact / não logar (`SEC-050`) | “só em staging” |
 | HTML de saída | Escape por contexto / sanitizer (`SEC-021`, `SEC-022`) | `.replace(<>&)` (`SEC-074`) |
 | Link em HTML | Só `http(s)` (`SEC-073`) | Qualquer string no `href` |
-| Chave no cliente BaaS | Publishable/`anon` + allowlist de GRANT (`SEC-077`, `SEC-078`) | Service role no bundle (`SEC-052`) |
+| Chave no cliente BaaS | Publishable/`anon` + allowlist de GRANT (`SEC-077`, `SEC-078`) | Service role no bundle (`SEC-085`) |
 | Linha pública com segredo | `GRANT` por coluna / view (`SEC-079`) | Só RLS de linha |
 | Função nova no schema | Sem default privilege ao `anon` (`SEC-080`) | `DEFAULT PRIVILEGES … TO anon` |
+| Segredo de provedor no app | Env de servidor + `has_*` + sem eco (`SEC-085`, `SEC-086`) | `VITE_*_SECRET` / JSON com `api_key` |
+| Webhook de provedor | Header ou HMAC + fail-closed (`SEC-087`) | Só `?token=` na URL |
 
 | Condição de bloqueio | Regra |
 | --- | --- |
 | Sem authz por objeto | `SEC-004` |
 | Multi-tenant sem isolamento | `SEC-006` |
-| Segredo no repo/cliente | `SEC-052` |
+| Segredo no repo/cliente/JSON de config | `SEC-052`, `SEC-085`, `SEC-086` |
+| Webhook só com token na URL | `SEC-087` |
 | Concatenação em consulta | `SEC-019` |
 | SQL dinâmico com sort/coluna do usuário | `SEC-067`, `SEC-069` |
 | Filtro `.or()` / DSL com texto livre | `SEC-068` |
@@ -708,7 +767,7 @@ bucket legado público (`SEC-035`, `SEC-084`).
 3. Autenticação/sessão/MFA/CSRF (SEC-044–048, SEC-025–027)
 4. Entrada: injeção, SQL dinâmico, DSL de filtro, upload, SSRF (SEC-019–024, SEC-067–071, SEC-049)
 5. Saída XSS: escape por contexto, HTML fora do SPA, href, caça mecânica (SEC-021–022, SEC-072–076)
-6. Criptografia, TLS, segredos (SEC-012–018, SEC-052)
+6. Criptografia, TLS, segredos e chave de integração (SEC-012–018, SEC-052, SEC-085–088)
 7. Config, CORS, headers, superfície admin (SEC-031–037)
 7b. Plano de dados público / BaaS: allowlist GRANT, coluna, defaults, DEFINER, regressão, storage legado (SEC-077–084; cite SEC-035)
 8. Dependências e pipeline (SEC-038–043)
@@ -817,6 +876,23 @@ REVOKE EXECUTE ON FUNCTION legacy_lead_submit FROM PUBLIC, anon;
 ```
 
 ```
+// Ruim — SEC-085 / SEC-086
+const key = import.meta.env.VITE_PROVIDER_API_KEY
+return json({ api_key: saved.api_key, webhook_token: saved.webhook_token })
+
+// Bom — secret só no servidor; resposta has_*
+return json({ has_api_key: true, webhook_url: adminOnlyUrl })
+```
+
+```
+// Ruim — SEC-087: só ?token=
+if (url.searchParams.get('token') !== secret) return 401
+
+// Bom — header/HMAC + tempo constante (SEC-017); fail-closed
+if (!timingSafeEqual(header, webhookAuth) || !verifyHmac(body, sig)) return 401
+```
+
+```
 # Ruim — SEC-077 / SEC-078: esconder anon key
 # Bom — allowlist + suite CI (SEC-083)
 ```
@@ -850,6 +926,9 @@ REVOKE EXECUTE ON FUNCTION legacy_lead_submit FROM PUBLIC, anon;
 | Default privilege `TO anon` | Toda RPC nova nasce pública (`SEC-080`) |
 | `REVOKE` antes do cliente novo (ou nunca) | Quebra ou superfície eterna (`SEC-082`) |
 | Bucket privado novo + bucket público antigo | URL histórica ainda abre (`SEC-084`) |
+| `VITE_*_SECRET` / eco de `api_key` no JSON | Chave no browser ou no módulo (`SEC-085`, `SEC-086`) |
+| Webhook só com token na query | Replay via log/proxy (`SEC-087`) |
+| “Não achei chave de integração” sem caça | Não verificado (`SEC-088`) |
 
 ---
 
@@ -864,6 +943,7 @@ REVOKE EXECUTE ON FUNCTION legacy_lead_submit FROM PUBLIC, anon;
 - [ ] Filtro/DSL de busca sem texto cru; service role valida IDs. (`SEC-068`, `SEC-070`)
 - [ ] Saída HTML: escape por contexto; e-mail/callback/template; href só http(s); caça anexada. (`SEC-021`, `SEC-022`, `SEC-072`–`SEC-076`)
 - [ ] Hash adequado; TLS; sem segredo no cliente/repo. (`SEC-012`, `SEC-013`, `SEC-052`)
+- [ ] Chave de integração: fora do bundle; sem eco no JSON; webhook com 2º fator; caça anexada. (`SEC-085`–`SEC-088`)
 - [ ] Sessão/token com expiração e regeneração. (`SEC-044`, `SEC-045`)
 - [ ] SSRF com allowlist. (`SEC-049`)
 - [ ] Sem PII em log; eventos de segurança. (`SEC-050`, `SEC-051`)
@@ -904,6 +984,9 @@ Rules of engagement:
   SECURITY DEFINER RPCs catalogued with proof (SEC-081). Revoke only with
   clients aligned (SEC-082). CI regression of the allowlist (SEC-083). Legacy
   public buckets after private migration stay open (SEC-084; cite SEC-035).
+- Integration API keys: never in frontend env (SEC-085); no JSON echo of saved
+  secrets — admin-only reveal (SEC-086); webhook second factor + fail-closed
+  (SEC-087); mechanical hunt before “no exposed key” (SEC-088).
 - Fix requires exploit-path closed with before/after (SEC-064).
 - Do not downgrade security S0 (SEC-066). Do not invent new SEC rules.
 
@@ -922,9 +1005,10 @@ Output: findings with path:line, severity, exploit path, verification level
 5. Saída HTML no escopo conforme (`SEC-021`, `SEC-022`, `SEC-072`–`SEC-076`), com evidência de caça.
 6. Nenhum segredo no repositório ou no cliente (`SEC-052`); chave publishable tratada como pública (`SEC-077`).
 7. Se há API de dados no cliente: allowlist GRANT + regressão (`SEC-078`–`SEC-083`); storage sem legado público (`SEC-084`).
-8. Sem dado pessoal em log nos caminhos revisados (`SEC-050`).
-9. Nível de verificação declarado (`SEC-060`).
-10. Correções `S0`/`S1` com prova antes/depois (`SEC-064`).
+8. Segredos de integração conforme (`SEC-085`–`SEC-088`), com evidência de caça.
+9. Sem dado pessoal em log nos caminhos revisados (`SEC-050`).
+10. Nível de verificação declarado (`SEC-060`).
+11. Correções `S0`/`S1` com prova antes/depois (`SEC-064`).
 
 ---
 
