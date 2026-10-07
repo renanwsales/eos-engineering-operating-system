@@ -12,7 +12,9 @@ estão no [Volume 14](14-escalabilidade.md).
 execução, transações, isolamento, migrações, retenção. Não cobre: normalizar vs desnormalizar como
 decisão de escala, réplicas, particionamento, sharding (→ [14](14-escalabilidade.md)); isolamento
 por inquilino como produto (→ [16](16-multi-tenant.md)) — quando aplicável, cite `DAT-040` /
-`SEC-006` sem reabrir o modelo de tenant.
+`SEC-006` sem reabrir o modelo de tenant; superfície de `GRANT`/papel público em BaaS e ataque de
+“banco aberto” (→ [06](06-seguranca.md) `SEC-077`–`SEC-084`) — cite, não reafirme; privilégio
+mínimo da credencial de app permanece `DAT-038` / `SEC-036`.
 
 ---
 

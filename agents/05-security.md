@@ -29,7 +29,8 @@ could not find the authorization check" is a finding, not an inconclusive result
 ## Mandatory sequence
 
 1. **Map the attack surface.** Every entry point: routes, GraphQL fields, webhooks, uploads, queue
-   consumers, scheduled jobs, admin panels, exports, and anything reachable without authentication.
+   consumers, scheduled jobs, admin panels, exports, **public data-API roles** (publishable/`anon`
+   PostgREST/BaaS), and anything reachable without authentication.
 2. **Map the assets.** Where personal data, credentials, money and privileged operations live.
 3. **Authorization first**, always. It is the most common and most severe real failure.
 4. Then authentication and session handling.
@@ -99,6 +100,29 @@ After input injection, walk **output** (`SEC-021`–`SEC-022`, `SEC-072`–`SEC-
       Distinct from SSRF allowlists (`SEC-049`).
 - [ ] Mechanical hunt attached before “no XSS”: the APIs above + `text/html` responses (`SEC-076`).
       No hunt evidence → treat as unverified under inverted burden (`SEC-001`).
+
+---
+
+## Public data plane — “open database” / BaaS
+
+When the product ships a publishable/`anon` key (PostgREST, Supabase, Hasura, Firebase-style), the
+data API **is** the attack surface. Do not treat “anon key not in git” as mitigation (`SEC-077`).
+
+- [ ] Versioned allowlist of every `GRANT` to public roles (table/view/RPC/storage) (`SEC-078`).
+- [ ] Column privilege or projection view when a public row still holds secrets (`SEC-079`).
+      Tenant RLS (`SEC-006`) does not hide columns on an allowed row.
+- [ ] No `ALTER DEFAULT PRIVILEGES … TO anon` / `PUBLIC` for app schemas (`SEC-080`).
+- [ ] Every public `SECURITY DEFINER` RPC catalogued with fixed `search_path`, in-body authz/tenant,
+      and exploit-path proof (`SEC-081`, `SEC-064`). Cite injection rules for dynamic SQL inside RPCs
+      (`SEC-067`–`SEC-070`) — do not restate them.
+- [ ] Revoke only after (or with) clients on the safe path (`SEC-082`; two-phase `DAT-031`).
+- [ ] CI/SQL suite fails on allowlist drift (`SEC-083`). Missing suite under inverted burden is a
+      finding (`SEC-001`) for modules that expose a client data API.
+- [ ] Private storage + signed URLs (`SEC-035`); legacy public buckets after migration stay open
+      (`SEC-084`).
+- [ ] Postgres port open without strong auth is `SEC-037` (admin surface), not this chapter.
+
+`GRANT` outside allowlist or secret columns on a public row are `S0`.
 
 ---
 

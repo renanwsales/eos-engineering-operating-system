@@ -59,11 +59,16 @@ Caminhos que a revisão esquece:
 
 ## 4. Design inseguro
 
-- [ ] Reautenticação em fluxo sensível (senha, e-mail, meio de pagamento).
-- [ ] Limite de tentativas de autenticação, com bloqueio progressivo.
-- [ ] Erro de login não revela se o e-mail existe.
-- [ ] Operação irreversível confirmada e registrada.
-- [ ] Abuso modelado: o que faria um usuário mal-intencionado **com credencial válida**?
+- [ ] Reautenticação em fluxo sensível (senha, e-mail, meio de pagamento). (`SEC-025`)
+- [ ] Lockout de autenticação no servidor de identidade (por conta/fator, teto + janela). (`S1`) (`SEC-026`)
+- [ ] Controle **não** é só UI, Edge opcional ou rate limit por IP. (`SEC-026`)
+- [ ] Janela cheia rejeita mesmo com senha correta na tentativa atual. (`SEC-026`)
+- [ ] Login, reset/recovery, OTP/MFA e códigos de recuperação cobertos. (`SEC-026`)
+- [ ] Captcha (se usado) complementa o lockout; Dashboard e cliente alinhados. (`SEC-026`)
+- [ ] Prova: N+1 falhas bloqueiam; API Auth direta (sem UI) também bloqueia. (`SEC-026`, `SEC-064`)
+- [ ] Erro de login não revela se o e-mail existe. (`SEC-027`)
+- [ ] Operação irreversível confirmada e registrada. (`SEC-028`)
+- [ ] Abuso modelado: o que faria um usuário mal-intencionado **com credencial válida**? (`SEC-029`)
 
 ## 5. Configuração insegura
 
@@ -72,9 +77,17 @@ Caminhos que a revisão esquece:
 - [ ] CORS restrito. `*` com credencial é `S0`.
 - [ ] Cabeçalhos de segurança presentes (política de conteúdo, HSTS, `nosniff`, referenciador,
       enquadramento).
-- [ ] Armazenamento privado por padrão.
-- [ ] Menor privilégio em toda credencial de serviço.
-- [ ] Nenhum endpoint de diagnóstico ou console de administração exposto.
+- [ ] Armazenamento privado por padrão. (`SEC-035`)
+- [ ] Menor privilégio em toda credencial de serviço. (`SEC-036`, `DAT-038`)
+- [ ] Nenhum endpoint de diagnóstico ou console de administração exposto. (`SEC-037`)
+- [ ] BaaS / API de dados no cliente: chave publishable modelada como atacante — não “esconder a chave”. (`S0`) (`SEC-077`)
+- [ ] Allowlist versionada de todo `GRANT` a `anon`/`public`/`authenticated` (tabela, view, RPC, storage). (`S0`) (`SEC-078`)
+- [ ] Coluna secreta na linha pública: `GRANT` por coluna ou view de projeção — RLS de linha não basta. (`S0`) (`SEC-079`)
+- [ ] Sem `DEFAULT PRIVILEGES` doando `EXECUTE`/`SELECT` ao papel público. (`S0`) (`SEC-080`)
+- [ ] RPC `SECURITY DEFINER` pública catalogada, com authz/tenant no corpo e prova. (`S0`) (`SEC-081`)
+- [ ] `REVOKE` só com cliente alinhado (duas fases). (`SEC-082`, `DAT-031`)
+- [ ] Suite CI/SQL falha se a superfície pública divergir da allowlist. (`SEC-083`)
+- [ ] Bucket legado público após migração para privado/assinado = superfície ainda aberta. (`S1`) (`SEC-084`)
 
 ## 6. Componentes vulneráveis
 
@@ -149,7 +162,7 @@ Nenhuma entrega passa com qualquer um destes:
 7. Vulnerabilidade crítica ou alta sem análise registrada
 8. CORS permissivo com credencial
 9. Dado sensível sem TLS
-10. Ausência de limite de tentativas em autenticação
+10. Ausência de limite de tentativas em autenticação (`SEC-026`: lockout no IdP por conta; UI/IP não bastam)
 
 ---
 

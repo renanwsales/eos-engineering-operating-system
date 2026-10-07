@@ -1,14 +1,16 @@
 # 📓 Volume 06 — Segurança e DevSecOps
 
-Prefixo: `SEC` · Regras: SEC-001 a SEC-076 · Papel: [Security Engineer](agents/05-security.md)
+Prefixo: `SEC` · Regras: SEC-001 a SEC-084 · Papel: [Security Engineer](agents/05-security.md)
 
 Camada coberta: **3 (segurança)**.
 
 **Fronteira.** OWASP Top 10 completo, criptografia, autenticação e sessão, segredos, dados
-pessoais, cadeia de suprimentos, SSRF, níveis progressivos de verificação. Não cobre:
-infraestrutura de deploy e política de acesso operacional (→ [10](10-devops.md)); isolamento de
-inquilino como decisão de arquitetura (→ [16](16-multi-tenant.md)), com achados classificados por
-este volume.
+pessoais, cadeia de suprimentos, SSRF, superfície de dados pública em BaaS (ataque de “banco
+aberto”), níveis progressivos de verificação. Não cobre: infraestrutura de deploy e política de
+acesso operacional (→ [10](10-devops.md)); isolamento de inquilino como decisão de arquitetura
+(→ [16](16-multi-tenant.md)), com achados classificados por este volume; modelagem e migração de
+schema (→ [05](05-banco-de-dados.md)) — privilégio mínimo de credencial de app permanece `DAT-038`
+/ `SEC-036`, citados sem reabrir.
 
 ---
 
@@ -20,8 +22,10 @@ mal-intencionado (`SEC-002`), não só o anônimo na borda.
 
 A ordem fixa — autorização antes de tudo (`SEC-003`) — evita gastar a rodada em headers enquanto
 IDOR permanece aberto. Isolamento de tenant no banco (`SEC-006`) e autorização por objeto
-(`SEC-004`) são o núcleo `S0`; o restante do volume fecha as classes OWASP e a prova de que a
-correção realmente fechou o caminho (`SEC-064`).
+(`SEC-004`) são o núcleo `S0`. Em produtos com API de dados no cliente (PostgREST, Supabase,
+Hasura, Firebase-style), a chave publishable/`anon` torna o **plano de dados** superfície pública
+(`SEC-077`–`SEC-084`): GRANT + policy + coluna + RPC, não “esconder a chave”. O restante do volume
+fecha as classes OWASP e a prova de que a correção realmente fechou o caminho (`SEC-064`).
 
 ---
 
@@ -336,6 +340,81 @@ dano de uma injeção bem-sucedida.
 ### SEC-037 — Superfície mínima **[OBRIGATÓRIA]**
 
 Sem endpoint de diagnóstico, console de administração ou porta de gerenciamento exposta.
+Postgres (ou equivalente) escutando na internet sem autenticação forte é este caso — não confunda
+com o plano de dados BaaS do capítulo seguinte.
+
+---
+
+## Capítulo 5.5b — Superfície de dados pública (ataque de “banco aberto” / BaaS)
+
+Em BaaS e APIs de dados embutidas no cliente, o atacante **não** precisa da senha do Postgres.
+Ele usa a chave publishable/`anon` (pública por desenho) contra REST/GraphQL/Storage e obtém tudo
+que `GRANT` + política de linha + privilégio de coluna + RPC `SECURITY DEFINER` permitem.
+
+Isso **não** substitui isolamento de tenant (`SEC-006` / `DAT-040`), armazenamento privado
+(`SEC-035`), menor privilégio de credencial de serviço (`SEC-036` / `DAT-038`) nem superfície
+mínima de porta administrativa (`SEC-037`). Este capítulo fecha a lacuna: **o papel público do
+plano de dados**.
+
+### SEC-077 — Chave publishable é atacante no plano de dados **[OBRIGATÓRIA]** · `S0`
+
+Modele a chave `anon` / publishable / “API key pública” como **já comprometida**: qualquer pessoa
+na internet pode chamá-la. Esconder a chave no bundle, ofuscar ou rotacionar sem reduzir GRANT
+**não** mitiga. Service role, JWT secret, senha do banco e chaves de provedor **não** entram no
+cliente (`SEC-052`); confundir publishable com segredo gera falso alarme e deixa o plano de dados
+sem allowlist.
+
+### SEC-078 — Allowlist explícita de GRANT ao papel público **[OBRIGATÓRIA]** · `S0`
+
+Toda tabela, view, sequência, rotina e objeto de storage acessível a `anon` / `public` /
+`authenticated` (ou equivalente) consta em inventário versionado: objeto, privilégio
+(`SELECT`/`INSERT`/`UPDATE`/`DELETE`/`EXECUTE`), justificativa e dono. Objeto fora da lista **não**
+tem `GRANT`. Política de linha sem `GRANT` é irrelevante para a API; `GRANT` sem política (ou com
+política permissiva) é vazamento. Negar por omissão (`SEC-005`) aplica-se a privilégio de banco,
+não só a rota HTTP.
+
+### SEC-079 — Privilégio de coluna quando a linha pública carrega segredo **[OBRIGATÓRIA]** · `S0`
+
+RLS que libera a **linha** não protege **colunas** sensíveis na mesma tupla (token de integração,
+chave de pagamento, segredo OAuth, PII além do necessário na landing). Para papel público: `GRANT`
+por coluna, view de projeção sem segredo, ou coluna inacessível ao papel — nunca só
+`GRANT SELECT ON TABLE` + “a policy filtra a empresa”. Isolamento de tenant (`SEC-006`) continua
+obrigatório e **não** absolve vazamento de coluna na linha permitida.
+
+### SEC-080 — Default privileges não doam ao papel público **[OBRIGATÓRIA]** · `S0`
+
+`ALTER DEFAULT PRIVILEGES … GRANT … TO anon` (ou `PUBLIC`) faz toda função/tabela **nova** nascer
+exposta. Defaults do schema da aplicação **não** incluem o papel público do plano de dados.
+Objeto novo nasce inacessível (`SEC-005`); inclusão na allowlist (`SEC-078`) é mudança revisada,
+não efeito colateral de `CREATE FUNCTION`.
+
+### SEC-081 — RPC `SECURITY DEFINER` no papel público é allowlist com prova **[OBRIGATÓRIA]** · `S0`
+
+Cada rotina `SECURITY DEFINER` (ou bypass de RLS) executável pelo papel público: dono mínimo,
+`search_path` fixo, autorização e tenant no corpo (`SEC-004`, `SEC-006`), sem SQL dinâmico
+inseguro (`SEC-067`–`SEC-070`). Catálogo da allowlist (`SEC-078`) lista essas RPCs com o caminho
+de exploração que permanece fechado (`SEC-064`). RPC legada “só para a landing antiga” sem dono
+nem prova é achado aberto.
+
+### SEC-082 — Revogar superfície pública só com o cliente alinhado **[OBRIGATÓRIA]**
+
+Revogar `EXECUTE`/`SELECT` de endpoint que o frontend/landing ainda chama quebra o produto;
+deployar cliente novo **sem** revogar deixa a superfície aberta. Trate como mudança em duas fases
+(`DAT-031`): (1) cliente na variante segura em produção; (2) `REVOKE` + teste de regressão da
+allowlist. Compatibilidade eterna de RPC pública não é estratégia de segurança.
+
+### SEC-083 — Regressão automatizada da superfície pública **[OBRIGATÓRIA]**
+
+Suite (SQL/CI) compara privilégios atuais do papel público com a allowlist (`SEC-078`) e falha em
+`GRANT` novo, coluna sensível exposta (`SEC-079`), default privilege permissivo (`SEC-080`) ou RPC
+`DEFINER` fora do catálogo (`SEC-081`). Ausência de suite, sob ônus invertido (`SEC-001`), é
+achado em módulo que expõe API de dados no cliente — não “não verificado inocente”.
+
+### SEC-084 — Bucket legado público após migração é superfície aberta **[OBRIGATÓRIA]** · `S1`
+
+Migrar leitura para bucket privado + URL assinada (`SEC-035`) **sem** esvaziar/despublicar o
+bucket antigo (ou objetos espelhados) deixa o ataque intacto pela URL histórica. Evidência de
+fechamento: objeto antigo inacessível anonimamente **e** cliente só usa caminho assinado/privado.
 
 ---
 
@@ -521,6 +600,8 @@ Nenhuma entrega passa com qualquer um destes:
 | 8 | CORS permissivo com credencial | SEC-033 |
 | 9 | Dado sensível sem TLS | SEC-013 |
 | 10 | Ausência de limite de tentativas em autenticação | SEC-026 |
+| 11 | Papel público com GRANT fora da allowlist ou coluna secreta na linha pública | SEC-078, SEC-079 |
+| 12 | Default privilege ou RPC `DEFINER` doando superfície ao papel público sem catálogo/prova | SEC-080, SEC-081 |
 
 ---
 
@@ -578,6 +659,11 @@ evidência (`SEC-076`).
 
 **Padrão: prova antes/depois.** Mesma requisição exploratória → 403; legítima → 200 (`SEC-064`).
 
+**Padrão: allowlist do plano de dados público.** Inventário versionado de `GRANT` ao papel
+publishable/`anon`; coluna sensível fora do `SELECT` público; defaults sem doação; RPC `DEFINER`
+catalogada; suite de regressão no CI (`SEC-077`–`SEC-083`). Storage: privado + assinado, sem
+bucket legado público (`SEC-035`, `SEC-084`).
+
 ---
 
 ## Matrizes de decisão
@@ -592,6 +678,9 @@ evidência (`SEC-076`).
 | Dado pessoal em log | Redact / não logar (`SEC-050`) | “só em staging” |
 | HTML de saída | Escape por contexto / sanitizer (`SEC-021`, `SEC-022`) | `.replace(<>&)` (`SEC-074`) |
 | Link em HTML | Só `http(s)` (`SEC-073`) | Qualquer string no `href` |
+| Chave no cliente BaaS | Publishable/`anon` + allowlist de GRANT (`SEC-077`, `SEC-078`) | Service role no bundle (`SEC-052`) |
+| Linha pública com segredo | `GRANT` por coluna / view (`SEC-079`) | Só RLS de linha |
+| Função nova no schema | Sem default privilege ao `anon` (`SEC-080`) | `DEFAULT PRIVILEGES … TO anon` |
 
 | Condição de bloqueio | Regra |
 | --- | --- |
@@ -606,6 +695,8 @@ evidência (`SEC-076`).
 | `href` / link de usuário | Só `http(s)` (`SEC-073`) |
 | `.replace(<>&)` como “fix” XSS | Ainda aberto (`SEC-074`) |
 | Hash inadequado | `SEC-012` |
+| GRANT/`DEFINER` público fora da allowlist | `SEC-078`, `SEC-080`, `SEC-081` |
+| Coluna secreta no `SELECT` do papel público | `SEC-079` |
 
 ---
 
@@ -618,7 +709,8 @@ evidência (`SEC-076`).
 4. Entrada: injeção, SQL dinâmico, DSL de filtro, upload, SSRF (SEC-019–024, SEC-067–071, SEC-049)
 5. Saída XSS: escape por contexto, HTML fora do SPA, href, caça mecânica (SEC-021–022, SEC-072–076)
 6. Criptografia, TLS, segredos (SEC-012–018, SEC-052)
-7. Config, CORS, headers, superfície (SEC-031–037)
+7. Config, CORS, headers, superfície admin (SEC-031–037)
+7b. Plano de dados público / BaaS: allowlist GRANT, coluna, defaults, DEFINER, regressão, storage legado (SEC-077–084; cite SEC-035)
 8. Dependências e pipeline (SEC-038–043)
 9. Logs e eventos de segurança (SEC-050–051)
 10. Dados pessoais: inventário, retenção, direitos (SEC-053–058)
@@ -706,6 +798,29 @@ Depois: GET /orders/A  como user B → 403
 Legítimo: GET /orders/A como user A → 200
 ```
 
+```
+-- Ruim — SEC-079: linha pública, coluna secreta
+GRANT SELECT ON companies TO anon;
+-- policy: true para landing; resposta inclui asaas_api_key, oauth_refresh, …
+
+-- Bom — projeção ou GRANT por coluna
+GRANT SELECT (id, name, slug, logo_url) ON companies TO anon;
+```
+
+```
+-- Ruim — SEC-080 / SEC-081
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT EXECUTE ON FUNCTIONS TO anon;
+CREATE FUNCTION legacy_lead_submit(...) … SECURITY DEFINER;
+
+-- Bom
+REVOKE EXECUTE ON FUNCTION legacy_lead_submit FROM PUBLIC, anon;
+```
+
+```
+# Ruim — SEC-077 / SEC-078: esconder anon key
+# Bom — allowlist + suite CI (SEC-083)
+```
+
 ---
 
 ## Antipadrões
@@ -730,6 +845,11 @@ Legítimo: GET /orders/A como user A → 200
 | Suprimir CVE sem análise escrita | Risco invisível (`SEC-039`) |
 | “Testes verdes” como prova de authz | Regressão de exploração (`SEC-064`) |
 | Rebaixar `S0` de segurança por prazo | `SEC-066` |
+| “Esconder” a chave publishable | Plano de dados intacto (`SEC-077`) |
+| RLS na linha e `SELECT *` ao anon | Segredo na coluna (`SEC-079`) |
+| Default privilege `TO anon` | Toda RPC nova nasce pública (`SEC-080`) |
+| `REVOKE` antes do cliente novo (ou nunca) | Quebra ou superfície eterna (`SEC-082`) |
+| Bucket privado novo + bucket público antigo | URL histórica ainda abre (`SEC-084`) |
 
 ---
 
@@ -748,6 +868,7 @@ Legítimo: GET /orders/A como user A → 200
 - [ ] SSRF com allowlist. (`SEC-049`)
 - [ ] Sem PII em log; eventos de segurança. (`SEC-050`, `SEC-051`)
 - [ ] Inventário/minimização/retenção de PII. (`SEC-053`–`SEC-055`)
+- [ ] Plano de dados público: allowlist GRANT; coluna; defaults; DEFINER; regressão CI; storage legado. (`SEC-077`–`SEC-084`)
 - [ ] Correção com prova antes/depois. (`SEC-064`)
 - [ ] Regras de bloqueio da tabela do volume: zero violações abertas.
 
@@ -777,6 +898,12 @@ Rules of engagement:
   SPA (email, OAuth callback, body_html) (SEC-072). href allowlist http(s)
   (SEC-073). Partial .replace is not escape (SEC-074). HTML templates escape
   every variable (SEC-075). Mechanical hunt before “no XSS” (SEC-076).
+- Public data plane / “open database” on BaaS: publishable key is the attacker
+  (SEC-077). Explicit GRANT allowlist (SEC-078). Column privilege when the
+  public row holds secrets (SEC-079). No default privileges to anon (SEC-080).
+  SECURITY DEFINER RPCs catalogued with proof (SEC-081). Revoke only with
+  clients aligned (SEC-082). CI regression of the allowlist (SEC-083). Legacy
+  public buckets after private migration stay open (SEC-084; cite SEC-035).
 - Fix requires exploit-path closed with before/after (SEC-064).
 - Do not downgrade security S0 (SEC-066). Do not invent new SEC rules.
 
@@ -793,10 +920,11 @@ Output: findings with path:line, severity, exploit path, verification level
 3. Zero concatenação de entrada em consulta/comando (`SEC-019`, `SEC-020`).
 4. SQL dinâmico e DSL de filtro conformes (`SEC-067`–`SEC-070`).
 5. Saída HTML no escopo conforme (`SEC-021`, `SEC-022`, `SEC-072`–`SEC-076`), com evidência de caça.
-6. Nenhum segredo no repositório ou no cliente (`SEC-052`).
-7. Sem dado pessoal em log nos caminhos revisados (`SEC-050`).
-8. Nível de verificação declarado (`SEC-060`).
-9. Correções `S0`/`S1` com prova antes/depois (`SEC-064`).
+6. Nenhum segredo no repositório ou no cliente (`SEC-052`); chave publishable tratada como pública (`SEC-077`).
+7. Se há API de dados no cliente: allowlist GRANT + regressão (`SEC-078`–`SEC-083`); storage sem legado público (`SEC-084`).
+8. Sem dado pessoal em log nos caminhos revisados (`SEC-050`).
+9. Nível de verificação declarado (`SEC-060`).
+10. Correções `S0`/`S1` com prova antes/depois (`SEC-064`).
 
 ---
 

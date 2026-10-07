@@ -446,7 +446,7 @@ Arquivo: [`05-banco-de-dados.md`](05-banco-de-dados.md) · 40 regras
 
 ## 📓 Volume 06 — Segurança e DevSecOps
 
-Arquivo: [`06-seguranca.md`](06-seguranca.md) · 76 regras
+Arquivo: [`06-seguranca.md`](06-seguranca.md) · 84 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -485,7 +485,7 @@ Arquivo: [`06-seguranca.md`](06-seguranca.md) · 76 regras
 | `SEC-075` | Template em modo HTML escapa toda variável | OBRIG | — | Injeção (OWASP A03) |
 | `SEC-076` | Caça mecânica antes de declarar ausência de XSS | OBRIG | — | Injeção (OWASP A03) |
 | `SEC-025` | Reautenticação em fluxo sensível | OBRIG | — | Design inseguro (OWASP A04) |
-| `SEC-026` | Limite de tentativas com bloqueio progressivo | OBRIG | — | Design inseguro (OWASP A04) |
+| `SEC-026` | Limite de tentativas com bloqueio progressivo | OBRIG | `S1` | Design inseguro (OWASP A04) |
 | `SEC-027` | Não revele existência | OBRIG | — | Design inseguro (OWASP A04) |
 | `SEC-028` | Operação irreversível é confirmada e registrada | OBRIG | — | Design inseguro (OWASP A04) |
 | `SEC-029` | Modele o abuso, não só o uso | OBRIG | — | Design inseguro (OWASP A04) |
@@ -497,6 +497,14 @@ Arquivo: [`06-seguranca.md`](06-seguranca.md) · 76 regras
 | `SEC-035` | Armazenamento privado por padrão | OBRIG | — | Configuração (OWASP A05) |
 | `SEC-036` | Menor privilégio em toda credencial de serviço | OBRIG | — | Configuração (OWASP A05) |
 | `SEC-037` | Superfície mínima | OBRIG | — | Configuração (OWASP A05) |
+| `SEC-077` | Chave publishable é atacante no plano de dados | OBRIG | `S0` | Superfície de dados pública (BaaS) |
+| `SEC-078` | Allowlist explícita de GRANT ao papel público | OBRIG | `S0` | Superfície de dados pública (BaaS) |
+| `SEC-079` | Privilégio de coluna quando a linha pública carrega segredo | OBRIG | `S0` | Superfície de dados pública (BaaS) |
+| `SEC-080` | Default privileges não doam ao papel público | OBRIG | `S0` | Superfície de dados pública (BaaS) |
+| `SEC-081` | RPC SECURITY DEFINER no papel público é allowlist com prova | OBRIG | `S0` | Superfície de dados pública (BaaS) |
+| `SEC-082` | Revogar superfície pública só com o cliente alinhado | OBRIG | — | Superfície de dados pública (BaaS) |
+| `SEC-083` | Regressão automatizada da superfície pública | OBRIG | — | Superfície de dados pública (BaaS) |
+| `SEC-084` | Bucket legado público após migração é superfície aberta | OBRIG | `S1` | Superfície de dados pública (BaaS) |
 | `SEC-038` | Varredura automatizada que bloqueia | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
 | `SEC-039` | Supressão exige análise de explorabilidade escrita | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
 | `SEC-040` | Dependência abandonada é risco registrado | RECOM | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
