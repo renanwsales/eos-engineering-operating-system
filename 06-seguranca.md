@@ -494,9 +494,6 @@ Bom:   confirmar no registry o pacote legítimo (ex.: eslint-plugin-unused-impor
        histórico e installs; só então alterar manifesto + lockfile no mesmo PR
 ```
 
-
-## Capítulo 5.7 — Autenticação e sessão (OWASP A07)
-
 ### SEC-094 — Instalação só a partir do lockfile travado **[OBRIGATÓRIA]**
 
 CI, deploy e o comando padrão de setup local resolvem **apenas** o que o lockfile pinou
@@ -532,6 +529,8 @@ bloqueia na borda do install (`SEC-043`, esta regra). Instalar "para ver se reso
 exploit.
 
 ---
+
+## Capítulo 5.7 — Autenticação e sessão (OWASP A07)
 
 ### SEC-044 — Sessão expira, renova com segurança e é invalidada **[OBRIGATÓRIA]**
 
@@ -1246,16 +1245,17 @@ Output: findings with path:line, severity, exploit path, verification level
 2. Multi-tenant em escopo com isolamento no dado (`SEC-006`).
 3. Zero concatenação de entrada em consulta/comando (`SEC-019`, `SEC-020`).
 4. SQL dinâmico e DSL de filtro conformes (`SEC-067`–`SEC-070`).
-5. Saída HTML no escopo conforme (`SEC-021`, `SEC-022`, `SEC-072`–`SEC-076`), com evidência de caça.
-6. Nenhum segredo no repositório ou no cliente (`SEC-052`); chave publishable tratada como pública (`SEC-077`).
-7. Se há API de dados no cliente: allowlist GRANT + regressão (`SEC-078`–`SEC-083`); storage sem legado público (`SEC-084`).
-8. Segredos de integração conforme (`SEC-085`–`SEC-088`), com evidência de caça.
-9. Rotas sem sessão: inventário + auth no handler + revalidação onde há efeito (`SEC-089`–`SEC-093`).
-10. Sem dado pessoal em log nos caminhos revisados (`SEC-050`).
-11. Nível de verificação declarado (`SEC-060`).
-12. Autenticação em escopo com lockout conforme `SEC-026` (ou N/A justificado se o módulo não autentica).
-13. Correções `S0`/`S1` com prova antes/depois (`SEC-064`).
+5. Superfícies com LLM: injeção de prompt tratada (`SEC-020`, `IAX-061`, `IAX-070`–`IAX-074`).
+6. Saída HTML no escopo conforme (`SEC-021`, `SEC-022`, `SEC-072`–`SEC-076`), com evidência de caça.
+7. Nenhum segredo no repositório ou no cliente (`SEC-052`); chave publishable tratada como pública (`SEC-077`).
+8. Se há API de dados no cliente: allowlist GRANT + regressão (`SEC-078`–`SEC-083`); storage sem legado público (`SEC-084`).
+9. Segredos de integração conforme (`SEC-085`–`SEC-088`), com evidência de caça.
+10. Rotas sem sessão: inventário + auth no handler + revalidação onde há efeito (`SEC-089`–`SEC-093`).
+11. Sem dado pessoal em log nos caminhos revisados (`SEC-050`).
+12. Nível de verificação declarado (`SEC-060`).
+13. Autenticação em escopo com lockout conforme `SEC-026` (ou N/A justificado se o módulo não autentica).
 14. Cadeia de suprimentos: audit alto/crítico fechado ou com análise (`SEC-038`/`SEC-039`); pacote novo verificado (`SEC-043`/`SEC-096`); install frozen e scripts controlados (`SEC-094`/`SEC-095`).
+15. Correções `S0`/`S1` com prova antes/depois (`SEC-064`).
 
 ---
 

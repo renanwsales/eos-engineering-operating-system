@@ -17,6 +17,7 @@ Ordenados por score. Recalcular os 10 do topo a cada rodada.
 | ID | Título | Sev. | Conf. | Esforço | Risco | Score | Gatilho de promoção | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | EOS-002 | Limiares de métrica nunca calibrados contra um módulo real | S2 | MEDIUM | M | LOW | 3.4 | Primeira revisão completa de módulo concluída | aberto |
+| EOS-012 | Vol 06 lista SEC fora da ordem numérica no corpo do capítulo | S3 | HIGH | M | LOW | 1.5 | Próxima edição editorial do Vol 06 ou reclamação de navegação | aberto |
 | EOS-010 | Volume 1 tem numeração fora de ordem no documento | S3 | HIGH | M | MEDIUM | 1.3 | Se um leitor humano relatar dificuldade de navegação no Vol 1 | aberto |
 | EOS-009 | Playbooks podem divergir das regras que citam | S2 | MEDIUM | S | LOW | 4.0 | Primeira alteração de regra em volume citado pelo Vol 21 | feito |
 | EOS-001 | Perfil do projeto ainda não preenchido para o repositório alvo | S1 | HIGH | S | LOW | 20.0 | Primeira rodada de revisão em qualquer projeto | feito |
@@ -69,6 +70,20 @@ Origem: ADR-0003, 2026-07-29
 Status: feito — `scripts/check-playbook-refs.py` exige citação de domínio em todo PLB;
   passos sem citação corrigidos; job no CI (2026-07-29). Reafirmação literal ainda é
   revisão humana; existência de IDs = `check-links.py`.
+```
+
+### EOS-012 — Vol 06 lista SEC fora da ordem numérica no corpo do capítulo
+
+```
+Severidade: S3 | Confiança: HIGH | Esforço: M | Risco: LOW | Score: 1.5
+Evidência: 06-seguranca.md — após SEC-024 vêm SEC-067–076 (cap. 5.3); SEC-077–084 no 5.5b;
+  SEC-038–043/094–096 no 5.6; SEC-044+ no 5.7. IDs estáveis (correto); leitura linear do
+  arquivo salta a numeração.
+Consequência se ignorado: revisor humano/agente pode achar que faltam regras ou que houve
+  colisão de ID; aumenta custo de onboarding no volume mais editado da série de segurança.
+Gatilho de promoção: próxima edição editorial do Vol 06, ou reclamação de navegação
+Origem: auditoria pós-merge PRs #1–#7, 2026-10-07
+Status: aberto — não renumerar IDs; só melhorar âncoras/sumário interno por capítulo
 ```
 
 ### EOS-010 — Volume 1 tem numeração fora de ordem no documento
@@ -175,4 +190,4 @@ até virar `MUST-FIX` ela mesma — normalmente na forma de um incidente.
 
 ## Próximo ID disponível
 
-`EOS-012`
+`EOS-013`

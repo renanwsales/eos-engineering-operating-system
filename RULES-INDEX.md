@@ -511,9 +511,9 @@ Arquivo: [`06-seguranca.md`](06-seguranca.md) · 96 regras
 | `SEC-041` | Integridade verificada em tudo que executa | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
 | `SEC-042` | Pipeline é código revisado | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
 | `SEC-043` | Pacote novo é decisão verificada; typosquat e slopsquat são bloqueio | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
-| `SEC-094` | Instalação só a partir do lockfile travado | OBRIG | — | Autenticação e sessão (OWASP A07) |
-| `SEC-095` | Scripts de lifecycle de dependência desligados por padrão | OBRIG | — | Autenticação e sessão (OWASP A07) |
-| `SEC-096` | Nome de pacote vindo de modelo é entrada não verificada | OBRIG | — | Autenticação e sessão (OWASP A07) |
+| `SEC-094` | Instalação só a partir do lockfile travado | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
+| `SEC-095` | Scripts de lifecycle de dependência desligados por padrão | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
+| `SEC-096` | Nome de pacote vindo de modelo é entrada não verificada | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
 | `SEC-044` | Sessão expira, renova com segurança e é invalidada | OBRIG | — | Autenticação e sessão (OWASP A07) |
 | `SEC-045` | Identificador de sessão regenerado após autenticar | OBRIG | — | Autenticação e sessão (OWASP A07) |
 | `SEC-046` | Token com escopo, vida curta e revogação possível | OBRIG | — | Autenticação e sessão (OWASP A07) |
