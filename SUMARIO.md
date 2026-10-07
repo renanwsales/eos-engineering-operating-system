@@ -228,9 +228,9 @@ experiência de usuário de resposta não determinística.
 **Não é:** como escrever prompts (→ [20](20-prompt-engineering.md)). Uso de IA para desenvolver o software
 (→ [01](01-orquestrador.md) e [20](20-prompt-engineering.md)).
 
-> Este volume é material de referência para a Vire hoje: a decisão registrada em `EOS-004` é que a IA é
-> ferramenta de desenvolvimento, não funcionalidade entregue ao usuário. Ele existe para o livro ser completo e
-> para o dia em que essa decisão mudar.
+> Norma ativa quando o produto entrega assistente, agente, RAG ou extração por modelo ao usuário
+> (incluindo painel interno). Enquanto a IA for só ferramenta de desenvolvimento (`EOS-004`), o volume
+> permanece referência.
 
 ### 20 — Prompt Engineering · `PRM`
 

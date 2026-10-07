@@ -153,6 +153,13 @@ template.
 Como código, comando, template ou expressão. Inclui avaliação dinâmica e desserialização em objeto
 executável.
 
+Inclui **injeção de prompt** (*prompt injection*): texto controlado por terceiro (mensagem de
+cliente, ticket, extrato, PDF/XML, comentário, trecho RAG enviado pelo cliente) que o modelo trata
+como instrução. Não existe parser que separe dado de comando no contexto do LLM — a mitigação
+eficaz não é um filtro de frases, é limitar o que a saída pode causar (`IAX-002`, `IAX-006`,
+`IAX-061`, `IAX-070` a `IAX-074`). Classifique o vetor aqui; a arquitetura da funcionalidade com
+IA vive no [Volume 19](19-ia-no-produto.md).
+
 ### SEC-021 — Escape na saída por contexto **[OBRIGATÓRIA]**
 
 HTML, atributo, URL e JavaScript têm regras diferentes. Escapar para o contexto errado não protege.
@@ -481,7 +488,7 @@ esquecido (`SEC-007`, `SEC-008`).
 1. Declarar nível V1/V2/V3 do módulo (SEC-059–060)
 2. Autorização por objeto + tenant + caminhos esquecidos (SEC-004–008)
 3. Autenticação/sessão/MFA/CSRF (SEC-044–048, SEC-025–027)
-4. Entrada: injeção, upload, SSRF (SEC-019–024, SEC-049)
+4. Entrada: injeção (incl. prompt), upload, SSRF (SEC-019–024, SEC-049; IAX-061, IAX-070–074)
 5. Criptografia, TLS, segredos (SEC-012–018, SEC-052)
 6. Config, CORS, headers, superfície (SEC-031–037)
 7. Dependências e pipeline (SEC-038–043)
@@ -531,6 +538,8 @@ Legítimo: GET /orders/A como user A → 200
 | Confiar em papel sem objeto | IDOR / `S0` (`SEC-004`) |
 | Isolamento só na disciplina de query | Vazamento multi-tenant (`SEC-006`) |
 | Concatenar entrada em SQL/comando | Injeção (`SEC-019`, `SEC-020`) |
+| Tratar texto de LLM/terceiro como instrução | Prompt injection (`SEC-020`, `IAX-061`) |
+| Confirmar write de agente sem ver o payload | Executa args injetados (`IAX-072`) |
 | Segredo no repositório “por enquanto” | Compromisso permanente até rotacionar (`SEC-052`) |
 | Hash rápido de senha | Credential stuffing trivial (`SEC-012`) |
 | CORS `*` com cookies | CSRF cross-origin (`SEC-033`) |
@@ -547,7 +556,8 @@ Legítimo: GET /orders/A como user A → 200
 - [ ] Autorização por objeto; negar por omissão. (`SEC-004`, `SEC-005`)
 - [ ] Isolamento de tenant no dado quando aplicável. (`SEC-006`)
 - [ ] Caminhos esquecidos percorridos. (`SEC-008`)
-- [ ] Consulta parametrizada; sem executar entrada. (`SEC-019`, `SEC-020`)
+- [ ] Consulta parametrizada; sem executar entrada (incl. prompt injection). (`SEC-019`, `SEC-020`)
+- [ ] Se houver agente/RAG: cerca de dados, ticket de confirmação, system fixo. (`IAX-070`–`IAX-074`)
 - [ ] Hash adequado; TLS; sem segredo no cliente/repo. (`SEC-012`, `SEC-013`, `SEC-052`)
 - [ ] Sessão/token com expiração e regeneração. (`SEC-044`, `SEC-045`)
 - [ ] SSRF com allowlist. (`SEC-049`)
@@ -575,6 +585,8 @@ Rules of engagement:
 - Burden of proof inverted on authz/payment/PII (SEC-001).
 - Authenticated attacker threat model (SEC-002).
 - Object-level authz and tenant isolation are S0 (SEC-004, SEC-006).
+- Never execute input — including prompt injection via third-party text in LLM
+  context (SEC-020). For agents/RAG cite IAX-061 and IAX-070–074.
 - Fix requires exploit-path closed with before/after (SEC-064).
 - Do not downgrade security S0 (SEC-066). Do not invent new SEC rules.
 
@@ -589,10 +601,11 @@ Output: findings with path:line, severity, exploit path, verification level
 1. Nenhum endpoint em escopo sem autorização por objeto (`SEC-004`).
 2. Multi-tenant em escopo com isolamento no dado (`SEC-006`).
 3. Zero concatenação de entrada em consulta/comando (`SEC-019`, `SEC-020`).
-4. Nenhum segredo no repositório ou no cliente (`SEC-052`).
-5. Sem dado pessoal em log nos caminhos revisados (`SEC-050`).
-6. Nível de verificação declarado (`SEC-060`).
-7. Correções `S0`/`S1` com prova antes/depois (`SEC-064`).
+4. Superfícies com LLM: injeção de prompt tratada (`SEC-020`, `IAX-061`, `IAX-070`–`IAX-074`).
+5. Nenhum segredo no repositório ou no cliente (`SEC-052`).
+6. Sem dado pessoal em log nos caminhos revisados (`SEC-050`).
+7. Nível de verificação declarado (`SEC-060`).
+8. Correções `S0`/`S1` com prova antes/depois (`SEC-064`).
 
 ---
 

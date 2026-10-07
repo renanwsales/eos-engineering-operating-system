@@ -1,6 +1,6 @@
 # RULES-INDEX — índice de regras do EOS
 
-**1391 regras** em 25 volumes. Este arquivo é **gerado** por
+**1396 regras** em 25 volumes. Este arquivo é **gerado** por
 `scripts/build-rules-index.py`; não edite à mão. Se um volume e este índice divergirem,
 **o volume** é a fonte de verdade.
 
@@ -21,7 +21,7 @@ deixa o número aposentado, nunca reaproveitado, para que relatórios antigos co
 | `[RECOMENDADA]` | Padrão esperado; exceção é normal | Justificativa no momento, sem ADR |
 | `[REVOGADA]` | Não vale mais; o número fica aposentado | — |
 
-Distribuição: **133 imutáveis** · **1051 obrigatórias** · **207 recomendadas**.
+Distribuição: **133 imutáveis** · **1056 obrigatórias** · **207 recomendadas**.
 
 ## Volumes
 
@@ -46,13 +46,13 @@ Distribuição: **133 imutáveis** · **1051 obrigatórias** · **207 recomendad
 | 16 | [Multi-Tenant](16-multi-tenant.md) | `MTN` | 58 |
 | 17 | [Observabilidade](17-observabilidade.md) | `OBS` | 70 |
 | 18 | [Produto](18-produto.md) | `PRD` | 58 |
-| 19 | [IA no Produto](19-ia-no-produto.md) | `IAX` | 69 |
+| 19 | [IA no Produto](19-ia-no-produto.md) | `IAX` | 74 |
 | 20 | [Prompt Engineering](20-prompt-engineering.md) | `PRM` | 58 |
 | 21 | [Playbooks](21-playbooks.md) | `PLB` | 58 |
 | 22 | [Checklists](22-checklists.md) | `CHK` | 48 |
 | 23 | [Métricas](23-metricas.md) | `MET` | 58 |
 | 24 | [Auditoria Final](24-auditoria-final.md) | `FIN` | 52 |
-| | **Total** | | **1391** |
+| | **Total** | | **1396** |
 
 ---
 
@@ -1239,7 +1239,7 @@ Arquivo: [`18-produto.md`](18-produto.md) · 58 regras
 
 ## 📓 Volume 19 — IA no Produto
 
-Arquivo: [`19-ia-no-produto.md`](19-ia-no-produto.md) · 69 regras
+Arquivo: [`19-ia-no-produto.md`](19-ia-no-produto.md) · 74 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -1308,6 +1308,11 @@ Arquivo: [`19-ia-no-produto.md`](19-ia-no-produto.md) · 69 regras
 | `IAX-063` | Dado enviado a modelo de terceiro é compartilhamento com terceiro | OBRIG | — | Segurança específica de funcionalidades com IA |
 | `IAX-064` | Envie o mínimo necessário ao contexto | OBRIG | — | Segurança específica de funcionalidades com IA |
 | `IAX-065` | Registro da conversa segue as regras de dado sensível | OBRIG | `S0` | Segurança específica de funcionalidades com IA |
+| `IAX-070` | Resultado de ferramenta que volta ao modelo é dado externo | OBRIG | `S0` | Segurança específica de funcionalidades com IA |
+| `IAX-071` | Write do agente só libera com ticket ligado aos argumentos | OBRIG | `S0` | Segurança específica de funcionalidades com IA |
+| `IAX-072` | A UI de confirmação mostra o payload que será executado | OBRIG | `S0` | Segurança específica de funcionalidades com IA |
+| `IAX-073` | Papel de política do sistema não interpola texto do cliente | OBRIG | `S0` | Segurança específica de funcionalidades com IA |
+| `IAX-074` | Extração por modelo que grava não cria entidade privilegiada sozinha | OBRIG | — | Segurança específica de funcionalidades com IA |
 | `IAX-066` | A interface distingue o que é gerado do que é dado do sistema | OBRIG | — | Experiência de uma resposta não determinística |
 | `IAX-067` | Comunique incerteza sem simulá-la | OBRIG | — | Experiência de uma resposta não determinística |
 | `IAX-068` | O usuário corrige, edita e rejeita a saída | OBRIG | — | Experiência de uma resposta não determinística |

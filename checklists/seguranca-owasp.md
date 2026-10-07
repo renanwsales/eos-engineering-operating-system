@@ -45,9 +45,15 @@ Caminhos que a revisão esquece:
 - [ ] Vale para NoSQL, comando de sistema, LDAP e template.
 - [ ] Escape na saída por contexto: HTML, atributo, URL, JavaScript.
 - [ ] Nenhuma inserção de HTML não confiável.
-- [ ] Nenhuma execução de entrada como código, comando ou template.
+- [ ] Nenhuma execução de entrada como código, comando ou template. Inclui injeção de prompt
+      (texto de terceiro no contexto do LLM). (`SEC-020`, `IAX-061`)
 - [ ] Validação por lista de permitidos, não de proibidos.
 - [ ] Nome de arquivo, cabeçalho e destino de redirecionamento validados.
+- [ ] Agente com tools: resultado reapresentado ao modelo cercado como dado. (`IAX-070`)
+- [ ] Write do agente: ticket assinado com args exatos; UI mostra payload integral.
+      (`IAX-071`, `IAX-072`)
+- [ ] System/policy sem interpolar excerpt, rota ou documento do cliente. (`IAX-073`)
+- [ ] Extração por modelo que grava: sem upsert privilegiado automático. (`IAX-074`)
 
 ## 4. Design inseguro
 
