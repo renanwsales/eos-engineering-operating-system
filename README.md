@@ -168,7 +168,8 @@ examples/                  Exemplos de implementação citados pelos volumes
 diagrams/                  Diagramas referenciados pelos volumes
 runbooks/                  Fluxos operacionais multiagente
 backlog/                   BACKLOG.md + adr/ (decisões registradas, incluindo as recusadas)
-scripts/                   build-rules-index.py, check-links.py — verificação automatizada
+scripts/                   build-rules-index.py, check-links.py, check-playbook-refs.py — verificação
+CHANGELOG.md               O que mudou em cada versão
 dist/                      system-prompt.md (versão compilada, reduzida)
 ```
 
@@ -182,7 +183,8 @@ O próprio repositório é verificável — coerente com a regra de que métrica
 
 ```bash
 python3 scripts/build-rules-index.py --check   # numeração contínua por prefixo, índice em dia
-python3 scripts/check-links.py                 # links, âncoras e IDs de regra citados
+python3 scripts/check-links.py                 # links, âncoras, IDs de regra e número de volume citados
+python3 scripts/check-playbook-refs.py         # todo passo PLB cita a norma de domínio por ID
 ```
 
 `check-links.py` valida as **referências cruzadas entre regras**: citar um ID que não existe em nenhum volume
@@ -199,5 +201,5 @@ Versionamento semântico, com as regras completas em [`AUTHORING.md`](AUTHORING.
 IDs de regra são **estáveis**: uma regra revogada deixa o número aposentado, nunca reaproveitado, para que
 relatórios e ADRs antigos continuem legíveis.
 
-Versão atual: **3.0.0** — reestruturação como livro de 25 volumes, com contrato de autoria e sumário de
-fronteiras. Histórico das decisões em [`backlog/adr/`](backlog/adr/).
+Versão atual: **3.1.1**. O que mudou em cada versão: [`CHANGELOG.md`](CHANGELOG.md). Por que mudou:
+[`backlog/adr/`](backlog/adr/).
