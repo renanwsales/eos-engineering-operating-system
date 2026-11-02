@@ -176,9 +176,12 @@ nova, quando bloquear, como discordar, revisão assistida por IA e seus limites.
 
 **É deste volume:** ordem de intervenção, normalizar vs desnormalizar, réplicas de leitura, particionamento,
 sharding, estado que impede escala horizontal, limites de recurso, contrapressão, descarte de carga, disjuntor,
-capacidade, custo por unidade.
+capacidade, custo por unidade. Hospeda também o **núcleo** de multi-inquilino, `ESC-036`–`ESC-042` (modelo de
+isolamento, mudança de modelo como `R4`, filtro no ponto mais interno, inquilino do contexto autenticado,
+chave de cache/busca com inquilino, cotas, operações por inquilino).
 
-**Não é:** o gargalo pontual medido hoje (→ [07](07-performance.md)). Isolamento de inquilino
+**Não é:** o gargalo pontual medido hoje (→ [07](07-performance.md)). A profundidade operacional de
+multi-inquilino — identidade, hierarquia, provisionamento, customização, impersonação, faturamento
 (→ [16](16-multi-tenant.md)).
 
 ### 15 — APIs · `API`
@@ -192,8 +195,9 @@ compatibilidade.
 
 ### 16 — Multi-Tenant · `MTN`
 
-**É deste volume:** modelos de isolamento e critério de escolha, identificação de inquilino, aplicação do
-isolamento no ponto mais interno, migração entre modelos, vizinho ruidoso e cotas, customização por inquilino,
+**É deste volume:** a profundidade operacional de multi-inquilino, construída sobre o núcleo `ESC-036`–`ESC-042`
+do [14](14-escalabilidade.md), que este volume cita e não reafirma: identidade e hierarquia de inquilino,
+migração entre modelos, vizinho ruidoso e cotas, customização por inquilino,
 operações por inquilino (exportar, eliminar, restaurar, medir), inquilino grande, provisionamento e
 desprovisionamento, faturamento por uso.
 
@@ -202,7 +206,7 @@ desprovisionamento, faturamento por uso.
 
 ### 17 — Observabilidade · `OBS`
 
-**És deste volume:** log estruturado e níveis, correlação, tracing distribuído, métricas e cardinalidade, as
+**É deste volume:** log estruturado e níveis, correlação, tracing distribuído, métricas e cardinalidade, as
 métricas mínimas por tipo de serviço, SLI, SLO e orçamento de erro, dashboards que respondem perguntas,
 alertas acionáveis, ruído de alerta, depuração em produção, retenção e custo de telemetria.
 
