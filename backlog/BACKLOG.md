@@ -17,7 +17,6 @@ Ordenados por score. Recalcular os 10 do topo a cada rodada.
 | ID | Título | Sev. | Conf. | Esforço | Risco | Score | Gatilho de promoção | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | EOS-016 | Incidente com dado pessoal sem caminho de notificação regulatória | S2 | MEDIUM | S | LOW | 6.3 | Primeiro incidente com dado pessoal, ou primeira auditoria de conformidade | aberto |
-| EOS-015 | Trilha de auditoria de negócio (quem mudou o quê, antes/depois) sem regra | S2 | HIGH | M | LOW | 4.8 | Primeiro cliente B2B que exija trilha, ou disputa sobre alteração de dado | aberto |
 | EOS-017 | `A-021` manda rodar dois scripts; o CI roda três | S3 | HIGH | XS | LOW | 4.0 | Próxima mudança `MAJOR` do livro (regra `[IMUTÁVEL]`) | aberto |
 | EOS-002 | Limiares de métrica nunca calibrados contra um módulo real | S2 | MEDIUM | M | LOW | 3.4 | Primeira revisão completa de módulo concluída | aberto |
 | EOS-012 | Regras fora da ordem numérica no corpo dos Vols 06, 10 e 19 | S3 | HIGH | M | LOW | 1.5 | Próxima edição editorial de um deles ou reclamação de navegação | aberto |
@@ -170,24 +169,6 @@ Status: feito — capítulo 6.13, `SEC-098`–`SEC-101`; não negociável 7 e du
   parada no AGENTS.md; dist/system-prompt.md alinhado (3.2.0, 2026-11-01)
 ```
 
-### EOS-015 — Trilha de auditoria de negócio sem regra
-
-```
-Severidade: S2 | Confiança: HIGH | Esforço: M | Risco: LOW | Score: 4.8
-Evidência: SEC-051 registra eventos de segurança; SEC-028 registra operação irreversível;
-  OBS-* tratam telemetria operacional. Nenhuma regra exige registro durável de quem alterou qual
-  dado de negócio, quando, com valor anterior e novo — o que cliente B2B pede em contrato e o que
-  resolve disputa ("quem mudou o preço deste plano?"). Única menção: retenção, em 17-observabilidade.md.
-Consequência se ignorado: cada módulo decide sozinho, log operacional vira trilha de auditoria por
-  acidente (com retenção e mascaramento errados, SEC-050), e a pergunta só aparece no primeiro
-  incidente ou auditoria de cliente.
-Correção: regra no Vol 05 (modelo e retenção do registro) ou no 06, com fronteira declarada contra
-  OBS (telemetria) e SEC-051 (segurança).
-Gatilho de promoção: primeiro cliente B2B que exija trilha, ou disputa sobre alteração de dado
-Origem: revisão 3.1.1, 2026-11-01
-Status: aberto
-```
-
 ### EOS-016 — Incidente com dado pessoal sem caminho de notificação regulatória
 
 ```
@@ -264,6 +245,7 @@ Estado saudável e necessário. Backlog que só cresce perde utilidade.
 
 | ID | Título | Por que deixou de existir | Data |
 | --- | --- | --- | --- |
+| EOS-015 | Trilha de auditoria de negócio sem regra | Aberto por erro de leitura: `SEC-011` (registro de auditoria em operação sensível) já cobre. Registrado para que o ID não seja reaproveitado | 2026-11-01 |
 | EOS-006 | Volume de prompt engineering como "não faremos" | Invalidado por ADR-0004: Vol 20 existe como doutrina operacional (não meta-prompt vazio) | 2026-07-29 |
 | EOS-004 (não-faremos absoluto) | Não escrever Vol de IA | Substituído: Vol 19 existe como referência; dívida EOS-004 acima = não ativar como norma Vire | 2026-07-29 |
 
