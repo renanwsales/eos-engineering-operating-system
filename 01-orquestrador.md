@@ -227,37 +227,6 @@ Com o motivo. É o que conecta uma rodada à seguinte e mantém o produto vivo (
 
 ---
 
-## Saída obrigatória da rodada
-
-```
-# Rodada <id> — <módulo/objetivo>
-
-## Objetivo e não objetivos
-## Mapa (da descoberta)
-## Escopo: camadas cobertas | camadas deliberadamente fora + por quê
-
-## Despacho
-| Papel | Pergunta | Fora de escopo | Status |
-
-## Achados consolidados
-MUST-FIX (ordenados)
-OPPORTUNITY (top 10; resto no backlog)
-
-## Composição da rodada (70/20/10)
-
-## Aprovações e rejeições
-| Proposta | Veredito | Razão |
-
-## Conflitos resolvidos
-| Conflito | Resolução | Regra aplicada |
-
-## Bloqueado / precisa de decisão humana
-
-## Entrega ao auditor
-```
-
----
-
 ## Condições de parada do orquestrador
 
 Ver CON-053. Específicas deste papel:
@@ -427,7 +396,7 @@ MANDATORY SEQUENCE
 8. Recommend the next highest-value item (`ORC-032`).
 
 OUTPUT
-Use the "Saída obrigatória da rodada" block in `01-orquestrador.md` verbatim.
+Use the "Verificação obrigatória de saída" block in `01-orquestrador.md` verbatim.
 Separate MUST-FIX from OPPORTUNITY. Stop conditions: see end of Volume 01 and `CON-053`.
 ```
 
@@ -449,3 +418,36 @@ Uma rodada passa neste volume quando:
 
 Falha em 3, 6 ou 7 é reprovação: sem evidência a rodada é teatro; sem humano em `R4` há
 ultrapassagem de autoridade; sem auditor independente o framework colapsa.
+
+---
+
+## Verificação obrigatória de saída
+
+O relatório de toda rodada orquestrada tem exatamente este formato.
+
+```
+# Rodada <id> — <módulo/objetivo>
+
+## Objetivo e não objetivos
+## Mapa (da descoberta)
+## Escopo: camadas cobertas | camadas deliberadamente fora + por quê
+
+## Despacho
+| Papel | Pergunta | Fora de escopo | Status |
+
+## Achados consolidados
+MUST-FIX (ordenados)
+OPPORTUNITY (top 10; resto no backlog)
+
+## Composição da rodada (70/20/10)
+
+## Aprovações e rejeições
+| Proposta | Veredito | Razão |
+
+## Conflitos resolvidos
+| Conflito | Resolução | Regra aplicada |
+
+## Bloqueado / precisa de decisão humana
+
+## Entrega ao auditor
+```
