@@ -2,7 +2,7 @@
 
 Prefixo: `BAK` · Regras: BAK-001 a BAK-073 · Papel: [Backend](agents/02-backend.md)
 
-Camadas cobertas: **2 (domínio)**, **3 (segurança, em conjunto com o Vol 5)**.
+Camadas cobertas: **2 (domínio)**, **3 (segurança, em conjunto com o Vol 06)**.
 
 Inclui webhooks, GraphQL e trabalho agendado. Contrato de API e regras de negócio são os capítulos centrais;
 os três últimos capítulos aplicam-se conforme a superfície do projeto.
@@ -136,7 +136,7 @@ Para cada entrada relevante, verifique e cite a linha que trata — ou reporte a
 
 ## Capítulo 3.3 — Autenticação e autorização
 
-Aprofundado no [Volume 5](06-seguranca.md). Aqui, o que o backend precisa garantir em cada endpoint.
+Aprofundado no [Volume 06](06-seguranca.md). Aqui, o que o backend precisa garantir em cada endpoint.
 
 ### BAK-016 — Autorização por objeto, não por rota **[OBRIGATÓRIA]**
 

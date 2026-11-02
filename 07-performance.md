@@ -82,7 +82,7 @@ Investigar na ordem inversa é como se perde tempo otimizando um laço enquanto 
 
 ## Capítulo 7.2 — Acesso a dados
 
-Normas completas no [Volume 6](05-banco-de-dados.md). Aqui, o recorte de performance.
+Normas completas no [Volume 05](05-banco-de-dados.md). Aqui, o recorte de performance.
 
 ### PRF-008 — Conte as consultas por requisição **[OBRIGATÓRIA]**
 

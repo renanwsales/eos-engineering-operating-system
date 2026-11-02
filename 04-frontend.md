@@ -66,7 +66,7 @@ dupla: é `S1`, não detalhe de interface.
 ### FRT-004 — Nunca exponha erro bruto do servidor **[OBRIGATÓRIA]**
 
 Stack trace, SQL ou caminho interno na tela é `S1` e é simultaneamente achado de segurança — reporte junto
-ao [Volume 5](06-seguranca.md).
+ao [Volume 06](06-seguranca.md).
 
 ### FRT-005 — Percorra os caminhos de falha **[OBRIGATÓRIA]**
 

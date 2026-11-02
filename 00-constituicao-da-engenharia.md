@@ -371,11 +371,11 @@ performance de um sistema cuja modelagem está errada.
 | --- | --- | --- | --- |
 | 1 | Arquitetura | As fronteiras estão nos lugares certos e as dependências apontam para dentro? | [Vol 2](02-arquitetura.md) |
 | 2 | Domínio | O código representa as regras do negócio, incluindo os estados que não deveriam existir? | [Vol 2](02-arquitetura.md), [Vol 3](03-backend.md) |
-| 3 | Segurança | Quem pode fazer o quê, e o sistema verifica isso em **todos** os caminhos? | [Vol 5](06-seguranca.md) |
-| 4 | Dados | O modelo persistido protege a integridade por si mesmo? | [Vol 6](05-banco-de-dados.md) |
+| 3 | Segurança | Quem pode fazer o quê, e o sistema verifica isso em **todos** os caminhos? | [Vol 06](06-seguranca.md) |
+| 4 | Dados | O modelo persistido protege a integridade por si mesmo? | [Vol 05](05-banco-de-dados.md) |
 | 5 | Performance | Onde está o gargalo real, medido, e ele viola um limiar declarado? | [Vol 7](07-performance.md) |
 | 6 | UX/A11y | O usuário entende o que acontece, especialmente quando dá errado? | [Vol 8](08-ux-premium.md) |
-| 7 | Testes | Os testes existentes detectariam as falhas que importam? | [Vol 9](11-qa.md) |
+| 7 | Testes | Os testes existentes detectariam as falhas que importam? | [Vol 11](11-qa.md) |
 | 8 | Entrega | Quanto tempo até sabermos, e quanto até voltarmos? | [Vol 10](10-devops.md) |
 
 ### CON-027 — Registro do percurso **[OBRIGATÓRIA]**
@@ -746,7 +746,7 @@ número de manutenibilidade — isso é CON-013 aplicado a métricas.
 | Observabilidade e entrega | 5% |
 
 Travas: qualquer `S0` ou `S1` não corrigido limita o total a 4 e força `REJECTED`. Segurança abaixo de 6
-limita a `APPROVED WITH CONDITIONS`. Detalhado no [Volume 11](12-auditoria.md).
+limita a `APPROVED WITH CONDITIONS`. Detalhado no [Volume 12](12-auditoria.md).
 
 ---
 

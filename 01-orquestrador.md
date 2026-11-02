@@ -32,23 +32,23 @@ orquestra não audita a própria rodada (`ORC-028`); aceitação de risco é hum
 
 | # | Papel | Escopo | Volume principal |
 | --- | --- | --- | --- |
-| 00 | [Orquestrador](agents/00-orchestrator.md) | Prioriza, distribui, aprova, integra | Vol 12 |
-| 01 | [Arquiteto](agents/01-architect.md) | Fronteiras, acoplamento, domínio | Vol 2 |
-| 02 | [Backend](agents/02-backend.md) | APIs, regras, autorização, resiliência | Vol 3 |
-| 03 | [Frontend](agents/03-frontend.md) | Componentes, estado, design system | Vol 4 |
-| 04 | [Database](agents/04-database.md) | Modelagem, índices, migrações | Vol 6 |
-| 05 | [Security](agents/05-security.md) | OWASP, autorização, segredos | Vol 5 |
-| 06 | [Performance](agents/06-performance.md) | Gargalos medidos, cache, limiares | Vol 7 |
-| 07 | [QA](agents/07-qa.md) | Cobertura de negócio, regressão, aceite | Vol 9 |
+| 00 | [Orquestrador](agents/00-orchestrator.md) | Prioriza, distribui, aprova, integra | Vol 01 |
+| 01 | [Arquiteto](agents/01-architect.md) | Fronteiras, acoplamento, domínio | Vol 02 |
+| 02 | [Backend](agents/02-backend.md) | APIs, regras, autorização, resiliência | Vol 03 |
+| 03 | [Frontend](agents/03-frontend.md) | Componentes, estado, design system | Vol 04 |
+| 04 | [Database](agents/04-database.md) | Modelagem, índices, migrações | Vol 05 |
+| 05 | [Security](agents/05-security.md) | OWASP, autorização, segredos | Vol 06 |
+| 06 | [Performance](agents/06-performance.md) | Gargalos medidos, cache, limiares | Vol 07 |
+| 07 | [QA](agents/07-qa.md) | Cobertura de negócio, regressão, aceite | Vol 11 |
 | 08 | [DevOps/SRE](agents/08-devops-sre.md) | CI/CD, observabilidade, rollback | Vol 10 |
-| 09 | [Product/UX](agents/09-product-ux.md) | Fluxos, consistência, acessibilidade | Vol 8 |
-| 10 | [Auditor Final](agents/10-final-auditor.md) | Regressões, notas, veto | Vol 11 |
+| 09 | [Product/UX](agents/09-product-ux.md) | Fluxos, consistência, acessibilidade | Vol 08 |
+| 10 | [Auditor Final](agents/10-final-auditor.md) | Regressões, notas, veto | Vol 12 |
 
 ### ORC-002 — Todos herdam o mesmo contrato **[IMUTÁVEL]**
 
 [`agents/_shared/core-contract.md`](agents/_shared/core-contract.md) e
 [`agents/_shared/output-schemas.md`](agents/_shared/output-schemas.md), mais o
-[Volume 1](00-constituicao-da-engenharia.md). Divergência de um papel em relação ao contrato só existe se declarada na
+[Volume 00](00-constituicao-da-engenharia.md). Divergência de um papel em relação ao contrato só existe se declarada na
 seção `Overrides` do próprio papel.
 
 ### ORC-003 — Orquestrador e Auditor estão em toda combinação **[OBRIGATÓRIA]**
@@ -77,7 +77,7 @@ julgamento**.
 
 ### ORC-005 — Carregue só os volumes que a tarefa exige **[OBRIGATÓRIA]**
 
-Uma correção de uma linha carrega o Volume 1 e o volume da área. Carregar os doze para tudo dilui as
+Uma correção de uma linha carrega o Volume 00 e o volume da área. Carregar os vinte e cinco para tudo dilui as
 instruções que importam.
 
 ---
