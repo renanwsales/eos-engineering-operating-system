@@ -16,7 +16,6 @@ Ordenados por score. Recalcular os 10 do topo a cada rodada.
 
 | ID | Título | Sev. | Conf. | Esforço | Risco | Score | Gatilho de promoção | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| EOS-014 | Segurança operacional do próprio agente de desenvolvimento sem norma | S2 | MEDIUM | M | LOW | 6.5 | Agente com shell, banco ou credencial de nuvem num repositório adotante | aberto |
 | EOS-016 | Incidente com dado pessoal sem caminho de notificação regulatória | S2 | MEDIUM | S | LOW | 6.3 | Primeiro incidente com dado pessoal, ou primeira auditoria de conformidade | aberto |
 | EOS-015 | Trilha de auditoria de negócio (quem mudou o quê, antes/depois) sem regra | S2 | HIGH | M | LOW | 4.8 | Primeiro cliente B2B que exija trilha, ou disputa sobre alteração de dado | aberto |
 | EOS-017 | `A-021` manda rodar dois scripts; o CI roda três | S3 | HIGH | XS | LOW | 4.0 | Próxima mudança `MAJOR` do livro (regra `[IMUTÁVEL]`) | aberto |
@@ -24,6 +23,7 @@ Ordenados por score. Recalcular os 10 do topo a cada rodada.
 | EOS-012 | Regras fora da ordem numérica no corpo dos Vols 06, 10 e 19 | S3 | HIGH | M | LOW | 1.5 | Próxima edição editorial de um deles ou reclamação de navegação | aberto |
 | EOS-010 | Volume 00 tem numeração fora de ordem no documento | S3 | HIGH | M | MEDIUM | 1.3 | Se um leitor humano relatar dificuldade de navegação no Vol 00 | aberto |
 | EOS-013 | Nenhuma regra geral de fail-closed em exceção de controle de segurança (OWASP A10:2025) | S2 | HIGH | S | LOW | 16.0 | Próxima edição do Vol 06, ou primeiro achado de exceção que libera acesso | feito |
+| EOS-014 | Segurança operacional do próprio agente de desenvolvimento sem norma | S2 | MEDIUM | M | LOW | 6.5 | Agente com shell, banco ou credencial de nuvem num repositório adotante | feito |
 | EOS-009 | Playbooks podem divergir das regras que citam | S2 | MEDIUM | S | LOW | 4.0 | Primeira alteração de regra em volume citado pelo Vol 21 | feito |
 | EOS-001 | Perfil do projeto ainda não preenchido para o repositório alvo | S1 | HIGH | S | LOW | 20.0 | Primeira rodada de revisão em qualquer projeto | feito |
 | EOS-003 | Verificação do EOS não roda automaticamente | S2 | HIGH | XS | LOW | 14.0 | Primeira hospedagem do repositório em plataforma com CI | feito |
@@ -166,7 +166,8 @@ Correção: capítulo curto no Vol 01 ou 20 (ou regras no 06): ambiente do agent
   novo é dependência (SEC-043); conteúdo lido do repositório é dado, não instrução (IAX-061).
 Gatilho de promoção: agente com shell, banco ou credencial de nuvem num repositório adotante
 Origem: revisão 3.1.1, 2026-11-01
-Status: aberto
+Status: feito — capítulo 6.13, `SEC-098`–`SEC-101`; não negociável 7 e duas condições de
+  parada no AGENTS.md; dist/system-prompt.md alinhado (3.2.0, 2026-11-01)
 ```
 
 ### EOS-015 — Trilha de auditoria de negócio sem regra

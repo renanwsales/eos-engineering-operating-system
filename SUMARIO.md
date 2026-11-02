@@ -107,12 +107,15 @@ transações, isolamento, migrações, retenção.
 
 **É deste volume:** OWASP Top 10 completo, criptografia, autenticação e sessão, segredos, dados pessoais,
 cadeia de suprimentos, SSRF, níveis progressivos de verificação, e autenticação na borda de **rotas HTTP
-alcançáveis sem sessão de usuário** (gateway com JWT desligado, webhooks, callbacks, coletores).
+alcançáveis sem sessão de usuário** (gateway com JWT desligado, webhooks, callbacks, coletores), e o **agente
+de desenvolvimento como superfície** — credencial ao seu alcance, operação destrutiva, conteúdo lido,
+ferramentas e servidores MCP.
 
 **Não é:** infraestrutura de deploy e política de acesso operacional (→ [10](10-devops.md)). Isolamento de
 inquilino, que é decisão de arquitetura com consequência de segurança (→ [16](16-multi-tenant.md), com achados
 classificados por este volume). Idempotência e ACK do webhook (→ [03](03-backend.md) `BAK-049`–`BAK-053`).
-Contrato público de API (→ [15](15-apis.md)).
+Contrato público de API (→ [15](15-apis.md)). Como o agente analisa, decide e despacha
+(→ [00](00-constituicao-da-engenharia.md), [01](01-orquestrador.md)).
 
 ### 07 — Performance · `PRF`
 

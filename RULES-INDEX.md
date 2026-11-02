@@ -1,6 +1,6 @@
 # RULES-INDEX — índice de regras do EOS
 
-**1433 regras** em 25 volumes. Este arquivo é **gerado** por
+**1437 regras** em 25 volumes. Este arquivo é **gerado** por
 `scripts/build-rules-index.py`; não edite à mão. Se um volume e este índice divergirem,
 **o volume** é a fonte de verdade.
 
@@ -21,7 +21,7 @@ deixa o número aposentado, nunca reaproveitado, para que relatórios antigos co
 | `[RECOMENDADA]` | Padrão esperado; exceção é normal | Justificativa no momento, sem ADR |
 | `[REVOGADA]` | Não vale mais; o número fica aposentado | — |
 
-Distribuição: **133 imutáveis** · **1093 obrigatórias** · **207 recomendadas**.
+Distribuição: **133 imutáveis** · **1097 obrigatórias** · **207 recomendadas**.
 
 ## Volumes
 
@@ -33,7 +33,7 @@ Distribuição: **133 imutáveis** · **1093 obrigatórias** · **207 recomendad
 | 03 | [Framework Backend](03-backend.md) | `BAK` | 73 |
 | 04 | [Framework Frontend](04-frontend.md) | `FRT` | 42 |
 | 05 | [Framework de Banco de Dados](05-banco-de-dados.md) | `DAT` | 40 |
-| 06 | [Segurança e DevSecOps](06-seguranca.md) | `SEC` | 97 |
+| 06 | [Segurança e DevSecOps](06-seguranca.md) | `SEC` | 101 |
 | 07 | [Framework de Performance](07-performance.md) | `PRF` | 38 |
 | 08 | [UX/UI Premium](08-ux-premium.md) | `UXI` | 55 |
 | 09 | [Design System](09-design-system.md) | `DSY` | 69 |
@@ -52,7 +52,7 @@ Distribuição: **133 imutáveis** · **1093 obrigatórias** · **207 recomendad
 | 22 | [Checklists](22-checklists.md) | `CHK` | 48 |
 | 23 | [Métricas](23-metricas.md) | `MET` | 58 |
 | 24 | [Auditoria Final](24-auditoria-final.md) | `FIN` | 52 |
-| | **Total** | | **1433** |
+| | **Total** | | **1437** |
 
 ---
 
@@ -446,7 +446,7 @@ Arquivo: [`05-banco-de-dados.md`](05-banco-de-dados.md) · 40 regras
 
 ## 📓 Volume 06 — Segurança e DevSecOps
 
-Arquivo: [`06-seguranca.md`](06-seguranca.md) · 97 regras
+Arquivo: [`06-seguranca.md`](06-seguranca.md) · 101 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -544,9 +544,13 @@ Arquivo: [`06-seguranca.md`](06-seguranca.md) · 97 regras
 | `SEC-061` | Subir de nível é decisão registrada; descer também | OBRIG | — | Níveis de verificação |
 | `SEC-062` | V3 nunca é executado só por agente | IMUT | — | Níveis de verificação |
 | `SEC-063` | Nível não substitui as regras de bloqueio | IMUT | — | Níveis de verificação |
-| `SEC-064` | Testes passando não é prova | OBRIG | — | Níveis de verificação |
-| `SEC-065` | Descreva o caminho de exploração concretamente | OBRIG | — | Níveis de verificação |
-| `SEC-066` | `S0` de segurança não é rebaixável por agente | IMUT | — | Níveis de verificação |
+| `SEC-098` | Ambiente do agente sem credencial de produção por padrão | OBRIG | `S1` | O agente de desenvolvimento como superfície |
+| `SEC-099` | Operação destrutiva do agente exige aprovação humana no ato | OBRIG | — | O agente de desenvolvimento como superfície |
+| `SEC-100` | Conteúdo lido pelo agente é dado, nunca instrução | OBRIG | `S1` | O agente de desenvolvimento como superfície |
+| `SEC-101` | Ferramenta e servidor MCP do agente são dependência | OBRIG | — | O agente de desenvolvimento como superfície |
+| `SEC-064` | Testes passando não é prova | OBRIG | — | O agente de desenvolvimento como superfície |
+| `SEC-065` | Descreva o caminho de exploração concretamente | OBRIG | — | O agente de desenvolvimento como superfície |
+| `SEC-066` | `S0` de segurança não é rebaixável por agente | IMUT | — | O agente de desenvolvimento como superfície |
 
 ## 📔 Volume 07 — Framework de Performance
 

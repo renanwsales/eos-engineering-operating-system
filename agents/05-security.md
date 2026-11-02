@@ -44,6 +44,9 @@ could not find the authorization check" is a finding, not an inconclusive result
    output handling (XSS, data leakage), secrets, dependencies, configuration.
 7. Then SSRF, integrity, logging. Throughout, an exception inside an access, signature or quota check
    must deny (`SEC-097`).
+8. When the scope includes the coding agent's own setup: credentials within its reach (`SEC-098`),
+   destructive operations without per-execution approval (`SEC-099`), content it reads acting as
+   instruction (`SEC-100`), MCP servers and tools as unverified dependencies (`SEC-101`).
 
 On dependencies, go beyond CVE scanners: new lockfile entries need registry proof
 (`SEC-043`); install must be frozen (`SEC-094`); lifecycle scripts off by default

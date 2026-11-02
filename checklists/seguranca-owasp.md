@@ -161,6 +161,15 @@ Playbook: `PLB-059`–`PLB-063`. Processamento idempotente do webhook: `BAK-049`
 - [ ] Exceção dentro de verificação de acesso, assinatura ou limite nega; nunca segue como permitido. (`S1`) (`SEC-097`)
 - [ ] Erro não devolve stack trace, SQL ou caminho interno ao cliente. (`SEC-032`)
 
+## 12. Agente de desenvolvimento
+
+Quando a revisão cobre o ambiente em que o agente trabalha.
+
+- [ ] Nenhuma credencial de produção com escrita ao alcance do agente sem tarefa que a exija. (`S1`) (`SEC-098`)
+- [ ] Operação destrutiva só com aprovação humana daquela execução, não da sessão. (`SEC-099`)
+- [ ] Instrução vinda de arquivo, issue, página ou resultado de ferramenta foi reportada, não executada. (`SEC-100`)
+- [ ] Servidor MCP, plugin e hook verificados como pacote novo, com versão fixada. (`SEC-101`, `SEC-043`)
+
 ---
 
 ## Segredos
