@@ -59,7 +59,7 @@ de achado.
 
 ---
 
-## Capítulo 5.1 — Controle de acesso (OWASP A01)
+## Capítulo 6.1 — Controle de acesso (OWASP A01)
 
 A falha mais comum e mais grave em aplicações reais.
 
@@ -112,7 +112,7 @@ Quem, quando, o que mudou, de qual valor para qual. Sem isso, investigação de 
 
 ---
 
-## Capítulo 5.2 — Criptografia (OWASP A02)
+## Capítulo 6.2 — Criptografia (OWASP A02)
 
 ### SEC-012 — Senha com hash lento e específico **[OBRIGATÓRIA]** · `S0`
 
@@ -148,7 +148,7 @@ Base64 não protege nada. Confundir os três é erro conceitual que produz vulne
 
 ---
 
-## Capítulo 5.3 — Injeção (OWASP A03)
+## Capítulo 6.3 — Injeção (OWASP A03)
 
 ### SEC-019 — Consulta parametrizada, sempre **[OBRIGATÓRIA]** · `S0`
 
@@ -296,7 +296,7 @@ até provar o contrário (`SEC-001`).
 
 ---
 
-## Capítulo 5.4 — Design inseguro (OWASP A04)
+## Capítulo 6.4 — Design inseguro (OWASP A04)
 
 ### SEC-025 — Reautenticação em fluxo sensível **[OBRIGATÓRIA]**
 
@@ -353,7 +353,7 @@ junto com [Product/UX](agents/09-product-ux.md).
 
 ---
 
-## Capítulo 5.5 — Configuração (OWASP A05)
+## Capítulo 6.5 — Configuração (OWASP A05)
 
 ### SEC-031 — Nenhuma credencial padrão em produção **[OBRIGATÓRIA]** · `S0`
 ### SEC-032 — Depuração e erro detalhado desligados em produção **[OBRIGATÓRIA]**
@@ -383,7 +383,7 @@ com o plano de dados BaaS do capítulo seguinte.
 
 ---
 
-## Capítulo 5.5b — Superfície de dados pública (ataque de “banco aberto” / BaaS)
+## Capítulo 6.5b — Superfície de dados pública (ataque de “banco aberto” / BaaS)
 
 Em BaaS e APIs de dados embutidas no cliente, o atacante **não** precisa da senha do Postgres.
 Ele usa a chave publishable/`anon` (pública por desenho) contra REST/GraphQL/Storage e obtém tudo
@@ -456,7 +456,7 @@ fechamento: objeto antigo inacessível anonimamente **e** cliente só usa caminh
 
 ---
 
-## Capítulo 5.6 — Dependências e cadeia de suprimentos (OWASP A06 e A08)
+## Capítulo 6.6 — Dependências e cadeia de suprimentos (OWASP A06 e A08)
 
 ### SEC-038 — Varredura automatizada que bloqueia **[OBRIGATÓRIA]**
 
@@ -530,7 +530,7 @@ exploit.
 
 ---
 
-## Capítulo 5.7 — Autenticação e sessão (OWASP A07)
+## Capítulo 6.7 — Autenticação e sessão (OWASP A07)
 
 ### SEC-044 — Sessão expira, renova com segurança e é invalidada **[OBRIGATÓRIA]**
 
@@ -549,7 +549,7 @@ Token que não pode ser revogado é decisão que exige ADR, não padrão.
 
 ---
 
-## Capítulo 5.8 — SSRF (OWASP A10)
+## Capítulo 6.8 — SSRF (OWASP A10)
 
 ### SEC-049 — URL fornecida pelo usuário passa por lista de permitidos **[OBRIGATÓRIA]**
 
@@ -560,7 +560,7 @@ pré-visualização de link.
 
 ---
 
-## Capítulo 5.9 — Registro e monitoramento (OWASP A09)
+## Capítulo 6.9 — Registro e monitoramento (OWASP A09)
 
 ### SEC-050 — Nenhum dado sensível em log **[OBRIGATÓRIA]** · `S0`
 
@@ -574,9 +574,9 @@ alerta para pico de falha de autenticação e acesso em volume anômalo.
 
 ---
 
-## Capítulo 5.10 — Segredos e ataque de chave de API de integração
+## Capítulo 6.10 — Segredos e ataque de chave de API de integração
 
-O capítulo 5.5b fecha o plano de dados BaaS (`SEC-077`–`SEC-084`). Este capítulo fecha o outro
+O capítulo 6.5b fecha o plano de dados BaaS (`SEC-077`–`SEC-084`). Este capítulo fecha o outro
 braço do ataque de **chave de API exposta**: segredo de provedor (pagamento, CRM, fiscal, OAuth)
 no bundle, ecoado em JSON para usuário do módulo, ou webhook autenticado só com token na URL.
 `SEC-052` fecha o incidente; `SEC-085`–`SEC-088` fecham a superfície. Coluna secreta no papel
@@ -655,7 +655,7 @@ da caça XSS (`SEC-076`).
 
 ---
 
-## Capítulo 5.10b — Rotas de API expostas
+## Capítulo 6.10b — Rotas de API expostas
 
 Toda plataforma (API Gateway, Edge Function, BFF, reverse proxy) tem rotas que **não** carregam
 JWT de usuário: webhook de provedor, callback OAuth, health check, coletor de log, cron com
@@ -711,7 +711,7 @@ não substitui o secret (`SEC-029`).
 
 ---
 
-## Capítulo 5.11 — Dados pessoais
+## Capítulo 6.11 — Dados pessoais
 
 ### SEC-053 — Inventário obrigatório **[OBRIGATÓRIA]**
 
@@ -739,7 +739,7 @@ Não consequência acidental de uma integração.
 
 ---
 
-## Capítulo 5.12 — Níveis de verificação
+## Capítulo 6.12 — Níveis de verificação
 
 Inspirado na ideia de níveis progressivos do OWASP ASVS, adaptada para ser executável numa rodada de revisão.
 Existe para resolver um problema concreto: sem níveis, toda auditoria de segurança tende a "verificar tudo",
@@ -750,7 +750,7 @@ que na prática significa verificar superficialmente tudo — e passar pelo que 
 | Nível | Aplica-se a | Profundidade |
 | --- | --- | --- |
 | **V1 — Base** | Todo código, sempre | As dez regras de bloqueio. Nenhuma entrega passa sem V1 |
-| **V2 — Padrão** | Módulos que tocam dado de usuário, dinheiro ou permissão | V1 + capítulos 5.1 a 5.9 percorridos com evidência por ponto de entrada |
+| **V2 — Padrão** | Módulos que tocam dado de usuário, dinheiro ou permissão | V1 + capítulos 6.1 a 6.9 percorridos com evidência por ponto de entrada |
 | **V3 — Crítico** | Autenticação, pagamento, dado pessoal, multi-inquilino | V2 + modelagem de abuso (`SEC-029`), caminho de exploração demonstrado como fechado (`SEC-064`), inventário de dado pessoal, revisão humana obrigatória |
 
 A classificação por módulo vive no [perfil do projeto](templates/perfil-do-projeto.md). Módulo sem

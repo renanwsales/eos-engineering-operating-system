@@ -44,7 +44,7 @@ pessoal, de acesso).
 
 ---
 
-## Capítulo 6.1 — Modelagem e integridade
+## Capítulo 5.1 — Modelagem e integridade
 
 ### DAT-002 — Auditoria de invariantes é o primeiro entregável **[OBRIGATÓRIA]**
 
@@ -124,7 +124,7 @@ simultaneamente. Se a necessidade é real, ela é a exceção documentada, não 
 
 ---
 
-## Capítulo 6.2 — Índices e consultas
+## Capítulo 5.2 — Índices e consultas
 
 ### DAT-015 — Toda consulta frequente usa índice **[OBRIGATÓRIA]**
 
@@ -172,7 +172,7 @@ Toda conclusão de desempenho declara o volume de dados considerado. Conclusão 
 
 ---
 
-## Capítulo 6.3 — Transações e concorrência
+## Capítulo 5.3 — Transações e concorrência
 
 ### DAT-025 — Escopo pela invariante **[OBRIGATÓRIA]**
 
@@ -199,7 +199,7 @@ Caminhos que bloqueiam os mesmos recursos em ordens diferentes produzem deadlock
 
 ---
 
-## Capítulo 6.4 — Migrações
+## Capítulo 5.4 — Migrações
 
 ### DAT-030 — Versionadas, reversíveis e com reversa executada **[OBRIGATÓRIA]**
 
@@ -244,7 +244,7 @@ Migração que roda em 2 segundos com dados de teste pode levar horas em produç
 
 ---
 
-## Capítulo 6.5 — Operação
+## Capítulo 5.5 — Operação
 
 ### DAT-037 — Backup com restauração testada **[OBRIGATÓRIA]**
 

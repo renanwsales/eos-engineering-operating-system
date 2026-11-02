@@ -5,8 +5,8 @@ Prefixos: `ARC` (Parte I — normas) · `SEL` (Parte II — seleção) · Regras
 Camadas de análise cobertas: **1 (arquitetura)** e **2 (domínio)**.
 
 Este volume trata de **como fazer certo** dentro da abordagem escolhida. A escolha da abordagem — estilo
-arquitetural, monólito ou serviços, síncrono ou assíncrono, comprar ou construir — está no
-[Volume 13](02-arquitetura.md).
+arquitetural, monólito ou serviços, síncrono ou assíncrono, comprar ou construir — está na
+Parte II deste volume (`SEL`).
 
 Aviso de calibragem: este é o volume com maior risco de gerar trabalho caro e de baixo valor. Achados
 arquiteturais costumam ter esforço `L`/`XL` sem defeito ativo, o que os coloca em prioridade baixa apesar
@@ -370,7 +370,7 @@ impecável e inútil.
 
 ---
 
-## Capítulo 2.1 — A regra que governa toda escolha
+## Capítulo 2.8 — A regra que governa toda escolha
 
 ### SEL-001 — O padrão é o mais simples que resolve **[IMUTÁVEL]**
 
@@ -411,7 +411,7 @@ Toda decisão deste volume é, por definição, custosa de reverter e serve de p
 
 ---
 
-## Capítulo 2.2 — Estilos de organização interna
+## Capítulo 2.9 — Estilos de organização interna
 
 Estes estilos não são alternativas excludentes: Clean, Hexagonal e Onion são a **mesma ideia** — dependências
 apontando para o domínio — com vocabulários diferentes. Tratá-los como opções distintas é confusão de
@@ -452,7 +452,7 @@ Organizar por funcionalidade não elimina a necessidade de um lugar único para 
 
 ---
 
-## Capítulo 2.3 — Monólito, monólito modular e serviços
+## Capítulo 2.10 — Monólito, monólito modular e serviços
 
 ### SEL-008 — Monólito modular é o padrão para produto em evolução **[RECOMENDADA]**
 
@@ -509,7 +509,7 @@ Quando existe, o BFF pode agregar e adaptar. Não pode conter regra de negócio 
 
 ---
 
-## Capítulo 2.4 — CQRS e event sourcing
+## Capítulo 2.11 — CQRS e event sourcing
 
 ### SEL-015 — CQRS é resposta a uma assimetria medida **[RECOMENDADA]**
 
@@ -543,7 +543,7 @@ sem decidir adotá-lo.
 
 ---
 
-## Capítulo 2.5 — Síncrono e assíncrono
+## Capítulo 2.12 — Síncrono e assíncrono
 
 ### SEL-019 — Nenhum dos dois é padrão; a escolha é registrada **[OBRIGATÓRIA]**
 
@@ -575,7 +575,7 @@ que só aparece sob carga.
 
 ---
 
-## Capítulo 2.6 — Estratégia de renderização
+## Capítulo 2.13 — Estratégia de renderização
 
 Complementa o [Volume 4](04-frontend.md). A escolha muda onde o dado é buscado, o que é público, e o que
 acontece quando o JavaScript falha.
@@ -613,7 +613,7 @@ estática, catálogo é servidor com cache por idioma, painel é cliente".
 
 ---
 
-## Capítulo 2.7 — Comprar, usar ou construir
+## Capítulo 2.14 — Comprar, usar ou construir
 
 ### SEL-029 — Construir o que é diferencial; comprar o resto **[RECOMENDADA]**
 

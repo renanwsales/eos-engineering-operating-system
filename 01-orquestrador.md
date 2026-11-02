@@ -26,7 +26,7 @@ orquestra não audita a própria rodada (`ORC-028`); aceitação de risco é hum
 
 ---
 
-## Capítulo 12.1 — A cadeia de agentes
+## Capítulo 1.1 — A cadeia de agentes
 
 ### ORC-001 — Os onze papéis **[OBRIGATÓRIA]**
 
@@ -58,7 +58,7 @@ independente o framework inteiro depende da palavra de quem fez o trabalho.
 
 ---
 
-## Capítulo 12.2 — Escolha do caminho
+## Capítulo 1.2 — Escolha do caminho
 
 ### ORC-004 — Nem toda tarefa merece a cadeia completa **[IMUTÁVEL]**
 
@@ -82,7 +82,7 @@ instruções que importam.
 
 ---
 
-## Capítulo 12.3 — Despacho
+## Capítulo 1.3 — Despacho
 
 ### ORC-006 — Descoberta é feita pelo orquestrador, pessoalmente **[OBRIGATÓRIA]**
 
@@ -127,7 +127,7 @@ como medir, o entregável dele é **o plano de medição**, declarado como tal.
 
 ---
 
-## Capítulo 12.4 — Integração
+## Capítulo 1.4 — Integração
 
 ### ORC-014 — Deduplicar **[OBRIGATÓRIA]**
 
@@ -171,7 +171,7 @@ produto, não de mais revisão.
 
 ---
 
-## Capítulo 12.5 — Portão de aprovação
+## Capítulo 1.5 — Portão de aprovação
 
 ### ORC-023 — Os oito critérios **[OBRIGATÓRIA]**
 
@@ -202,7 +202,7 @@ Não se improvisa uma terceira solução no meio do caminho.
 
 ---
 
-## Capítulo 12.6 — Encerramento
+## Capítulo 1.6 — Encerramento
 
 ### ORC-028 — O orquestrador não audita a própria rodada **[IMUTÁVEL]**
 

@@ -59,7 +59,7 @@ Then load by task type:
 | Designing or evolving a **published** API contract | [`15`](15-apis.md), [`03`](03-backend.md) |
 | UI work | [`agents/03-frontend.md`](agents/03-frontend.md), [`04`](04-frontend.md), [`09`](09-design-system.md) |
 | Tokens, components, motion, theming | [`09`](09-design-system.md) |
-| Rendering strategy (SSR/CSR/RSC/static/streaming) | [`02` Part II](02-arquitetura.md), ch. 2.6 |
+| Rendering strategy (SSR/CSR/RSC/static/streaming) | [`02` Part II](02-arquitetura.md), ch. 2.13 |
 | Schema / query work | [`agents/04-database.md`](agents/04-database.md), [`05`](05-banco-de-dados.md) |
 | Security work | [`agents/05-security.md`](agents/05-security.md), [`06`](06-seguranca.md), [`checklists/seguranca-owasp.md`](checklists/seguranca-owasp.md) |
 | Exposed API routes / webhooks without user JWT | [`06`](06-seguranca.md) `SEC-089`–`SEC-093` (+ `SEC-087`), [`21`](21-playbooks.md) `PLB-059`–`PLB-063`, [`03`](03-backend.md) `BAK-049`–`BAK-053` |
@@ -131,7 +131,7 @@ G4 Validation      → prove it works and that nothing else broke
 G5 Audit           → regressions, residual risk, backlog update
 ```
 
-Full definition in [`00`, chapter 1.4](00-constituicao-da-engenharia.md) (`CON-056` to `CON-064`).
+Full definition in [`00`, chapter 0.4](00-constituicao-da-engenharia.md) (`CON-056` to `CON-064`).
 
 You may compress G0–G2 for trivial, obviously-correct fixes — a typo in a string, an off-by-one with a test
 that already fails — but you must say you compressed them and why. **G4 is never compressed** (`CON-061`,

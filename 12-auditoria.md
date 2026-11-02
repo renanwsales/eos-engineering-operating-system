@@ -54,7 +54,7 @@ O auditor não participou do trabalho, não corrige o trabalho e não tem intere
 
 ---
 
-## Capítulo 11.1 — Orçamento de mudança
+## Capítulo 12.1 — Orçamento de mudança
 
 ### AUD-004 — Limites por PR **[OBRIGATÓRIA]**
 
@@ -78,7 +78,7 @@ separado**.
 
 ---
 
-## Capítulo 11.2 — Ordem da revisão
+## Capítulo 12.2 — Ordem da revisão
 
 ### AUD-006 — Pare no primeiro nível que reprova **[OBRIGATÓRIA]**
 
@@ -102,7 +102,7 @@ comentários de implementação.
 
 ---
 
-## Capítulo 11.3 — Como comentar
+## Capítulo 12.3 — Como comentar
 
 ### AUD-008 — Todo comentário declara sua força **[OBRIGATÓRIA]**
 
@@ -146,7 +146,7 @@ Cobrar de um PR de correção a dívida histórica do arquivo é como PRs morrem
 
 ---
 
-## Capítulo 11.4 — Autorrevisão
+## Capítulo 12.4 — Autorrevisão
 
 ### AUD-015 — Você não pode submeter um diff que não leu por completo **[IMUTÁVEL]**
 
@@ -165,7 +165,7 @@ escopo, com ID de backlog.
 
 ---
 
-## Capítulo 11.5 — Caça a regressões
+## Capítulo 12.5 — Caça a regressões
 
 ### AUD-018 — Leia o diff do conjunto, não das partes **[OBRIGATÓRIA]**
 
@@ -199,7 +199,7 @@ Com contagem, não com suposição. Ver DAT-032.
 
 ---
 
-## Capítulo 11.6 — Integridade do escopo
+## Capítulo 12.6 — Integridade do escopo
 
 ### AUD-022 — Cada arquivo do diff corresponde a uma proposta aprovada **[OBRIGATÓRIA]**
 
@@ -216,7 +216,7 @@ Código deletado sem justificativa é mudança de comportamento não proposta.
 
 ---
 
-## Capítulo 11.7 — Notas
+## Capítulo 12.7 — Notas
 
 ### AUD-027 — Pesos por dimensão **[OBRIGATÓRIA]**
 
@@ -258,7 +258,7 @@ Nota 10 exige DoE, não ausência de reclamação.
 
 ---
 
-## Capítulo 11.8 — Veredito
+## Capítulo 12.8 — Veredito
 
 ### AUD-031 — Os quatro vereditos **[OBRIGATÓRIA]**
 
@@ -285,7 +285,7 @@ Ele verifica contra DoD, DoE e as normas dos volumes. Defeito novo genuíno é r
 
 ---
 
-## Capítulo 11.9 — Backlog
+## Capítulo 12.9 — Backlog
 
 ### AUD-035 — Conferência obrigatória: reportadas versus registradas **[OBRIGATÓRIA]**
 
@@ -325,7 +325,7 @@ modificadores de contexto · agrupar itens do mesmo módulo · recalcular o scor
 
 ---
 
-## Capítulo 11.10 — Código gerado por IA
+## Capítulo 12.10 — Código gerado por IA
 
 ### AUD-041 — Riscos específicos verificados explicitamente **[OBRIGATÓRIA]**
 
