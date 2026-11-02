@@ -938,8 +938,7 @@ if (!concluido) return bloqueado(estado)                       // IAX-049
 ## Checklist
 
 - [ ] A parte determinística foi separada e resolvida sem modelo. (`IAX-001`)
-- [ ] Critério de sucesso numérico declarado e verificável. (`IAX-004`)
-- [ ] Taxa de erro aceitável declarada, com quem absorve o custo. (`IAX-005`)
+- [ ] Critério de sucesso numérico e taxa de erro aceitável declarados, com quem absorve o custo. (`IAX-004`, `IAX-005`)
 - [ ] Nenhum efeito irreversível parte diretamente da geração. (`IAX-006`)
 - [ ] Linha de base sem modelo medida. (`IAX-007`)
 - [ ] Dono humano nomeado. (`IAX-008`)
@@ -953,10 +952,8 @@ if (!concluido) return bloqueado(estado)                       // IAX-049
 - [ ] Falha de validação tem caminho com teto; nada é corrigido em silêncio. (`IAX-026`, `IAX-027`)
 - [ ] Afirmação verificável ancorada em fonte do sistema. (`IAX-029`)
 - [ ] Abstenção possível no schema, no prompt e na interface. (`IAX-030`)
-- [ ] Permissão do usuário aplicada na consulta ao índice. (`IAX-032`)
-- [ ] Exclusão e revogação propagam ao índice. (`IAX-033`)
-- [ ] Recuperação e geração avaliadas separadamente. (`IAX-034`)
-- [ ] Limiar de relevância definido, com abstenção abaixo dele. (`IAX-037`)
+- [ ] Permissão do usuário aplicada na consulta ao índice; exclusão e revogação propagam a ele. (`IAX-032`, `IAX-033`)
+- [ ] Recuperação e geração avaliadas separadamente; abstenção abaixo do limiar de relevância. (`IAX-034`, `IAX-037`)
 - [ ] Ferramentas rodam com a autoridade do usuário. (`IAX-043`)
 - [ ] Conteúdo externo no contexto cercado como dado; tool results também. (`IAX-061`, `IAX-070`)
 - [ ] Write com ticket assinado dos args; UI mostra payload integral. (`IAX-071`, `IAX-072`)

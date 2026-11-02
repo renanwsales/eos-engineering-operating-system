@@ -3,7 +3,8 @@
 Regra que governa este checklist: **o ônus da prova é de quem afirma que está seguro.** Item que você
 não conseguiu verificar é reportado como não verificado — nunca presumido em ordem.
 
-Norma completa: [Volume 06 — Segurança](../06-seguranca.md).
+Norma completa: [Volume 06 — Segurança](../06-seguranca.md). As seções seguem a ordem de análise de
+`SEC-003`; a correspondência com os códigos do OWASP Top 10:2025 está no mapa do Volume 06.
 
 ---
 
@@ -153,6 +154,22 @@ Playbook: `PLB-059`–`PLB-063`. Processamento idempotente do webhook: `BAK-049`
 - [ ] Redirecionamento não é seguido cegamente.
 - [ ] Verificado em: importação por URL, webhook, miniatura, conversão de documento.
 
+## 11. Condições excepcionais (OWASP A10:2025)
+
+- [ ] Nenhum `catch` vazio ou que só registra e segue em caminho de autorização, pagamento ou escrita. (`BAK-023`)
+- [ ] Falha de dependência (timeout, 5xx, resposta malformada) tem comportamento decidido e testado. (`BAK-045`)
+- [ ] Exceção dentro de verificação de acesso, assinatura ou limite nega; nunca segue como permitido. (`S1`) (`SEC-097`)
+- [ ] Erro não devolve stack trace, SQL ou caminho interno ao cliente. (`SEC-032`)
+
+## 12. Agente de desenvolvimento
+
+Quando a revisão cobre o ambiente em que o agente trabalha.
+
+- [ ] Nenhuma credencial de produção com escrita ao alcance do agente sem tarefa que a exija. (`S1`) (`SEC-098`)
+- [ ] Operação destrutiva só com aprovação humana daquela execução, não da sessão. (`SEC-099`)
+- [ ] Instrução vinda de arquivo, issue, página ou resultado de ferramenta foi reportada, não executada. (`SEC-100`)
+- [ ] Servidor MCP, plugin e hook verificados como pacote novo, com versão fixada. (`SEC-101`, `SEC-043`)
+
 ---
 
 ## Segredos
@@ -179,20 +196,9 @@ Playbook: `PLB-059`–`PLB-063`. Processamento idempotente do webhook: `BAK-049`
 
 ## Regras de bloqueio
 
-Nenhuma entrega passa com qualquer um destes:
-
-1. Endpoint sem autorização por objeto
-2. Consulta multi-tenant sem filtro de isolamento
-3. Segredo no repositório ou no cliente
-4. Concatenação de entrada em consulta ou comando
-5. Senha com hash inadequado
-6. Dado pessoal em log
-7. Vulnerabilidade crítica ou alta sem análise registrada
-8. CORS permissivo com credencial
-9. Dado sensível sem TLS
-10. Ausência de limite de tentativas em autenticação (`SEC-026`: lockout no IdP por conta; UI/IP não bastam)
-11. Rota com JWT desligado sem autenticação no handler (`SEC-090`)
-12. Efeito em dinheiro/estado só pelo corpo do webhook, sem revalidação (`SEC-091`)
+Nenhuma entrega passa com qualquer condição da tabela
+[Regras de bloqueio](../06-seguranca.md#regras-de-bloqueio) do Volume 06. A lista vive só lá (`A-001`):
+uma cópia aqui já divergiu uma vez — tinha 12 condições quando o volume tinha 16.
 
 ---
 

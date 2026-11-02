@@ -33,7 +33,7 @@ opiniões nem a autoridade de quem falou mais alto (`CON-022`).
 
 ---
 
-## Capítulo 1.1 — Princípios
+## Capítulo 0.1 — Princípios
 
 Oito princípios. Cada um tem consequência prática e regra de desempate. Nenhum é aspiracional.
 
@@ -104,7 +104,7 @@ negligência.
 
 ---
 
-## Capítulo 1.2 — Regras imutáveis de conduta
+## Capítulo 0.2 — Regras imutáveis de conduta
 
 ### CON-009 — Regra da evidência **[IMUTÁVEL]**
 
@@ -128,12 +128,12 @@ execução) · `LOW` (reconhecimento de padrão).
 ### CON-011 — Ordem obrigatória de análise **[IMUTÁVEL]**
 
 `arquitetura → domínio → segurança → dados → performance → UX/A11y → testes → entrega`.
-Detalhado no capítulo 1.5.
+Detalhado no capítulo 0.5.
 
 ### CON-012 — Protocolo de decisão **[IMUTÁVEL]**
 
 Nenhuma mudança não trivial sem ≥2 alternativas reais comparadas, mais a opção zero. Detalhado no
-capítulo 1.6.
+capítulo 0.6.
 
 ### CON-013 — Proibição de refatoração cosmética **[IMUTÁVEL]**
 
@@ -197,7 +197,7 @@ omitida.
 
 ---
 
-## Capítulo 1.3 — Regra de desempate
+## Capítulo 0.3 — Regra de desempate
 
 ### CON-021 — Ordem lexicográfica de prioridade **[IMUTÁVEL]**
 
@@ -231,7 +231,7 @@ empate real.
 
 ---
 
-## Capítulo 1.4 — Processo: os seis portões
+## Capítulo 0.4 — Processo: os seis portões
 
 ### CON-056 — O trabalho avança por portões **[IMUTÁVEL]**
 
@@ -265,7 +265,7 @@ estruturais.
 
 ### CON-058 — G1 Diagnóstico: achados com evidência **[OBRIGATÓRIA]**
 
-Percorra as oito camadas na ordem obrigatória (capítulo 1.5), preenchendo o schema `FINDING` com
+Percorra as oito camadas na ordem obrigatória (capítulo 0.5), preenchendo o schema `FINDING` com
 `arquivo:linha`.
 
 **Passagem:** todo achado tem evidência ou está rotulado `HYPOTHESIS` · todo achado tem severidade,
@@ -277,7 +277,7 @@ declarada em um volume.
 ### CON-059 — G2 Decisão: alternativa descartada registrada **[OBRIGATÓRIA]**
 
 Defina o escopo da rodada · produza um `CHANGE PROPOSAL` com ≥2 alternativas por item · avalie a faixa de
-risco (capítulo 1.8) e aplique a mitigação obrigatória · escreva [ADR](templates/adr.md) quando CON-034
+risco (capítulo 0.8) e aplique a mitigação obrigatória · escreva [ADR](templates/adr.md) quando CON-034
 exigir · defina a ordem de execução, dependências primeiro e risco alto isolado.
 
 **Passagem:** nenhuma proposta com alternativa única · a opção zero foi considerada · cada proposta declara o
@@ -341,7 +341,7 @@ Não evite voltar por parecer retrabalho. O retrabalho caro é o que acontece em
 
 ---
 
-## Capítulo 1.5 — Ordem de análise
+## Capítulo 0.5 — Ordem de análise
 
 ### CON-023 — As oito camadas **[IMUTÁVEL]**
 
@@ -371,11 +371,11 @@ performance de um sistema cuja modelagem está errada.
 | --- | --- | --- | --- |
 | 1 | Arquitetura | As fronteiras estão nos lugares certos e as dependências apontam para dentro? | [Vol 2](02-arquitetura.md) |
 | 2 | Domínio | O código representa as regras do negócio, incluindo os estados que não deveriam existir? | [Vol 2](02-arquitetura.md), [Vol 3](03-backend.md) |
-| 3 | Segurança | Quem pode fazer o quê, e o sistema verifica isso em **todos** os caminhos? | [Vol 5](06-seguranca.md) |
-| 4 | Dados | O modelo persistido protege a integridade por si mesmo? | [Vol 6](05-banco-de-dados.md) |
+| 3 | Segurança | Quem pode fazer o quê, e o sistema verifica isso em **todos** os caminhos? | [Vol 06](06-seguranca.md) |
+| 4 | Dados | O modelo persistido protege a integridade por si mesmo? | [Vol 05](05-banco-de-dados.md) |
 | 5 | Performance | Onde está o gargalo real, medido, e ele viola um limiar declarado? | [Vol 7](07-performance.md) |
 | 6 | UX/A11y | O usuário entende o que acontece, especialmente quando dá errado? | [Vol 8](08-ux-premium.md) |
-| 7 | Testes | Os testes existentes detectariam as falhas que importam? | [Vol 9](11-qa.md) |
+| 7 | Testes | Os testes existentes detectariam as falhas que importam? | [Vol 11](11-qa.md) |
 | 8 | Entrega | Quanto tempo até sabermos, e quanto até voltarmos? | [Vol 10](10-devops.md) |
 
 ### CON-027 — Registro do percurso **[OBRIGATÓRIA]**
@@ -389,7 +389,7 @@ Motivo da parada: <escopo definido | defeito S0 na camada 2 | limite de contexto
 
 ---
 
-## Capítulo 1.6 — Tomada de decisão
+## Capítulo 0.6 — Tomada de decisão
 
 ### CON-028 — Enuncie o problema como restrição **[OBRIGATÓRIA]**
 
@@ -460,7 +460,7 @@ e o evento que reabre. Postergar sem registro é esquecer.
 
 ---
 
-## Capítulo 1.7 — Classificação e priorização
+## Capítulo 0.7 — Classificação e priorização
 
 ### CON-036 — Severidade mede consequência **[IMUTÁVEL]**
 
@@ -530,7 +530,7 @@ produto, não de mais revisão.
 
 ---
 
-## Capítulo 1.8 — Matriz de risco de execução
+## Capítulo 0.8 — Matriz de risco de execução
 
 ### CON-041 — Faixas e mitigação obrigatória **[IMUTÁVEL]**
 
@@ -581,7 +581,7 @@ nunca um agente.
 
 ---
 
-## Capítulo 1.9 — Definition of Done
+## Capítulo 0.9 — Definition of Done
 
 ### CON-043 — DoD é obrigatória e verificada item a item **[IMUTÁVEL]**
 
@@ -640,7 +640,7 @@ Se a resposta é não, algum item acima está marcado incorretamente.
 
 ---
 
-## Capítulo 1.10 — Definition of Excellence
+## Capítulo 0.10 — Definition of Excellence
 
 ### CON-046 — Excelência é deliberada e por módulo **[OBRIGATÓRIA]**
 
@@ -687,7 +687,7 @@ testes verdes.
 
 ---
 
-## Capítulo 1.11 — Métricas e limiares
+## Capítulo 0.11 — Métricas e limiares
 
 ### CON-050 — Métrica sem reação é decoração **[OBRIGATÓRIA]**
 
@@ -746,11 +746,11 @@ número de manutenibilidade — isso é CON-013 aplicado a métricas.
 | Observabilidade e entrega | 5% |
 
 Travas: qualquer `S0` ou `S1` não corrigido limita o total a 4 e força `REJECTED`. Segurança abaixo de 6
-limita a `APPROVED WITH CONDITIONS`. Detalhado no [Volume 11](12-auditoria.md).
+limita a `APPROVED WITH CONDITIONS`. Detalhado no [Volume 12](12-auditoria.md).
 
 ---
 
-## Capítulo 1.12 — Condições de parada
+## Capítulo 0.12 — Condições de parada
 
 ### CON-053 — Pare e escale **[IMUTÁVEL]**
 
@@ -784,7 +784,7 @@ Pare e pergunte, em vez de adivinhar, quando:
 
 ---
 
-## Capítulo 1.13 — Ofício: nomes, código e commits
+## Capítulo 0.13 — Ofício: nomes, código e commits
 
 Estas normas são universais: valem para qualquer linguagem e são carregadas por **todos** os papéis. Elas
 existem para encerrar discussão, não para criar mais.

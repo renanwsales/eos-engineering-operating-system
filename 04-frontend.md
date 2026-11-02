@@ -1,10 +1,10 @@
-# 📕 Volume 4 — Framework Frontend
+# 📕 Volume 04 — Framework Frontend
 
 Prefixo: `FRT` · Regras: FRT-001 a FRT-042 · Papel: [Frontend](agents/03-frontend.md)
 
 Camadas cobertas: **6 (UX/A11y)** na parte técnica, com apoio de [Vol 7](07-performance.md) e
 [Vol 8](08-ux-premium.md). A escolha da estratégia de renderização (SSR, CSR, RSC, estático, streaming) está no
-[Volume 13](02-arquitetura.md), capítulo 13.6.
+[Volume 02](02-arquitetura.md), Parte II, capítulo 2.13.
 
 Aviso de calibragem: revisão de frontend é onde achados cosméticos se multiplicam. Estrutura de
 componentes, abordagem de estilização e organização de arquivos **não são achados** salvo violação de norma
@@ -66,7 +66,7 @@ dupla: é `S1`, não detalhe de interface.
 ### FRT-004 — Nunca exponha erro bruto do servidor **[OBRIGATÓRIA]**
 
 Stack trace, SQL ou caminho interno na tela é `S1` e é simultaneamente achado de segurança — reporte junto
-ao [Volume 5](06-seguranca.md).
+ao [Volume 06](06-seguranca.md).
 
 ### FRT-005 — Percorra os caminhos de falha **[OBRIGATÓRIA]**
 

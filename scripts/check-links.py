@@ -7,7 +7,9 @@ Uso:
 Falha com código 1 quando encontra:
   - link relativo para arquivo inexistente;
   - âncora que não corresponde a nenhum cabeçalho do arquivo alvo;
-  - referência a um ID de regra (ex.: `SEC-004`) que não existe em nenhum volume.
+  - referência a um ID de regra (ex.: `SEC-004`) que não existe em nenhum volume;
+  - link cujo texto nomeia um volume e aponta para outro (ex.: `[Volume 5](06-seguranca.md)`),
+    o defeito que a renumeração v2 → v3 deixou espalhado pelo livro.
 """
 
 from __future__ import annotations
@@ -23,6 +25,9 @@ SKIP_DIRS = {".git", "node_modules"}
 LINK = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 HEADING = re.compile(r"^#{1,6}\s+(.*)$")
 RULE_DEF = re.compile(r"^### ([A-Z]{3}-\d{3}) — ", re.M)
+VOLUME_LINK = re.compile(
+    r"\[`?(?:Volume|Vol\.?)\s*(\d{1,2})\b[^\]]*\]\((?:\.\./)*(\d{2})-[a-z0-9-]+\.md[^)]*\)"
+)
 
 
 def rule_reference_pattern(prefixes: set[str]) -> re.Pattern[str]:
@@ -88,6 +93,10 @@ def main() -> int:
                 anchor_checks += 1
                 if resolved in anchors and anchor not in anchors[resolved]:
                     errors.append(f"{rel}: âncora inexistente -> {target}")
+
+        for named, target in VOLUME_LINK.findall(text):
+            if int(named) != int(target):
+                errors.append(f"{rel}: link diz Volume {named} mas aponta para o {target}")
 
         for prefix, number in rule_ref.findall(text):
             rule_refs += 1

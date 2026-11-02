@@ -50,7 +50,7 @@ framework inteiro. IDs nunca são renumerados nem reciclados (`A-007`).
 | 03 | [Backend](03-backend.md) | `BAK` | Casos de uso, validação, erros, concorrência, idempotência, filas, workers, webhooks, GraphQL |
 | 04 | [Frontend](04-frontend.md) | `FRT` | Oito estados, gerenciamento de estado, cache de cliente, composição, formulários |
 | 05 | [Banco de Dados](05-banco-de-dados.md) | `DAT` | Modelagem, integridade declarativa, índices, transações, migrações |
-| 06 | [Segurança](06-seguranca.md) | `SEC` | OWASP Top 10, criptografia, sessão, segredos, dados pessoais, rotas de API expostas, níveis de verificação |
+| 06 | [Segurança](06-seguranca.md) | `SEC` | OWASP Top 10:2025, criptografia, sessão, segredos, dados pessoais, rotas de API expostas, agente de desenvolvimento como superfície, níveis de verificação |
 | 07 | [Performance](07-performance.md) | `PRF` | Medição, acesso a dados, cache, renderização, limiares |
 | 08 | [UX Premium](08-ux-premium.md) | `UXI` | Usabilidade, microinterações, erros, fluxos, caminhos infelizes, WCAG 2.2 AA |
 | 09 | [Design System](09-design-system.md) | `DSY` | Tokens, cor, espaçamento, tipografia, movimento, catálogo de componentes, governança |
@@ -168,7 +168,8 @@ examples/                  Exemplos de implementação citados pelos volumes
 diagrams/                  Diagramas referenciados pelos volumes
 runbooks/                  Fluxos operacionais multiagente
 backlog/                   BACKLOG.md + adr/ (decisões registradas, incluindo as recusadas)
-scripts/                   build-rules-index.py, check-links.py — verificação automatizada
+scripts/                   build-rules-index.py, check-links.py, check-playbook-refs.py — verificação
+CHANGELOG.md               O que mudou em cada versão
 dist/                      system-prompt.md (versão compilada, reduzida)
 ```
 
@@ -182,7 +183,8 @@ O próprio repositório é verificável — coerente com a regra de que métrica
 
 ```bash
 python3 scripts/build-rules-index.py --check   # numeração contínua por prefixo, índice em dia
-python3 scripts/check-links.py                 # links, âncoras e IDs de regra citados
+python3 scripts/check-links.py                 # links, âncoras, IDs de regra e número de volume citados
+python3 scripts/check-playbook-refs.py         # todo passo PLB cita a norma de domínio por ID
 ```
 
 `check-links.py` valida as **referências cruzadas entre regras**: citar um ID que não existe em nenhum volume
@@ -199,5 +201,5 @@ Versionamento semântico, com as regras completas em [`AUTHORING.md`](AUTHORING.
 IDs de regra são **estáveis**: uma regra revogada deixa o número aposentado, nunca reaproveitado, para que
 relatórios e ADRs antigos continuem legíveis.
 
-Versão atual: **3.0.0** — reestruturação como livro de 25 volumes, com contrato de autoria e sumário de
-fronteiras. Histórico das decisões em [`backlog/adr/`](backlog/adr/).
+Versão atual: **3.2.0**. O que mudou em cada versão: [`CHANGELOG.md`](CHANGELOG.md). Por que mudou:
+[`backlog/adr/`](backlog/adr/).

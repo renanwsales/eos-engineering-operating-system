@@ -1,6 +1,6 @@
 # RULES-INDEX — índice de regras do EOS
 
-**1432 regras** em 25 volumes. Este arquivo é **gerado** por
+**1437 regras** em 25 volumes. Este arquivo é **gerado** por
 `scripts/build-rules-index.py`; não edite à mão. Se um volume e este índice divergirem,
 **o volume** é a fonte de verdade.
 
@@ -21,7 +21,7 @@ deixa o número aposentado, nunca reaproveitado, para que relatórios antigos co
 | `[RECOMENDADA]` | Padrão esperado; exceção é normal | Justificativa no momento, sem ADR |
 | `[REVOGADA]` | Não vale mais; o número fica aposentado | — |
 
-Distribuição: **133 imutáveis** · **1092 obrigatórias** · **207 recomendadas**.
+Distribuição: **133 imutáveis** · **1097 obrigatórias** · **207 recomendadas**.
 
 ## Volumes
 
@@ -33,7 +33,7 @@ Distribuição: **133 imutáveis** · **1092 obrigatórias** · **207 recomendad
 | 03 | [Framework Backend](03-backend.md) | `BAK` | 73 |
 | 04 | [Framework Frontend](04-frontend.md) | `FRT` | 42 |
 | 05 | [Framework de Banco de Dados](05-banco-de-dados.md) | `DAT` | 40 |
-| 06 | [Segurança e DevSecOps](06-seguranca.md) | `SEC` | 96 |
+| 06 | [Segurança e DevSecOps](06-seguranca.md) | `SEC` | 101 |
 | 07 | [Framework de Performance](07-performance.md) | `PRF` | 38 |
 | 08 | [UX/UI Premium](08-ux-premium.md) | `UXI` | 55 |
 | 09 | [Design System](09-design-system.md) | `DSY` | 69 |
@@ -52,7 +52,7 @@ Distribuição: **133 imutáveis** · **1092 obrigatórias** · **207 recomendad
 | 22 | [Checklists](22-checklists.md) | `CHK` | 48 |
 | 23 | [Métricas](23-metricas.md) | `MET` | 58 |
 | 24 | [Auditoria Final](24-auditoria-final.md) | `FIN` | 52 |
-| | **Total** | | **1432** |
+| | **Total** | | **1437** |
 
 ---
 
@@ -188,7 +188,7 @@ Arquivo: [`01-orquestrador.md`](01-orquestrador.md) · 32 regras
 | `ORC-031` | Registrar as notas para comparação | RECOM | — | Encerramento |
 | `ORC-032` | Recomendar o próximo item de maior valor | OBRIG | — | Encerramento |
 
-## 📗 Volume 2 — Framework de Arquitetura
+## 📗 Volume 02 — Framework de Arquitetura
 
 Arquivo: [`02-arquitetura.md`](02-arquitetura.md) · 73 regras
 
@@ -268,7 +268,7 @@ Arquivo: [`02-arquitetura.md`](02-arquitetura.md) · 73 regras
 | `SEL-032` | Fornecedor crítico exige comportamento em falha declarado | OBRIG | — | Comprar, usar ou construir |
 | `SEL-033` | Construir para evitar custo de assinatura exige o cálculo completo | RECOM | — | Comprar, usar ou construir |
 
-## 📙 Volume 3 — Framework Backend
+## 📙 Volume 03 — Framework Backend
 
 Arquivo: [`03-backend.md`](03-backend.md) · 73 regras
 
@@ -348,7 +348,7 @@ Arquivo: [`03-backend.md`](03-backend.md) · 73 regras
 | `BAK-072` | Fuso do agendamento é explícito | OBRIG | — | Trabalho agendado e workers |
 | `BAK-073` | Job de volume processa em lotes, com progresso registrado | RECOM | — | Trabalho agendado e workers |
 
-## 📕 Volume 4 — Framework Frontend
+## 📕 Volume 04 — Framework Frontend
 
 Arquivo: [`04-frontend.md`](04-frontend.md) · 42 regras
 
@@ -446,7 +446,7 @@ Arquivo: [`05-banco-de-dados.md`](05-banco-de-dados.md) · 40 regras
 
 ## 📓 Volume 06 — Segurança e DevSecOps
 
-Arquivo: [`06-seguranca.md`](06-seguranca.md) · 96 regras
+Arquivo: [`06-seguranca.md`](06-seguranca.md) · 101 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -461,65 +461,66 @@ Arquivo: [`06-seguranca.md`](06-seguranca.md) · 96 regras
 | `SEC-009` | Campo privilegiado do cliente é ignorado | OBRIG | `S0` | Controle de acesso (OWASP A01) |
 | `SEC-010` | Autorização centralizada por construção | RECOM | — | Controle de acesso (OWASP A01) |
 | `SEC-011` | Registro de auditoria em operação sensível | RECOM | — | Controle de acesso (OWASP A01) |
-| `SEC-012` | Senha com hash lento e específico | OBRIG | `S0` | Criptografia (OWASP A02) |
-| `SEC-013` | TLS em trânsito, sem exceção interna | OBRIG | — | Criptografia (OWASP A02) |
-| `SEC-014` | Dado sensível criptografado em repouso | OBRIG | — | Criptografia (OWASP A02) |
-| `SEC-015` | Nenhum algoritmo obsoleto e nenhuma criptografia caseira | OBRIG | — | Criptografia (OWASP A02) |
-| `SEC-016` | Aleatoriedade criptográfica para token | OBRIG | — | Criptografia (OWASP A02) |
-| `SEC-017` | Comparação de segredo em tempo constante | OBRIG | — | Criptografia (OWASP A02) |
-| `SEC-018` | Hash não é criptografia, e codificação não é nenhum dos dois | OBRIG | — | Criptografia (OWASP A02) |
-| `SEC-019` | Consulta parametrizada, sempre | OBRIG | `S0` | Injeção (OWASP A03) |
-| `SEC-020` | Nunca execute entrada | OBRIG | `S0` | Injeção (OWASP A03) |
-| `SEC-021` | Escape na saída por contexto | OBRIG | — | Injeção (OWASP A03) |
-| `SEC-022` | Nenhuma inserção de HTML não confiável | OBRIG | `S1` | Injeção (OWASP A03) |
-| `SEC-023` | Upload de arquivo tratado como hostil | OBRIG | — | Injeção (OWASP A03) |
-| `SEC-024` | Nome de arquivo, cabeçalho e caminho validados | OBRIG | — | Injeção (OWASP A03) |
-| `SEC-067` | SQL dinâmico só com identificador allowlist e valor bound | OBRIG | `S0` | Injeção (OWASP A03) |
-| `SEC-068` | Predicado montado em string é superfície de injeção | OBRIG | `S0` | Injeção (OWASP A03) |
-| `SEC-069` | Identificador e enum de consulta por lista de permitidos | OBRIG | — | Injeção (OWASP A03) |
-| `SEC-070` | Cliente privilegiado exige validação mais rígida do interpolado | OBRIG | `S0` | Injeção (OWASP A03) |
-| `SEC-071` | Helper único de sanitização de filtro compartilhado | RECOM | — | Injeção (OWASP A03) |
-| `SEC-072` | Superfície HTML fora do SPA também escapa | OBRIG | `S1` | Injeção (OWASP A03) |
-| `SEC-073` | Href e URL de navegação só com esquema permitido | OBRIG | — | Injeção (OWASP A03) |
-| `SEC-074` | Filtro parcial de caracteres não é escape | OBRIG | `S1` | Injeção (OWASP A03) |
-| `SEC-075` | Template em modo HTML escapa toda variável | OBRIG | — | Injeção (OWASP A03) |
-| `SEC-076` | Caça mecânica antes de declarar ausência de XSS | OBRIG | — | Injeção (OWASP A03) |
-| `SEC-025` | Reautenticação em fluxo sensível | OBRIG | — | Design inseguro (OWASP A04) |
-| `SEC-026` | Limite de tentativas com bloqueio progressivo | OBRIG | `S1` | Design inseguro (OWASP A04) |
-| `SEC-027` | Não revele existência | OBRIG | — | Design inseguro (OWASP A04) |
-| `SEC-028` | Operação irreversível é confirmada e registrada | OBRIG | — | Design inseguro (OWASP A04) |
-| `SEC-029` | Modele o abuso, não só o uso | OBRIG | — | Design inseguro (OWASP A04) |
-| `SEC-030` | Controle de segurança que empurra para contorno é falha | RECOM | — | Design inseguro (OWASP A04) |
-| `SEC-031` | Nenhuma credencial padrão em produção | OBRIG | `S0` | Configuração (OWASP A05) |
-| `SEC-032` | Depuração e erro detalhado desligados em produção | OBRIG | — | Configuração (OWASP A05) |
-| `SEC-033` | CORS restrito a origens conhecidas | OBRIG | — | Configuração (OWASP A05) |
-| `SEC-034` | Cabeçalhos de segurança presentes | OBRIG | — | Configuração (OWASP A05) |
-| `SEC-035` | Armazenamento privado por padrão | OBRIG | — | Configuração (OWASP A05) |
-| `SEC-036` | Menor privilégio em toda credencial de serviço | OBRIG | — | Configuração (OWASP A05) |
-| `SEC-037` | Superfície mínima | OBRIG | — | Configuração (OWASP A05) |
-| `SEC-077` | Chave publishable é atacante no plano de dados | OBRIG | `S0` | Configuração (OWASP A05) |
-| `SEC-078` | Allowlist explícita de GRANT ao papel público | OBRIG | `S0` | Configuração (OWASP A05) |
-| `SEC-079` | Privilégio de coluna quando a linha pública carrega segredo | OBRIG | `S0` | Configuração (OWASP A05) |
-| `SEC-080` | Default privileges não doam ao papel público | OBRIG | `S0` | Configuração (OWASP A05) |
-| `SEC-081` | RPC `SECURITY DEFINER` no papel público é allowlist com prova | OBRIG | `S0` | Configuração (OWASP A05) |
-| `SEC-082` | Revogar superfície pública só com o cliente alinhado | OBRIG | — | Configuração (OWASP A05) |
-| `SEC-083` | Regressão automatizada da superfície pública | OBRIG | — | Configuração (OWASP A05) |
-| `SEC-084` | Bucket legado público após migração é superfície aberta | OBRIG | `S1` | Configuração (OWASP A05) |
-| `SEC-038` | Varredura automatizada que bloqueia | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
-| `SEC-039` | Supressão exige análise de explorabilidade escrita | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
-| `SEC-040` | Dependência abandonada é risco registrado | RECOM | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
-| `SEC-041` | Integridade verificada em tudo que executa | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
-| `SEC-042` | Pipeline é código revisado | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
-| `SEC-043` | Pacote novo é decisão verificada; typosquat e slopsquat são bloqueio | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
-| `SEC-094` | Instalação só a partir do lockfile travado | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
-| `SEC-095` | Scripts de lifecycle de dependência desligados por padrão | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
-| `SEC-096` | Nome de pacote vindo de modelo é entrada não verificada | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A06 e A08) |
+| `SEC-097` | Exceção dentro de controle de segurança nega | OBRIG | `S1` | Controle de acesso (OWASP A01) |
+| `SEC-012` | Senha com hash lento e específico | OBRIG | `S0` | Criptografia (OWASP A04) |
+| `SEC-013` | TLS em trânsito, sem exceção interna | OBRIG | — | Criptografia (OWASP A04) |
+| `SEC-014` | Dado sensível criptografado em repouso | OBRIG | — | Criptografia (OWASP A04) |
+| `SEC-015` | Nenhum algoritmo obsoleto e nenhuma criptografia caseira | OBRIG | — | Criptografia (OWASP A04) |
+| `SEC-016` | Aleatoriedade criptográfica para token | OBRIG | — | Criptografia (OWASP A04) |
+| `SEC-017` | Comparação de segredo em tempo constante | OBRIG | — | Criptografia (OWASP A04) |
+| `SEC-018` | Hash não é criptografia, e codificação não é nenhum dos dois | OBRIG | — | Criptografia (OWASP A04) |
+| `SEC-019` | Consulta parametrizada, sempre | OBRIG | `S0` | Injeção (OWASP A05) |
+| `SEC-020` | Nunca execute entrada | OBRIG | `S0` | Injeção (OWASP A05) |
+| `SEC-021` | Escape na saída por contexto | OBRIG | — | Injeção (OWASP A05) |
+| `SEC-022` | Nenhuma inserção de HTML não confiável | OBRIG | `S1` | Injeção (OWASP A05) |
+| `SEC-023` | Upload de arquivo tratado como hostil | OBRIG | — | Injeção (OWASP A05) |
+| `SEC-024` | Nome de arquivo, cabeçalho e caminho validados | OBRIG | — | Injeção (OWASP A05) |
+| `SEC-067` | SQL dinâmico só com identificador allowlist e valor bound | OBRIG | `S0` | Injeção (OWASP A05) |
+| `SEC-068` | Predicado montado em string é superfície de injeção | OBRIG | `S0` | Injeção (OWASP A05) |
+| `SEC-069` | Identificador e enum de consulta por lista de permitidos | OBRIG | — | Injeção (OWASP A05) |
+| `SEC-070` | Cliente privilegiado exige validação mais rígida do interpolado | OBRIG | `S0` | Injeção (OWASP A05) |
+| `SEC-071` | Helper único de sanitização de filtro compartilhado | RECOM | — | Injeção (OWASP A05) |
+| `SEC-072` | Superfície HTML fora do SPA também escapa | OBRIG | `S1` | Injeção (OWASP A05) |
+| `SEC-073` | Href e URL de navegação só com esquema permitido | OBRIG | — | Injeção (OWASP A05) |
+| `SEC-074` | Filtro parcial de caracteres não é escape | OBRIG | `S1` | Injeção (OWASP A05) |
+| `SEC-075` | Template em modo HTML escapa toda variável | OBRIG | — | Injeção (OWASP A05) |
+| `SEC-076` | Caça mecânica antes de declarar ausência de XSS | OBRIG | — | Injeção (OWASP A05) |
+| `SEC-025` | Reautenticação em fluxo sensível | OBRIG | — | Design inseguro (OWASP A06) |
+| `SEC-026` | Limite de tentativas com bloqueio progressivo | OBRIG | `S1` | Design inseguro (OWASP A06) |
+| `SEC-027` | Não revele existência | OBRIG | — | Design inseguro (OWASP A06) |
+| `SEC-028` | Operação irreversível é confirmada e registrada | OBRIG | — | Design inseguro (OWASP A06) |
+| `SEC-029` | Modele o abuso, não só o uso | OBRIG | — | Design inseguro (OWASP A06) |
+| `SEC-030` | Controle de segurança que empurra para contorno é falha | RECOM | — | Design inseguro (OWASP A06) |
+| `SEC-031` | Nenhuma credencial padrão em produção | OBRIG | `S0` | Configuração (OWASP A02) |
+| `SEC-032` | Depuração e erro detalhado desligados em produção | OBRIG | — | Configuração (OWASP A02) |
+| `SEC-033` | CORS restrito a origens conhecidas | OBRIG | — | Configuração (OWASP A02) |
+| `SEC-034` | Cabeçalhos de segurança presentes | OBRIG | — | Configuração (OWASP A02) |
+| `SEC-035` | Armazenamento privado por padrão | OBRIG | — | Configuração (OWASP A02) |
+| `SEC-036` | Menor privilégio em toda credencial de serviço | OBRIG | — | Configuração (OWASP A02) |
+| `SEC-037` | Superfície mínima | OBRIG | — | Configuração (OWASP A02) |
+| `SEC-077` | Chave publishable é atacante no plano de dados | OBRIG | `S0` | Configuração (OWASP A02) |
+| `SEC-078` | Allowlist explícita de GRANT ao papel público | OBRIG | `S0` | Configuração (OWASP A02) |
+| `SEC-079` | Privilégio de coluna quando a linha pública carrega segredo | OBRIG | `S0` | Configuração (OWASP A02) |
+| `SEC-080` | Default privileges não doam ao papel público | OBRIG | `S0` | Configuração (OWASP A02) |
+| `SEC-081` | RPC `SECURITY DEFINER` no papel público é allowlist com prova | OBRIG | `S0` | Configuração (OWASP A02) |
+| `SEC-082` | Revogar superfície pública só com o cliente alinhado | OBRIG | — | Configuração (OWASP A02) |
+| `SEC-083` | Regressão automatizada da superfície pública | OBRIG | — | Configuração (OWASP A02) |
+| `SEC-084` | Bucket legado público após migração é superfície aberta | OBRIG | `S1` | Configuração (OWASP A02) |
+| `SEC-038` | Varredura automatizada que bloqueia | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A03 e A08) |
+| `SEC-039` | Supressão exige análise de explorabilidade escrita | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A03 e A08) |
+| `SEC-040` | Dependência abandonada é risco registrado | RECOM | — | Dependências e cadeia de suprimentos (OWASP A03 e A08) |
+| `SEC-041` | Integridade verificada em tudo que executa | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A03 e A08) |
+| `SEC-042` | Pipeline é código revisado | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A03 e A08) |
+| `SEC-043` | Pacote novo é decisão verificada; typosquat e slopsquat são bloqueio | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A03 e A08) |
+| `SEC-094` | Instalação só a partir do lockfile travado | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A03 e A08) |
+| `SEC-095` | Scripts de lifecycle de dependência desligados por padrão | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A03 e A08) |
+| `SEC-096` | Nome de pacote vindo de modelo é entrada não verificada | OBRIG | — | Dependências e cadeia de suprimentos (OWASP A03 e A08) |
 | `SEC-044` | Sessão expira, renova com segurança e é invalidada | OBRIG | — | Autenticação e sessão (OWASP A07) |
 | `SEC-045` | Identificador de sessão regenerado após autenticar | OBRIG | — | Autenticação e sessão (OWASP A07) |
 | `SEC-046` | Token com escopo, vida curta e revogação possível | OBRIG | — | Autenticação e sessão (OWASP A07) |
 | `SEC-047` | MFA disponível em conta e operação sensível | RECOM | — | Autenticação e sessão (OWASP A07) |
 | `SEC-048` | Proteção contra requisição forjada em fluxo com cookie | OBRIG | — | Autenticação e sessão (OWASP A07) |
-| `SEC-049` | URL fornecida pelo usuário passa por lista de permitidos | OBRIG | — | SSRF (OWASP A10) |
+| `SEC-049` | URL fornecida pelo usuário passa por lista de permitidos | OBRIG | — | SSRF (OWASP A01) |
 | `SEC-050` | Nenhum dado sensível em log | OBRIG | `S0` | Registro e monitoramento (OWASP A09) |
 | `SEC-051` | Eventos de segurança registrados e alertados | OBRIG | — | Registro e monitoramento (OWASP A09) |
 | `SEC-052` | Ordem correta ao encontrar segredo exposto | IMUT | — | Segredos e ataque de chave de API de integração |
@@ -543,11 +544,15 @@ Arquivo: [`06-seguranca.md`](06-seguranca.md) · 96 regras
 | `SEC-061` | Subir de nível é decisão registrada; descer também | OBRIG | — | Níveis de verificação |
 | `SEC-062` | V3 nunca é executado só por agente | IMUT | — | Níveis de verificação |
 | `SEC-063` | Nível não substitui as regras de bloqueio | IMUT | — | Níveis de verificação |
-| `SEC-064` | Testes passando não é prova | OBRIG | — | Níveis de verificação |
-| `SEC-065` | Descreva o caminho de exploração concretamente | OBRIG | — | Níveis de verificação |
-| `SEC-066` | `S0` de segurança não é rebaixável por agente | IMUT | — | Níveis de verificação |
+| `SEC-098` | Ambiente do agente sem credencial de produção por padrão | OBRIG | `S1` | O agente de desenvolvimento como superfície |
+| `SEC-099` | Operação destrutiva do agente exige aprovação humana no ato | OBRIG | — | O agente de desenvolvimento como superfície |
+| `SEC-100` | Conteúdo lido pelo agente é dado, nunca instrução | OBRIG | `S1` | O agente de desenvolvimento como superfície |
+| `SEC-101` | Ferramenta e servidor MCP do agente são dependência | OBRIG | — | O agente de desenvolvimento como superfície |
+| `SEC-064` | Testes passando não é prova | OBRIG | — | O agente de desenvolvimento como superfície |
+| `SEC-065` | Descreva o caminho de exploração concretamente | OBRIG | — | O agente de desenvolvimento como superfície |
+| `SEC-066` | `S0` de segurança não é rebaixável por agente | IMUT | — | O agente de desenvolvimento como superfície |
 
-## 📔 Volume 7 — Framework de Performance
+## 📔 Volume 07 — Framework de Performance
 
 Arquivo: [`07-performance.md`](07-performance.md) · 38 regras
 
@@ -592,7 +597,7 @@ Arquivo: [`07-performance.md`](07-performance.md) · 38 regras
 | `PRF-037` | Trabalho em volume processado em lotes e retomável | RECOM | — | Algoritmo e volume |
 | `PRF-038` | Limiares declarados e protegidos por verificação automática | OBRIG | — | Limiares e regressão |
 
-## 📘 Volume 8 — UX/UI Premium
+## 📘 Volume 08 — UX/UI Premium
 
 Arquivo: [`08-ux-premium.md`](08-ux-premium.md) · 55 regras
 

@@ -4,7 +4,7 @@ Prefixo: `ESC` · Regras: ESC-001 a ESC-042 · Papéis:
 [Database](agents/04-database.md), [Performance](agents/06-performance.md),
 [DevOps/SRE](agents/08-devops-sre.md)
 
-O [Volume 6](05-banco-de-dados.md) trata de integridade e consulta correta. O
+O [Volume 05](05-banco-de-dados.md) trata de integridade e consulta correta. O
 [Volume 7](07-performance.md) trata do gargalo medido de hoje. Este volume trata das decisões
 **estruturais** de crescimento — as que são caras de reverter — e do isolamento entre inquilinos, que é
 simultaneamente decisão de escala e de segurança.
@@ -274,7 +274,7 @@ O ponto de saturação precisa ser medido antes de ser encontrado em produção.
 ## Capítulo 14.7 — Multi-inquilino
 
 Simultaneamente decisão de escala e de segurança. Os achados de vazamento entre inquilinos são `S0` e vão
-para o [Volume 5](06-seguranca.md).
+para o [Volume 06](06-seguranca.md).
 
 ### ESC-036 — Escolha o modelo de isolamento com critério declarado **[OBRIGATÓRIA]**
 

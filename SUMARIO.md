@@ -107,12 +107,15 @@ transações, isolamento, migrações, retenção.
 
 **É deste volume:** OWASP Top 10 completo, criptografia, autenticação e sessão, segredos, dados pessoais,
 cadeia de suprimentos, SSRF, níveis progressivos de verificação, e autenticação na borda de **rotas HTTP
-alcançáveis sem sessão de usuário** (gateway com JWT desligado, webhooks, callbacks, coletores).
+alcançáveis sem sessão de usuário** (gateway com JWT desligado, webhooks, callbacks, coletores), e o **agente
+de desenvolvimento como superfície** — credencial ao seu alcance, operação destrutiva, conteúdo lido,
+ferramentas e servidores MCP.
 
 **Não é:** infraestrutura de deploy e política de acesso operacional (→ [10](10-devops.md)). Isolamento de
 inquilino, que é decisão de arquitetura com consequência de segurança (→ [16](16-multi-tenant.md), com achados
 classificados por este volume). Idempotência e ACK do webhook (→ [03](03-backend.md) `BAK-049`–`BAK-053`).
-Contrato público de API (→ [15](15-apis.md)).
+Contrato público de API (→ [15](15-apis.md)). Como o agente analisa, decide e despacha
+(→ [00](00-constituicao-da-engenharia.md), [01](01-orquestrador.md)).
 
 ### 07 — Performance · `PRF`
 
@@ -176,9 +179,12 @@ nova, quando bloquear, como discordar, revisão assistida por IA e seus limites.
 
 **É deste volume:** ordem de intervenção, normalizar vs desnormalizar, réplicas de leitura, particionamento,
 sharding, estado que impede escala horizontal, limites de recurso, contrapressão, descarte de carga, disjuntor,
-capacidade, custo por unidade.
+capacidade, custo por unidade. Hospeda também o **núcleo** de multi-inquilino, `ESC-036`–`ESC-042` (modelo de
+isolamento, mudança de modelo como `R4`, filtro no ponto mais interno, inquilino do contexto autenticado,
+chave de cache/busca com inquilino, cotas, operações por inquilino).
 
-**Não é:** o gargalo pontual medido hoje (→ [07](07-performance.md)). Isolamento de inquilino
+**Não é:** o gargalo pontual medido hoje (→ [07](07-performance.md)). A profundidade operacional de
+multi-inquilino — identidade, hierarquia, provisionamento, customização, impersonação, faturamento
 (→ [16](16-multi-tenant.md)).
 
 ### 15 — APIs · `API`
@@ -192,8 +198,9 @@ compatibilidade.
 
 ### 16 — Multi-Tenant · `MTN`
 
-**É deste volume:** modelos de isolamento e critério de escolha, identificação de inquilino, aplicação do
-isolamento no ponto mais interno, migração entre modelos, vizinho ruidoso e cotas, customização por inquilino,
+**É deste volume:** a profundidade operacional de multi-inquilino, construída sobre o núcleo `ESC-036`–`ESC-042`
+do [14](14-escalabilidade.md), que este volume cita e não reafirma: identidade e hierarquia de inquilino,
+migração entre modelos, vizinho ruidoso e cotas, customização por inquilino,
 operações por inquilino (exportar, eliminar, restaurar, medir), inquilino grande, provisionamento e
 desprovisionamento, faturamento por uso.
 
@@ -202,7 +209,7 @@ desprovisionamento, faturamento por uso.
 
 ### 17 — Observabilidade · `OBS`
 
-**És deste volume:** log estruturado e níveis, correlação, tracing distribuído, métricas e cardinalidade, as
+**É deste volume:** log estruturado e níveis, correlação, tracing distribuído, métricas e cardinalidade, as
 métricas mínimas por tipo de serviço, SLI, SLO e orçamento de erro, dashboards que respondem perguntas,
 alertas acionáveis, ruído de alerta, depuração em produção, retenção e custo de telemetria.
 

@@ -26,29 +26,29 @@ orquestra não audita a própria rodada (`ORC-028`); aceitação de risco é hum
 
 ---
 
-## Capítulo 12.1 — A cadeia de agentes
+## Capítulo 1.1 — A cadeia de agentes
 
 ### ORC-001 — Os onze papéis **[OBRIGATÓRIA]**
 
 | # | Papel | Escopo | Volume principal |
 | --- | --- | --- | --- |
-| 00 | [Orquestrador](agents/00-orchestrator.md) | Prioriza, distribui, aprova, integra | Vol 12 |
-| 01 | [Arquiteto](agents/01-architect.md) | Fronteiras, acoplamento, domínio | Vol 2 |
-| 02 | [Backend](agents/02-backend.md) | APIs, regras, autorização, resiliência | Vol 3 |
-| 03 | [Frontend](agents/03-frontend.md) | Componentes, estado, design system | Vol 4 |
-| 04 | [Database](agents/04-database.md) | Modelagem, índices, migrações | Vol 6 |
-| 05 | [Security](agents/05-security.md) | OWASP, autorização, segredos | Vol 5 |
-| 06 | [Performance](agents/06-performance.md) | Gargalos medidos, cache, limiares | Vol 7 |
-| 07 | [QA](agents/07-qa.md) | Cobertura de negócio, regressão, aceite | Vol 9 |
+| 00 | [Orquestrador](agents/00-orchestrator.md) | Prioriza, distribui, aprova, integra | Vol 01 |
+| 01 | [Arquiteto](agents/01-architect.md) | Fronteiras, acoplamento, domínio | Vol 02 |
+| 02 | [Backend](agents/02-backend.md) | APIs, regras, autorização, resiliência | Vol 03 |
+| 03 | [Frontend](agents/03-frontend.md) | Componentes, estado, design system | Vol 04 |
+| 04 | [Database](agents/04-database.md) | Modelagem, índices, migrações | Vol 05 |
+| 05 | [Security](agents/05-security.md) | OWASP, autorização, segredos | Vol 06 |
+| 06 | [Performance](agents/06-performance.md) | Gargalos medidos, cache, limiares | Vol 07 |
+| 07 | [QA](agents/07-qa.md) | Cobertura de negócio, regressão, aceite | Vol 11 |
 | 08 | [DevOps/SRE](agents/08-devops-sre.md) | CI/CD, observabilidade, rollback | Vol 10 |
-| 09 | [Product/UX](agents/09-product-ux.md) | Fluxos, consistência, acessibilidade | Vol 8 |
-| 10 | [Auditor Final](agents/10-final-auditor.md) | Regressões, notas, veto | Vol 11 |
+| 09 | [Product/UX](agents/09-product-ux.md) | Fluxos, consistência, acessibilidade | Vol 08 |
+| 10 | [Auditor Final](agents/10-final-auditor.md) | Regressões, notas, veto | Vol 12 |
 
 ### ORC-002 — Todos herdam o mesmo contrato **[IMUTÁVEL]**
 
 [`agents/_shared/core-contract.md`](agents/_shared/core-contract.md) e
 [`agents/_shared/output-schemas.md`](agents/_shared/output-schemas.md), mais o
-[Volume 1](00-constituicao-da-engenharia.md). Divergência de um papel em relação ao contrato só existe se declarada na
+[Volume 00](00-constituicao-da-engenharia.md). Divergência de um papel em relação ao contrato só existe se declarada na
 seção `Overrides` do próprio papel.
 
 ### ORC-003 — Orquestrador e Auditor estão em toda combinação **[OBRIGATÓRIA]**
@@ -58,7 +58,7 @@ independente o framework inteiro depende da palavra de quem fez o trabalho.
 
 ---
 
-## Capítulo 12.2 — Escolha do caminho
+## Capítulo 1.2 — Escolha do caminho
 
 ### ORC-004 — Nem toda tarefa merece a cadeia completa **[IMUTÁVEL]**
 
@@ -77,12 +77,12 @@ julgamento**.
 
 ### ORC-005 — Carregue só os volumes que a tarefa exige **[OBRIGATÓRIA]**
 
-Uma correção de uma linha carrega o Volume 1 e o volume da área. Carregar os doze para tudo dilui as
+Uma correção de uma linha carrega o Volume 00 e o volume da área. Carregar os vinte e cinco para tudo dilui as
 instruções que importam.
 
 ---
 
-## Capítulo 12.3 — Despacho
+## Capítulo 1.3 — Despacho
 
 ### ORC-006 — Descoberta é feita pelo orquestrador, pessoalmente **[OBRIGATÓRIA]**
 
@@ -127,7 +127,7 @@ como medir, o entregável dele é **o plano de medição**, declarado como tal.
 
 ---
 
-## Capítulo 12.4 — Integração
+## Capítulo 1.4 — Integração
 
 ### ORC-014 — Deduplicar **[OBRIGATÓRIA]**
 
@@ -171,7 +171,7 @@ produto, não de mais revisão.
 
 ---
 
-## Capítulo 12.5 — Portão de aprovação
+## Capítulo 1.5 — Portão de aprovação
 
 ### ORC-023 — Os oito critérios **[OBRIGATÓRIA]**
 
@@ -202,7 +202,7 @@ Não se improvisa uma terceira solução no meio do caminho.
 
 ---
 
-## Capítulo 12.6 — Encerramento
+## Capítulo 1.6 — Encerramento
 
 ### ORC-028 — O orquestrador não audita a própria rodada **[IMUTÁVEL]**
 
@@ -224,37 +224,6 @@ rodada** (CON-048).
 ### ORC-032 — Recomendar o próximo item de maior valor **[OBRIGATÓRIA]**
 
 Com o motivo. É o que conecta uma rodada à seguinte e mantém o produto vivo (CON-008).
-
----
-
-## Saída obrigatória da rodada
-
-```
-# Rodada <id> — <módulo/objetivo>
-
-## Objetivo e não objetivos
-## Mapa (da descoberta)
-## Escopo: camadas cobertas | camadas deliberadamente fora + por quê
-
-## Despacho
-| Papel | Pergunta | Fora de escopo | Status |
-
-## Achados consolidados
-MUST-FIX (ordenados)
-OPPORTUNITY (top 10; resto no backlog)
-
-## Composição da rodada (70/20/10)
-
-## Aprovações e rejeições
-| Proposta | Veredito | Razão |
-
-## Conflitos resolvidos
-| Conflito | Resolução | Regra aplicada |
-
-## Bloqueado / precisa de decisão humana
-
-## Entrega ao auditor
-```
 
 ---
 
@@ -427,7 +396,7 @@ MANDATORY SEQUENCE
 8. Recommend the next highest-value item (`ORC-032`).
 
 OUTPUT
-Use the "Saída obrigatória da rodada" block in `01-orquestrador.md` verbatim.
+Use the "Verificação obrigatória de saída" block in `01-orquestrador.md` verbatim.
 Separate MUST-FIX from OPPORTUNITY. Stop conditions: see end of Volume 01 and `CON-053`.
 ```
 
@@ -449,3 +418,36 @@ Uma rodada passa neste volume quando:
 
 Falha em 3, 6 ou 7 é reprovação: sem evidência a rodada é teatro; sem humano em `R4` há
 ultrapassagem de autoridade; sem auditor independente o framework colapsa.
+
+---
+
+## Verificação obrigatória de saída
+
+O relatório de toda rodada orquestrada tem exatamente este formato.
+
+```
+# Rodada <id> — <módulo/objetivo>
+
+## Objetivo e não objetivos
+## Mapa (da descoberta)
+## Escopo: camadas cobertas | camadas deliberadamente fora + por quê
+
+## Despacho
+| Papel | Pergunta | Fora de escopo | Status |
+
+## Achados consolidados
+MUST-FIX (ordenados)
+OPPORTUNITY (top 10; resto no backlog)
+
+## Composição da rodada (70/20/10)
+
+## Aprovações e rejeições
+| Proposta | Veredito | Razão |
+
+## Conflitos resolvidos
+| Conflito | Resolução | Regra aplicada |
+
+## Bloqueado / precisa de decisão humana
+
+## Entrega ao auditor
+```
