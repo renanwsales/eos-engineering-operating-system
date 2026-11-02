@@ -187,20 +187,9 @@ Playbook: `PLB-059`–`PLB-063`. Processamento idempotente do webhook: `BAK-049`
 
 ## Regras de bloqueio
 
-Nenhuma entrega passa com qualquer um destes:
-
-1. Endpoint sem autorização por objeto
-2. Consulta multi-tenant sem filtro de isolamento
-3. Segredo no repositório ou no cliente
-4. Concatenação de entrada em consulta ou comando
-5. Senha com hash inadequado
-6. Dado pessoal em log
-7. Vulnerabilidade crítica ou alta sem análise registrada
-8. CORS permissivo com credencial
-9. Dado sensível sem TLS
-10. Ausência de limite de tentativas em autenticação (`SEC-026`: lockout no IdP por conta; UI/IP não bastam)
-11. Rota com JWT desligado sem autenticação no handler (`SEC-090`)
-12. Efeito em dinheiro/estado só pelo corpo do webhook, sem revalidação (`SEC-091`)
+Nenhuma entrega passa com qualquer condição da tabela
+[Regras de bloqueio](../06-seguranca.md#regras-de-bloqueio) do Volume 06. A lista vive só lá (`A-001`):
+uma cópia aqui já divergiu uma vez — tinha 12 condições quando o volume tinha 16.
 
 ---
 

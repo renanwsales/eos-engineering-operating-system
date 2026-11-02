@@ -772,7 +772,7 @@ que na prática significa verificar superficialmente tudo — e passar pelo que 
 
 | Nível | Aplica-se a | Profundidade |
 | --- | --- | --- |
-| **V1 — Base** | Todo código, sempre | As dez regras de bloqueio. Nenhuma entrega passa sem V1 |
+| **V1 — Base** | Todo código, sempre | As [regras de bloqueio](#regras-de-bloqueio) deste volume. Nenhuma entrega passa sem V1 |
 | **V2 — Padrão** | Módulos que tocam dado de usuário, dinheiro ou permissão | V1 + capítulos 6.1 a 6.9 percorridos com evidência por ponto de entrada |
 | **V3 — Crítico** | Autenticação, pagamento, dado pessoal, multi-inquilino | V2 + modelagem de abuso (`SEC-029`), caminho de exploração demonstrado como fechado (`SEC-064`), inventário de dado pessoal, revisão humana obrigatória |
 
