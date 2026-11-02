@@ -29,6 +29,29 @@ Hasura, Firebase-style), a chave publishable/`anon` torna o **plano de dados** s
 (`SEC-077`–`SEC-084`): GRANT + policy + coluna + RPC, não “esconder a chave”. O restante do volume
 fecha as classes OWASP e a prova de que a correção realmente fechou o caminho (`SEC-064`).
 
+
+### Mapa OWASP Top 10:2025 → este volume
+
+Os capítulos seguem a ordem de análise de `SEC-003`, não a ordem do OWASP. Os códigos nos títulos
+seguem a edição **2025**; quem tem relatório antigo com códigos de 2021 converte por esta tabela.
+
+| 2025 | Categoria | 2021 | Onde vive no EOS |
+| --- | --- | --- | --- |
+| A01 | Controle de acesso quebrado (absorve SSRF) | A01 + A10 | Capítulos 6.1, 6.5b, 6.8, 6.10b |
+| A02 | Configuração insegura | A05 | Capítulo 6.5 |
+| A03 | Falhas na cadeia de suprimentos de software | A06 (ampliada) | Capítulo 6.6 |
+| A04 | Falhas criptográficas | A02 | Capítulo 6.2 |
+| A05 | Injeção | A03 | Capítulo 6.3; injeção de prompt em `IAX-061`, `IAX-070`–`IAX-074` |
+| A06 | Design inseguro | A04 | Capítulo 6.4 |
+| A07 | Falhas de autenticação | A07 | Capítulo 6.7, `SEC-026` |
+| A08 | Falhas de integridade de software ou dados | A08 | Capítulo 6.6 (`SEC-041`, `SEC-042`) |
+| A09 | Falhas de registro e alerta | A09 | Capítulo 6.9 |
+| A10 | Tratamento inadequado de condições excepcionais | — (nova) | Sem capítulo próprio: `BAK-023`, `BAK-045`, `SEC-032`, `SEC-090`, `SEC-093` |
+
+A10 é a lacuna conhecida: as regras acima cobrem erro engolido, comportamento em falha decidido e
+fail-closed em rotas sem sessão, mas não existe ainda uma regra geral de que **exceção dentro de um controle
+de segurança nega** (`EOS-013`).
+
 ---
 
 ## A regra que governa o volume inteiro
@@ -112,7 +135,7 @@ Quem, quando, o que mudou, de qual valor para qual. Sem isso, investigação de 
 
 ---
 
-## Capítulo 6.2 — Criptografia (OWASP A02)
+## Capítulo 6.2 — Criptografia (OWASP A04)
 
 ### SEC-012 — Senha com hash lento e específico **[OBRIGATÓRIA]** · `S0`
 
@@ -148,7 +171,7 @@ Base64 não protege nada. Confundir os três é erro conceitual que produz vulne
 
 ---
 
-## Capítulo 6.3 — Injeção (OWASP A03)
+## Capítulo 6.3 — Injeção (OWASP A05)
 
 ### SEC-019 — Consulta parametrizada, sempre **[OBRIGATÓRIA]** · `S0`
 
@@ -296,7 +319,7 @@ até provar o contrário (`SEC-001`).
 
 ---
 
-## Capítulo 6.4 — Design inseguro (OWASP A04)
+## Capítulo 6.4 — Design inseguro (OWASP A06)
 
 ### SEC-025 — Reautenticação em fluxo sensível **[OBRIGATÓRIA]**
 
@@ -353,7 +376,7 @@ junto com [Product/UX](agents/09-product-ux.md).
 
 ---
 
-## Capítulo 6.5 — Configuração (OWASP A05)
+## Capítulo 6.5 — Configuração (OWASP A02)
 
 ### SEC-031 — Nenhuma credencial padrão em produção **[OBRIGATÓRIA]** · `S0`
 ### SEC-032 — Depuração e erro detalhado desligados em produção **[OBRIGATÓRIA]**
@@ -456,7 +479,7 @@ fechamento: objeto antigo inacessível anonimamente **e** cliente só usa caminh
 
 ---
 
-## Capítulo 6.6 — Dependências e cadeia de suprimentos (OWASP A06 e A08)
+## Capítulo 6.6 — Dependências e cadeia de suprimentos (OWASP A03 e A08)
 
 ### SEC-038 — Varredura automatizada que bloqueia **[OBRIGATÓRIA]**
 
@@ -549,7 +572,7 @@ Token que não pode ser revogado é decisão que exige ADR, não padrão.
 
 ---
 
-## Capítulo 6.8 — SSRF (OWASP A10)
+## Capítulo 6.8 — SSRF (OWASP A01)
 
 ### SEC-049 — URL fornecida pelo usuário passa por lista de permitidos **[OBRIGATÓRIA]**
 

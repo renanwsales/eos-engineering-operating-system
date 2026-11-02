@@ -3,7 +3,8 @@
 Regra que governa este checklist: **o ônus da prova é de quem afirma que está seguro.** Item que você
 não conseguiu verificar é reportado como não verificado — nunca presumido em ordem.
 
-Norma completa: [Volume 06 — Segurança](../06-seguranca.md).
+Norma completa: [Volume 06 — Segurança](../06-seguranca.md). As seções seguem a ordem de análise de
+`SEC-003`; a correspondência com os códigos do OWASP Top 10:2025 está no mapa do Volume 06.
 
 ---
 
@@ -152,6 +153,13 @@ Playbook: `PLB-059`–`PLB-063`. Processamento idempotente do webhook: `BAK-049`
 - [ ] Faixas internas e endpoint de metadados de nuvem bloqueados.
 - [ ] Redirecionamento não é seguido cegamente.
 - [ ] Verificado em: importação por URL, webhook, miniatura, conversão de documento.
+
+## 11. Condições excepcionais (OWASP A10:2025)
+
+- [ ] Nenhum `catch` vazio ou que só registra e segue em caminho de autorização, pagamento ou escrita. (`BAK-023`)
+- [ ] Falha de dependência (timeout, 5xx, resposta malformada) tem comportamento decidido e testado. (`BAK-045`)
+- [ ] Exceção dentro de verificação de acesso nega; nunca segue como permitido. (`SEC-090`, `SEC-093`)
+- [ ] Erro não devolve stack trace, SQL ou caminho interno ao cliente. (`SEC-032`)
 
 ---
 
