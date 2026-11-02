@@ -3,6 +3,20 @@
 Versionamento semântico conforme [`AUTHORING.md`](AUTHORING.md) seção 7 (`A-020`). Decisões estruturais
 ficam em [`backlog/adr/`](backlog/adr/); este arquivo registra **o que** mudou em cada versão.
 
+## 3.2.0 — 2026-11-01
+
+`MINOR`. Cinco regras novas no Volume 06; nenhuma regra existente alterada.
+
+- `SEC-097` — exceção dentro de controle de segurança nega (OWASP A10:2025). Linha 17 da tabela de
+  bloqueio. Fecha `EOS-013`.
+- Capítulo 6.13, `SEC-098`–`SEC-101` — o agente de desenvolvimento como superfície: sem credencial de
+  produção por padrão, operação destrutiva com aprovação humana no ato, conteúdo lido é dado e não
+  instrução, ferramenta e servidor MCP são dependência. Linha 18 da tabela de bloqueio; não negociável 7
+  e duas condições de parada no `AGENTS.md`; `dist/system-prompt.md` e papel Security alinhados. Fecha
+  `EOS-014`.
+- O checklist de segurança deixou de copiar a tabela de bloqueio do Vol 06 e passou a citá-la (`A-001`):
+  a cópia tinha 12 condições, e o volume, 16.
+
 ## 3.1.1 — 2026-11-01
 
 `PATCH`. Nenhuma regra criada, alterada, revogada ou renumerada.

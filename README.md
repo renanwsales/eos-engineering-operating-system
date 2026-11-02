@@ -201,5 +201,5 @@ Versionamento semântico, com as regras completas em [`AUTHORING.md`](AUTHORING.
 IDs de regra são **estáveis**: uma regra revogada deixa o número aposentado, nunca reaproveitado, para que
 relatórios e ADRs antigos continuem legíveis.
 
-Versão atual: **3.1.1**. O que mudou em cada versão: [`CHANGELOG.md`](CHANGELOG.md). Por que mudou:
+Versão atual: **3.2.0**. O que mudou em cada versão: [`CHANGELOG.md`](CHANGELOG.md). Por que mudou:
 [`backlog/adr/`](backlog/adr/).
