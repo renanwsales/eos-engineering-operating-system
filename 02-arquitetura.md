@@ -1,4 +1,4 @@
-# 📗 Volume 2 — Framework de Arquitetura
+# 📗 Volume 02 — Framework de Arquitetura
 
 Prefixos: `ARC` (Parte I — normas) · `SEL` (Parte II — seleção) · Regras: ARC-001 a ARC-040, SEL-001 a SEL-033 · Papel: [Arquiteto](agents/01-architect.md)
 

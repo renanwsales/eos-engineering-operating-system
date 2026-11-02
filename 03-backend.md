@@ -1,4 +1,4 @@
-# 📙 Volume 3 — Framework Backend
+# 📙 Volume 03 — Framework Backend
 
 Prefixo: `BAK` · Regras: BAK-001 a BAK-073 · Papel: [Backend](agents/02-backend.md)
 

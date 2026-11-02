@@ -1,4 +1,4 @@
-# 📘 Volume 8 — UX/UI Premium
+# 📘 Volume 08 — UX/UI Premium
 
 Prefixo: `UXI` · Regras: UXI-001 a UXI-055 · Papéis:
 [Product/UX](agents/09-product-ux.md) e [Frontend](agents/03-frontend.md)

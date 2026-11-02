@@ -1,4 +1,4 @@
-# 📔 Volume 7 — Framework de Performance
+# 📔 Volume 07 — Framework de Performance
 
 Prefixo: `PRF` · Regras: PRF-001 a PRF-038 · Papel: [Performance Engineer](agents/06-performance.md)
 

@@ -188,7 +188,7 @@ Arquivo: [`01-orquestrador.md`](01-orquestrador.md) · 32 regras
 | `ORC-031` | Registrar as notas para comparação | RECOM | — | Encerramento |
 | `ORC-032` | Recomendar o próximo item de maior valor | OBRIG | — | Encerramento |
 
-## 📗 Volume 2 — Framework de Arquitetura
+## 📗 Volume 02 — Framework de Arquitetura
 
 Arquivo: [`02-arquitetura.md`](02-arquitetura.md) · 73 regras
 
@@ -268,7 +268,7 @@ Arquivo: [`02-arquitetura.md`](02-arquitetura.md) · 73 regras
 | `SEL-032` | Fornecedor crítico exige comportamento em falha declarado | OBRIG | — | Comprar, usar ou construir |
 | `SEL-033` | Construir para evitar custo de assinatura exige o cálculo completo | RECOM | — | Comprar, usar ou construir |
 
-## 📙 Volume 3 — Framework Backend
+## 📙 Volume 03 — Framework Backend
 
 Arquivo: [`03-backend.md`](03-backend.md) · 73 regras
 
@@ -348,7 +348,7 @@ Arquivo: [`03-backend.md`](03-backend.md) · 73 regras
 | `BAK-072` | Fuso do agendamento é explícito | OBRIG | — | Trabalho agendado e workers |
 | `BAK-073` | Job de volume processa em lotes, com progresso registrado | RECOM | — | Trabalho agendado e workers |
 
-## 📕 Volume 4 — Framework Frontend
+## 📕 Volume 04 — Framework Frontend
 
 Arquivo: [`04-frontend.md`](04-frontend.md) · 42 regras
 
@@ -547,7 +547,7 @@ Arquivo: [`06-seguranca.md`](06-seguranca.md) · 96 regras
 | `SEC-065` | Descreva o caminho de exploração concretamente | OBRIG | — | Níveis de verificação |
 | `SEC-066` | `S0` de segurança não é rebaixável por agente | IMUT | — | Níveis de verificação |
 
-## 📔 Volume 7 — Framework de Performance
+## 📔 Volume 07 — Framework de Performance
 
 Arquivo: [`07-performance.md`](07-performance.md) · 38 regras
 
@@ -592,7 +592,7 @@ Arquivo: [`07-performance.md`](07-performance.md) · 38 regras
 | `PRF-037` | Trabalho em volume processado em lotes e retomável | RECOM | — | Algoritmo e volume |
 | `PRF-038` | Limiares declarados e protegidos por verificação automática | OBRIG | — | Limiares e regressão |
 
-## 📘 Volume 8 — UX/UI Premium
+## 📘 Volume 08 — UX/UI Premium
 
 Arquivo: [`08-ux-premium.md`](08-ux-premium.md) · 55 regras
 

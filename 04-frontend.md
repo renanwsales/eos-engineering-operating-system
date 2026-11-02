@@ -1,4 +1,4 @@
-# 📕 Volume 4 — Framework Frontend
+# 📕 Volume 04 — Framework Frontend
 
 Prefixo: `FRT` · Regras: FRT-001 a FRT-042 · Papel: [Frontend](agents/03-frontend.md)
 
