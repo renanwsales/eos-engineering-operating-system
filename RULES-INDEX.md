@@ -1,6 +1,6 @@
 # RULES-INDEX — índice de regras do EOS
 
-**1432 regras** em 25 volumes. Este arquivo é **gerado** por
+**1433 regras** em 25 volumes. Este arquivo é **gerado** por
 `scripts/build-rules-index.py`; não edite à mão. Se um volume e este índice divergirem,
 **o volume** é a fonte de verdade.
 
@@ -21,7 +21,7 @@ deixa o número aposentado, nunca reaproveitado, para que relatórios antigos co
 | `[RECOMENDADA]` | Padrão esperado; exceção é normal | Justificativa no momento, sem ADR |
 | `[REVOGADA]` | Não vale mais; o número fica aposentado | — |
 
-Distribuição: **133 imutáveis** · **1092 obrigatórias** · **207 recomendadas**.
+Distribuição: **133 imutáveis** · **1093 obrigatórias** · **207 recomendadas**.
 
 ## Volumes
 
@@ -33,7 +33,7 @@ Distribuição: **133 imutáveis** · **1092 obrigatórias** · **207 recomendad
 | 03 | [Framework Backend](03-backend.md) | `BAK` | 73 |
 | 04 | [Framework Frontend](04-frontend.md) | `FRT` | 42 |
 | 05 | [Framework de Banco de Dados](05-banco-de-dados.md) | `DAT` | 40 |
-| 06 | [Segurança e DevSecOps](06-seguranca.md) | `SEC` | 96 |
+| 06 | [Segurança e DevSecOps](06-seguranca.md) | `SEC` | 97 |
 | 07 | [Framework de Performance](07-performance.md) | `PRF` | 38 |
 | 08 | [UX/UI Premium](08-ux-premium.md) | `UXI` | 55 |
 | 09 | [Design System](09-design-system.md) | `DSY` | 69 |
@@ -52,7 +52,7 @@ Distribuição: **133 imutáveis** · **1092 obrigatórias** · **207 recomendad
 | 22 | [Checklists](22-checklists.md) | `CHK` | 48 |
 | 23 | [Métricas](23-metricas.md) | `MET` | 58 |
 | 24 | [Auditoria Final](24-auditoria-final.md) | `FIN` | 52 |
-| | **Total** | | **1432** |
+| | **Total** | | **1433** |
 
 ---
 
@@ -446,7 +446,7 @@ Arquivo: [`05-banco-de-dados.md`](05-banco-de-dados.md) · 40 regras
 
 ## 📓 Volume 06 — Segurança e DevSecOps
 
-Arquivo: [`06-seguranca.md`](06-seguranca.md) · 96 regras
+Arquivo: [`06-seguranca.md`](06-seguranca.md) · 97 regras
 
 | ID | Regra | Nível | Sev. | Capítulo |
 | --- | --- | --- | --- | --- |
@@ -461,6 +461,7 @@ Arquivo: [`06-seguranca.md`](06-seguranca.md) · 96 regras
 | `SEC-009` | Campo privilegiado do cliente é ignorado | OBRIG | `S0` | Controle de acesso (OWASP A01) |
 | `SEC-010` | Autorização centralizada por construção | RECOM | — | Controle de acesso (OWASP A01) |
 | `SEC-011` | Registro de auditoria em operação sensível | RECOM | — | Controle de acesso (OWASP A01) |
+| `SEC-097` | Exceção dentro de controle de segurança nega | OBRIG | `S1` | Controle de acesso (OWASP A01) |
 | `SEC-012` | Senha com hash lento e específico | OBRIG | `S0` | Criptografia (OWASP A04) |
 | `SEC-013` | TLS em trânsito, sem exceção interna | OBRIG | — | Criptografia (OWASP A04) |
 | `SEC-014` | Dado sensível criptografado em repouso | OBRIG | — | Criptografia (OWASP A04) |

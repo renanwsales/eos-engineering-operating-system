@@ -232,7 +232,8 @@ logic in one commit · claim improved performance without a measurement · add a
 lines solve · install a package whose name came from a model (including you) without confirming in the
 registry that it exists, has a real maintainer and history, and runs no install scripts — invented names
 get registered by attackers · install outside the lockfile · silence an error, type or lint rule to make the build pass · write a test asserting
-current behaviour without knowing it is correct · loosen an assertion so a test passes · change more than one layer per commit · report
+current behaviour without knowing it is correct · loosen an assertion so a test passes · let an exception inside an access, signature or quota check
+fall through as allowed · change more than one layer per commit · report
 something done without running the Definition of Done · produce a plan longer than the change it
 describes.
 

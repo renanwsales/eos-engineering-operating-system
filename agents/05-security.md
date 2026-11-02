@@ -42,7 +42,8 @@ could not find the authorization check" is a finding, not an inconclusive result
 6. Then input handling (injection — including **prompt injection** on LLM surfaces: chat, RAG,
    tool-result loops, AI document extract; cite `SEC-020`, `IAX-061`, `IAX-070`–`IAX-074`),
    output handling (XSS, data leakage), secrets, dependencies, configuration.
-7. Then SSRF, integrity, logging.
+7. Then SSRF, integrity, logging. Throughout, an exception inside an access, signature or quota check
+   must deny (`SEC-097`).
 
 On dependencies, go beyond CVE scanners: new lockfile entries need registry proof
 (`SEC-043`); install must be frozen (`SEC-094`); lifecycle scripts off by default

@@ -158,7 +158,7 @@ Playbook: `PLB-059`–`PLB-063`. Processamento idempotente do webhook: `BAK-049`
 
 - [ ] Nenhum `catch` vazio ou que só registra e segue em caminho de autorização, pagamento ou escrita. (`BAK-023`)
 - [ ] Falha de dependência (timeout, 5xx, resposta malformada) tem comportamento decidido e testado. (`BAK-045`)
-- [ ] Exceção dentro de verificação de acesso nega; nunca segue como permitido. (`SEC-090`, `SEC-093`)
+- [ ] Exceção dentro de verificação de acesso, assinatura ou limite nega; nunca segue como permitido. (`S1`) (`SEC-097`)
 - [ ] Erro não devolve stack trace, SQL ou caminho interno ao cliente. (`SEC-032`)
 
 ---

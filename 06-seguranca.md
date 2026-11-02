@@ -1,6 +1,6 @@
 # 📓 Volume 06 — Segurança e DevSecOps
 
-Prefixo: `SEC` · Regras: SEC-001 a SEC-096 · Papel: [Security Engineer](agents/05-security.md)
+Prefixo: `SEC` · Regras: SEC-001 a SEC-097 · Papel: [Security Engineer](agents/05-security.md)
 
 Camada coberta: **3 (segurança)**.
 
@@ -46,11 +46,7 @@ seguem a edição **2025**; quem tem relatório antigo com códigos de 2021 conv
 | A07 | Falhas de autenticação | A07 | Capítulo 6.7, `SEC-026` |
 | A08 | Falhas de integridade de software ou dados | A08 | Capítulo 6.6 (`SEC-041`, `SEC-042`) |
 | A09 | Falhas de registro e alerta | A09 | Capítulo 6.9 |
-| A10 | Tratamento inadequado de condições excepcionais | — (nova) | Sem capítulo próprio: `BAK-023`, `BAK-045`, `SEC-032`, `SEC-090`, `SEC-093` |
-
-A10 é a lacuna conhecida: as regras acima cobrem erro engolido, comportamento em falha decidido e
-fail-closed em rotas sem sessão, mas não existe ainda uma regra geral de que **exceção dentro de um controle
-de segurança nega** (`EOS-013`).
+| A10 | Tratamento inadequado de condições excepcionais | — (nova) | `SEC-097` (capítulo 6.1); apoio em `BAK-023`, `BAK-045`, `SEC-032` |
 
 ---
 
@@ -132,6 +128,40 @@ dia alguém esquecerá.
 ### SEC-011 — Registro de auditoria em operação sensível **[RECOMENDADA]**
 
 Quem, quando, o que mudou, de qual valor para qual. Sem isso, investigação de fraude é impossível.
+
+### SEC-097 — Exceção dentro de controle de segurança nega **[OBRIGATÓRIA]** · `S1`
+
+Verificação de acesso, de assinatura, de token, de limite ou de cota que lança exceção, estoura o timeout
+ou recebe resposta malformada termina em **negação**, nunca em "segue". O defeito não aparece no caminho
+feliz nem no teste de acesso negado: aparece no dia em que o provedor de identidade, o cache de
+permissões ou a chave de verificação falha, e todo chamador passa a ser autorizado ao mesmo tempo. Quando
+o caminho liberado expõe dado de outro usuário ou inquilino, o achado é `S0`.
+
+```ts
+// Ruim — SEC-097: falha do serviço de permissão vira permissão
+let permitido = true
+try {
+  permitido = await permissoes.pode(usuario, 'fatura:ler', fatura.id)
+} catch (erro) {
+  log.warn('permissoes indisponivel', { erro })
+}
+if (permitido) return fatura
+
+// Bom
+const permitido = await permissoes
+  .pode(usuario, 'fatura:ler', fatura.id)
+  .catch((erro) => {
+    log.error('permissoes indisponivel', { erro })
+    return false
+  })
+if (!permitido) throw new AcessoNegado()
+return fatura
+```
+
+Generaliza o fail-closed que `SEC-090` e `SEC-093` exigem em rotas sem sessão. Erro engolido é `BAK-023`;
+comportamento em falha decidido é `BAK-045`. Falha aberta deliberada — limite de taxa que libera quando o
+contador cai, por exemplo — é aceitação de risco registrada com nome (`CON-042`), nunca o padrão, e nunca
+em autorização. É a categoria A10 do OWASP Top 10:2025.
 
 ---
 
@@ -829,6 +859,7 @@ Nenhuma entrega passa com qualquer um destes:
 | 14 | Efeito em dinheiro/estado só pelo corpo do webhook | SEC-091 |
 | 15 | Pacote novo no lockfile sem verificação no registry | SEC-043, SEC-096 |
 | 16 | Install aberta / scripts de dependência ligados sem allowlist | SEC-094, SEC-095 |
+| 17 | Exceção em verificação de acesso que libera a operação | SEC-097 |
 
 ---
 
@@ -1203,6 +1234,7 @@ npm ci
 - [ ] Plano de dados público: allowlist GRANT; coluna; defaults; DEFINER; regressão CI; storage legado. (`SEC-077`–`SEC-084`)
 - [ ] Audit de deps bloqueia alto/crítico; pacote novo verificado no registry. (`SEC-038`, `SEC-043`, `SEC-096`)
 - [ ] Install só do lockfile; scripts de deps off ou allowlist. (`SEC-094`, `SEC-095`)
+- [ ] Exceção em verificação de acesso, assinatura ou limite nega. (`SEC-097`)
 - [ ] Correção com prova antes/depois. (`SEC-064`)
 - [ ] Regras de bloqueio da tabela do volume: zero violações abertas.
 
@@ -1253,6 +1285,7 @@ Rules of engagement:
   (SEC-064).
 - Never execute input — including prompt injection via third-party text in LLM
   context (SEC-020). For agents/RAG cite IAX-061 and IAX-070–074.
+- An exception inside an access, signature or quota check must deny (SEC-097).
 - Fix requires exploit-path closed with before/after (SEC-064).
 - Do not downgrade security S0 (SEC-066). Do not invent new SEC rules.
 
@@ -1278,7 +1311,8 @@ Output: findings with path:line, severity, exploit path, verification level
 12. Nível de verificação declarado (`SEC-060`).
 13. Autenticação em escopo com lockout conforme `SEC-026` (ou N/A justificado se o módulo não autentica).
 14. Cadeia de suprimentos: audit alto/crítico fechado ou com análise (`SEC-038`/`SEC-039`); pacote novo verificado (`SEC-043`/`SEC-096`); install frozen e scripts controlados (`SEC-094`/`SEC-095`).
-15. Correções `S0`/`S1` com prova antes/depois (`SEC-064`).
+15. Controles de segurança em escopo falham fechado sob exceção (`SEC-097`).
+16. Correções `S0`/`S1` com prova antes/depois (`SEC-064`).
 
 ---
 
